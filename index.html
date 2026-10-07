@@ -5,8 +5,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Калькулятор баллов — Главное меню</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Панель слева — переход на главную EMS */
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 180px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92);
+    color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 160px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .tab-left:hover { left: 0; }
+  }
+</style>
 </head>
 <body>
+
+<!-- ============================================================
+     ПАНЕЛЬ СЛЕВА — ПЕРЕХОД НА ГЛАВНУЮ EMS
+     ============================================================ -->
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главная EMS</span>
+  </a>
+</nav>
 
 <!-- ============================================================
      ПАНЕЛЬ ВКЛАДОК СПРАВА
