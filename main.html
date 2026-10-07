@@ -249,7 +249,7 @@
     max-width: 540px; margin: 0 auto; line-height: 1.7;
   }
 
-  /* --------- Пустой контейнер для будущих блоков --------- */
+  /* --------- Контейнер блоков --------- */
   #content {
     min-height: 120px;
   }
@@ -268,7 +268,7 @@
     -webkit-backdrop-filter: blur(var(--blur));
   }
 
-  /* --------- Заготовка стилей для будущих блоков --------- */
+  /* --------- Секции --------- */
   .section {
     background: var(--bg-alt);
     border: 1px solid var(--border);
@@ -288,6 +288,7 @@
   }
   .section-title .icon { font-size: 18px; }
 
+  /* --------- Карточки-ссылки --------- */
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -385,7 +386,6 @@
     .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; }
     .tab-icon { font-size: 16px; width: 20px; }
 
-    /* Кнопка калькулятора слева — на мобилке сверху, компактнее */
     .side-tabs-left {
       top: auto; bottom: 12px; left: 12px; transform: none;
     }
@@ -480,10 +480,26 @@
   </div>
 
   <!-- ============================================================
-       СЮДА БУДЕМ ДОБАВЛЯТЬ БЛОКИ.
-       Пока пусто — появится подсказка «Разделы появятся здесь...».
+       БЛОКИ БАЗЫ ЗНАНИЙ EMS
+       По мере поступления данных добавляем новые секции с карточками.
        ============================================================ -->
-  <div id="content"></div>
+  <div id="content">
+
+    <!-- ==================== ИНФОРМАЦИЯ ОБ ОТДЕЛАХ ==================== -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🏥</span> Информация об отделах</div>
+      <div class="cards">
+        <a class="card" href="departments.html">
+          <div class="card-icon">🏥</div>
+          <div class="card-body">
+            <div class="card-title">Отделы больницы EMS</div>
+            <div class="card-desc">PM, PSID, DI, HAD — назначение, перевод, лимиты мест</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
 
   <footer>
     База знаний EMS · <span id="year"></span> · Разделы пополняются по мере поступления данных
@@ -573,14 +589,6 @@ const BG_PRESETS = [
   const saved = load();
   if (saved) applyBackground(saved, false);
 })();
-
-/* ============================================================
-   ПЛАВНЫЙ СКРОЛЛ НАВЕРХ
-   ============================================================ */
-function scrollTop(e) {
-  if (e) e.preventDefault();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
 
 /* ============================================================
    TOAST
