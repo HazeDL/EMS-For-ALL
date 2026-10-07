@@ -5,17 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HAD — Калькулятор баллов</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Панель слева — переход на главную EMS */
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 180px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92);
+    color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 160px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .tab-left:hover { left: 0; }
+  }
+</style>
 </head>
 <body>
 
-<!-- ============================================================
-     ПАНЕЛЬ ВКЛАДОК СПРАВА
-     ============================================================ -->
-<nav class="side-tabs" aria-label="Разделы">
-  <a class="tab" href="index.html">
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
     <span class="tab-icon">🏠</span>
-    <span class="tab-label">Главное меню</span>
+    <span class="tab-label">Главная EMS</span>
   </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
   <a class="tab" href="pm.html">
     <span class="tab-icon">📋</span>
     <span class="tab-label">PM</span>
@@ -34,9 +82,6 @@
   </a>
 </nav>
 
-<!-- ============================================================
-     КНОПКА ФОНА
-     ============================================================ -->
 <div class="bg-controls">
   <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
   <div class="bg-menu" id="bg-menu" hidden>
@@ -58,9 +103,6 @@
   </div>
 </div>
 
-<!-- ============================================================
-     ОСНОВНОЙ КОНТЕНТ
-     ============================================================ -->
 <div class="container page-content">
 
   <header>
@@ -70,7 +112,6 @@
 
   <div class="content-layout" id="content-had">
 
-    <!-- ================= ШКАЛА СЛЕВА ================= -->
     <aside class="progress-rail" data-rail="had">
       <div class="progress-rail-title">HAD</div>
       <div class="progress-rail-value" data-rail-value>0</div>
@@ -87,7 +128,6 @@
       <div class="progress-rail-status" data-rail-status>Начало</div>
     </aside>
 
-    <!-- ================= ПРАВАЯ КОЛОНКА ================= -->
     <div>
 
       <div class="section">
@@ -168,17 +208,9 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ============================================================
-     ПОДКЛЮЧЕНИЕ СКРИПТОВ
-     ============================================================ -->
 <script src="common.js"></script>
 <script>
-/* ============================================================
-   СПИСОК УСЛУГ HAD
-   sect: 1 = основные действия, 2 = инструктор, 3 = недельный отчёт
-   ============================================================ */
 const HAD_ITEMS = [
-  // Основные действия
   {key:"had_reprimand",    name:"Выдача выговоров",                          pts:5,  lim:0,   sect:1},
   {key:"had_walk_check",   name:"Проверка на прогул",                        pts:5,  lim:0,   sect:1},
   {key:"had_break_check",  name:"Проверка обедов / отпусков",                pts:3,  lim:0,   sect:1},
@@ -190,11 +222,9 @@ const HAD_ITEMS = [
   {key:"had_hospital_duty",name:"Дежурство в больнице 30 мин",               pts:10, lim:0,   sect:1},
   {key:"had_duty_accept",  name:"Принятие дежурств",                         pts:15, lim:0,   sect:1},
 
-  // Инструктор HAD
   {key:"had_instr_promo",  name:"Проверка отчёта на повышение",              pts:20, lim:0,   sect:2},
   {key:"had_instr_weekly", name:"Проверка недельного отчёта",                pts:25, lim:0,   sect:2},
 
-  // Недельный отчёт
   {key:"had_w_duty",       name:"Дежурство в больнице 30 мин",               pts:10, lim:0,   sect:3},
   {key:"had_w_accept",     name:"Принятие человека",                         pts:10, lim:0,   sect:3},
   {key:"had_w_pmp_day",    name:"ПМП днём",                                  pts:2,  lim:100, sect:3},
@@ -207,9 +237,6 @@ const HAD_ITEMS = [
 
 const STORAGE_HAD_STATE = "had_calc_state_v1";
 
-/* ============================================================
-   ОТРИСОВКА СТРОК
-   ============================================================ */
 function renderHadItems() {
   const elMain = document.getElementById("had-main-items");
   const elIns  = document.getElementById("had-instr-items");
@@ -246,9 +273,6 @@ function getHadValue(key, role) {
   return isNaN(v) ? 0 : v;
 }
 
-/* ============================================================
-   ПЕРЕСЧЁТ
-   ============================================================ */
 function recalcHad() {
   let total = 0;
   const details = {
@@ -309,9 +333,6 @@ function recalcHad() {
   saveHadState();
 }
 
-/* ============================================================
-   СОХРАНЕНИЕ / ЗАГРУЗКА
-   ============================================================ */
 function saveHadState() {
   const s = {};
   HAD_ITEMS.forEach(it => s[it.key] = { count: getHadValue(it.key, "count"), point: getHadValue(it.key, "point") });
@@ -335,9 +356,6 @@ function loadHadState() {
   } catch (e) {}
 }
 
-/* ============================================================
-   КНОПКИ
-   ============================================================ */
 function resetHad() {
   HAD_ITEMS.forEach(it => {
     const cEl = document.querySelector(`#content-had input[data-role="count"][data-key="${it.key}"]`);
@@ -357,9 +375,6 @@ function copyHadReport() {
     .catch(() => showToast("Не удалось скопировать"));
 }
 
-/* ============================================================
-   ИНИЦИАЛИЗАЦИЯ
-   ============================================================ */
 renderHadItems();
 loadHadState();
 
@@ -368,7 +383,6 @@ document.getElementById("had-btn-reset").addEventListener("click", resetHad);
 
 recalcHad();
 
-/* ---- Ctrl+S — копировать отчёт ---- */
 document.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "s") {
     e.preventDefault();
@@ -376,7 +390,6 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* ---- Пересчёт шкалы при ресайзе ---- */
 window.onCalcResize = function() {
   recalcHad();
 };
