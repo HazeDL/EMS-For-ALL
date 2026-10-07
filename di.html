@@ -5,17 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DI — Калькулятор баллов</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Панель слева — переход на главную EMS */
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 180px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92);
+    color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 160px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .tab-left:hover { left: 0; }
+  }
+</style>
 </head>
 <body>
 
-<!-- ============================================================
-     ПАНЕЛЬ ВКЛАДОК СПРАВА
-     ============================================================ -->
-<nav class="side-tabs" aria-label="Разделы">
-  <a class="tab" href="index.html">
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
     <span class="tab-icon">🏠</span>
-    <span class="tab-label">Главное меню</span>
+    <span class="tab-label">Главная EMS</span>
   </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
   <a class="tab" href="pm.html">
     <span class="tab-icon">📋</span>
     <span class="tab-label">PM</span>
@@ -34,9 +82,6 @@
   </a>
 </nav>
 
-<!-- ============================================================
-     КНОПКА ФОНА
-     ============================================================ -->
 <div class="bg-controls">
   <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
   <div class="bg-menu" id="bg-menu" hidden>
@@ -58,9 +103,6 @@
   </div>
 </div>
 
-<!-- ============================================================
-     ОСНОВНОЙ КОНТЕНТ
-     ============================================================ -->
 <div class="container page-content">
 
   <header>
@@ -70,7 +112,6 @@
 
   <div class="content-layout" id="content-di">
 
-    <!-- ================= ШКАЛА СЛЕВА ================= -->
     <aside class="progress-rail" data-rail="di">
       <div class="progress-rail-title">DI</div>
       <div class="progress-rail-value" data-rail-value>0</div>
@@ -87,7 +128,6 @@
       <div class="progress-rail-status" data-rail-status>Начало</div>
     </aside>
 
-    <!-- ================= ПРАВАЯ КОЛОНКА ================= -->
     <div>
 
       <div class="section">
@@ -159,17 +199,9 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ============================================================
-     ПОДКЛЮЧЕНИЕ СКРИПТОВ
-     ============================================================ -->
 <script src="common.js"></script>
 <script>
-/* ============================================================
-   СПИСОК УСЛУГ DI
-   sect: 1 = сотрудники, 2 = инструкторы (1 действие), 3 = доп. активность
-   ============================================================ */
 const DI_ITEMS = [
-  // Для сотрудников DI
   {key:"di_interview",        name:"Проведение собеседования / восстановления / перевода", pts:25, lim:0, sect:1},
   {key:"di_briefing_intro",   name:"Проведение вводного инструктажа",                       pts:35, lim:0, sect:1},
   {key:"di_interview_fail",   name:"Неудачное собеседование",                               pts:5,  lim:0, sect:1},
@@ -182,14 +214,12 @@ const DI_ITEMS = [
   {key:"di_fire_check",       name:"Проведение пожарной проверки",                          pts:60, lim:0, sect:1},
   {key:"di_hospital_duty",    name:"Дежурство в больницах (30 минут)",                      pts:10, lim:0, sect:1},
 
-  // Для инструкторов DI (1 действие)
   {key:"di_instr_activity",   name:"Любая деятельность по отделу (работа сотрудника DI)",   pts:1, lim:0, sect:2},
   {key:"di_instr_report",     name:"Проверка отчёта на повышение сотрудника DI",            pts:1, lim:0, sect:2},
   {key:"di_instr_audit",      name:"Кадровый аудит (повышения и т.д.)",                     pts:1, lim:0, sect:2},
   {key:"di_instr_craft",      name:"Участие в крафте",                                      pts:1, lim:0, sect:2},
   {key:"di_instr_other",      name:"Прочие активности из канала поощрений",                 pts:1, lim:0, sect:2},
 
-  // Дополнительная активность
   {key:"di_x_pill",       name:"Таблетка в любой больнице",         pts:1,  lim:0, sect:3},
   {key:"di_x_vax",        name:"Вакцинация",                        pts:2,  lim:0, sect:3},
   {key:"di_x_med",        name:"Оформление справок",                pts:3,  lim:0, sect:3},
@@ -201,9 +231,6 @@ const DI_ITEMS = [
 
 const STORAGE_DI_STATE = "di_calc_state_v1";
 
-/* ============================================================
-   ОТРИСОВКА СТРОК
-   ============================================================ */
 function renderDiItems() {
   const elStaff = document.getElementById("di-staff-items");
   const elInstr = document.getElementById("di-instr-items");
@@ -238,11 +265,6 @@ function getDiValue(key, role) {
   return isNaN(v) ? 0 : v;
 }
 
-/* ============================================================
-   ПЕРЕСЧЁТ
-   Итог баллов = сотрудники + доп. активность.
-   Инструкторы — в счётчик «действий», баллы не идут в общий итог.
-   ============================================================ */
 function recalcDi() {
   let total = 0;
   let instrActions = 0;
@@ -329,9 +351,6 @@ function recalcDi() {
   saveDiState();
 }
 
-/* ============================================================
-   СОХРАНЕНИЕ / ЗАГРУЗКА
-   ============================================================ */
 function saveDiState() {
   const s = {};
   DI_ITEMS.forEach(it => s[it.key] = { count: getDiValue(it.key, "count"), point: getDiValue(it.key, "point") });
@@ -355,9 +374,6 @@ function loadDiState() {
   } catch (e) {}
 }
 
-/* ============================================================
-   КНОПКИ
-   ============================================================ */
 function resetDi() {
   DI_ITEMS.forEach(it => {
     const cEl = document.querySelector(`#content-di input[data-role="count"][data-key="${it.key}"]`);
@@ -377,9 +393,6 @@ function copyDiReport() {
     .catch(() => showToast("Не удалось скопировать"));
 }
 
-/* ============================================================
-   ИНИЦИАЛИЗАЦИЯ
-   ============================================================ */
 renderDiItems();
 loadDiState();
 
@@ -388,7 +401,6 @@ document.getElementById("di-btn-reset").addEventListener("click", resetDi);
 
 recalcDi();
 
-/* ---- Ctrl+S — копировать отчёт ---- */
 document.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "s") {
     e.preventDefault();
@@ -396,7 +408,6 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* ---- Пересчёт шкалы при ресайзе ---- */
 window.onCalcResize = function() {
   recalcDi();
 };
