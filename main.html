@@ -104,7 +104,6 @@
     margin: 0 auto;
   }
 
-  /* --------- Кнопка фона --------- */
   .bg-controls { position: fixed; top: 16px; right: 16px; z-index: 100; }
   .bg-btn {
     background: var(--bg-alt); color: var(--text);
@@ -151,7 +150,6 @@
     border-radius: 6px; cursor: pointer;
   }
 
-  /* --------- Панель вкладок справа --------- */
   .side-tabs {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 6px;
@@ -190,7 +188,6 @@
   .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Панель слева — кнопка на калькулятор --------- */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 6px;
@@ -227,7 +224,6 @@
   .tab-left .tab-icon { font-size: 20px; width: 26px; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Hero --------- */
   .hero {
     text-align: center;
     padding: 36px 24px 30px;
@@ -249,10 +245,7 @@
     max-width: 540px; margin: 0 auto; line-height: 1.7;
   }
 
-  /* --------- Контейнер блоков --------- */
-  #content {
-    min-height: 120px;
-  }
+  #content { min-height: 120px; }
   #content:empty::before {
     content: "Разделы появятся здесь по мере поступления данных.";
     display: block;
@@ -268,7 +261,6 @@
     -webkit-backdrop-filter: blur(var(--blur));
   }
 
-  /* --------- Секции --------- */
   .section {
     background: var(--bg-alt);
     border: 1px solid var(--border);
@@ -288,7 +280,6 @@
   }
   .section-title .icon { font-size: 18px; }
 
-  /* --------- Карточки-ссылки --------- */
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -351,20 +342,6 @@
     line-height: 1.45;
   }
 
-  .card.new::before {
-    content: "NEW";
-    position: absolute;
-    top: 8px; right: 8px;
-    background: var(--accent);
-    color: #0d1117;
-    font-size: 9px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    letter-spacing: 0.5px;
-  }
-
-  /* --------- Подвал --------- */
   footer {
     text-align: center;
     margin-top: 40px;
@@ -374,7 +351,6 @@
     font-size: 12.5px;
   }
 
-  /* --------- Адаптив --------- */
   @media (max-width: 640px) {
     body { padding: 16px 10px 40px; }
     header h1 { font-size: 22px; }
@@ -385,20 +361,14 @@
     .side-tabs { top: auto; bottom: 12px; transform: none; }
     .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; }
     .tab-icon { font-size: 16px; width: 20px; }
-
-    .side-tabs-left {
-      top: auto; bottom: 12px; left: 12px; transform: none;
-    }
+    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
     .tab-left {
       --width: 180px; --visible: 44px;
       height: 42px; font-size: 13px;
-      left: 0;
-      border-radius: 10px;
+      left: 0; border-radius: 10px;
       border-left: 1px solid var(--accent);
       padding: 0 10px;
     }
-    .tab-left:hover { left: 0; }
-
     .section { padding: 16px; }
     .cards { grid-template-columns: 1fr; gap: 10px; }
     .card { padding: 13px 14px; }
@@ -419,7 +389,7 @@
 <body>
 
 <!-- ============================================================
-     ПАНЕЛЬ СЛЕВА — КНОПКА НА КАЛЬКУЛЯТОР
+     ПАНЕЛЬ СЛЕВА
      ============================================================ -->
 <nav class="side-tabs-left" aria-label="Быстрые ссылки">
   <a class="tab-left" href="index.html" title="Перейти к калькулятору баллов">
@@ -429,7 +399,7 @@
 </nav>
 
 <!-- ============================================================
-     ПАНЕЛЬ ВКЛАДОК СПРАВА
+     ПАНЕЛЬ СПРАВА
      ============================================================ -->
 <nav class="side-tabs" aria-label="Разделы">
   <a class="tab tab-active" href="main.html">
@@ -479,10 +449,6 @@
     </p>
   </div>
 
-  <!-- ============================================================
-       БЛОКИ БАЗЫ ЗНАНИЙ EMS
-       По мере поступления данных добавляем новые секции с карточками.
-       ============================================================ -->
   <div id="content">
 
     <!-- ==================== ИНФОРМАЦИЯ ОБ ОТДЕЛАХ ==================== -->
@@ -499,6 +465,27 @@
       </div>
     </div>
 
+    <!-- ==================== ОБУЧЕНИЕ И ПРАВИЛА ==================== -->
+    <div class="section">
+      <div class="section-title"><span class="icon">📖</span> Обучение и правила</div>
+      <div class="cards">
+        <a class="card" href="intro.html">
+          <div class="card-icon">💓</div>
+          <div class="card-body">
+            <div class="card-title">Вступительная лекция и правила гос. организаций</div>
+            <div class="card-desc">Руководство, иерархия, обязанности сотрудника, лимиты медикаментов</div>
+          </div>
+        </a>
+        <a class="card" href="lecture-pills.html">
+          <div class="card-icon">💊</div>
+          <div class="card-body">
+            <div class="card-title">Как правильно выдавать таблетки</div>
+            <div class="card-desc">Пошаговая инструкция с картинками: где стоять, как продать, гос. сотрудникам</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
   </div>
 
   <footer>
@@ -508,9 +495,6 @@
 </div>
 
 <script>
-/* ============================================================
-   ПРЕСЕТЫ ФОНОВ
-   ============================================================ */
 const BG_PRESETS = [
   { id: "med-blue", title: "Медицина", css: "linear-gradient(135deg, #0a1f3d 0%, #0d2f4a 40%, #0a1f3d 100%)" },
   { id: "med-soft", title: "Soft", css: "linear-gradient(160deg, #1a2a3a 0%, #0f1e2e 50%, #05111c 100%)" },
@@ -529,9 +513,6 @@ const BG_PRESETS = [
          "linear-gradient(160deg, #05111c, #0d1117)" },
 ];
 
-/* ============================================================
-   ФОН
-   ============================================================ */
 (function() {
   const KEY = "ems_bg_v1";
   const body = document.body;
@@ -590,9 +571,6 @@ const BG_PRESETS = [
   if (saved) applyBackground(saved, false);
 })();
 
-/* ============================================================
-   TOAST
-   ============================================================ */
 function showToast(msg) {
   let t = document.getElementById("toast");
   if (!t) {
@@ -622,9 +600,6 @@ function showToast(msg) {
   }, 2200);
 }
 
-/* ============================================================
-   ГОД В ПОДВАЛЕ
-   ============================================================ */
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 </body>
