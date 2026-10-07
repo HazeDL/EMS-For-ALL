@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Как правильно выдавать таблетки — База знаний EMS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Левая панель */
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 180px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92);
+    color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Правая панель */
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 42px; --width: 180px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px; display: flex; align-items: center;
+    gap: 10px; padding: 0 14px 0 12px;
+    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 10px 0 0 10px; font-family: inherit;
+    font-size: 14px; font-weight: 500; cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab:active { transform: translateY(1px); }
+  .tab.tab-active {
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.9), rgba(22, 33, 62, 0.9));
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Хлебные крошки */
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-dim);
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .breadcrumbs a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
+  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
+  .breadcrumbs .current { color: var(--text); }
+
+  /* Секции */
+  .rules-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+  }
+  .rules-title {
+    font-size: 14px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .rules-title .icon { font-size: 18px; }
+
+  .rules-text {
+    font-size: 14.5px; color: var(--text);
+    line-height: 1.7; margin-bottom: 10px;
+  }
+  .rules-text strong { color: var(--accent); }
+  .rules-text code {
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.25);
+    border-radius: 5px;
+    padding: 2px 8px;
+    color: var(--accent);
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* Карточки цен */
+  .price-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .price-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    background: rgba(63, 185, 80, 0.10);
+    border: 1px solid rgba(63, 185, 80, 0.30);
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .price-box .price {
+    font-weight: 700;
+    color: var(--success);
+    font-size: 17px;
+  }
+  .price-box .label {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  /* Одна картинка — крупно */
+  .single-image {
+    margin: 16px 0;
+    text-align: center;
+  }
+  .single-image img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 480px;
+    margin: 0 auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(13, 17, 23, 0.55);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+    cursor: zoom-in;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .single-image img:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 28px rgba(88, 166, 255, 0.18);
+  }
+  .single-image figcaption {
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* Пара картинок в ряд */
+  .image-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .image-pair figure {
+    margin: 0;
+    text-align: center;
+  }
+  .image-pair img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(13, 17, 23, 0.55);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+    cursor: zoom-in;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .image-pair img:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 28px rgba(88, 166, 255, 0.18);
+  }
+  .image-pair figcaption {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* Строка шагов */
+  .step-line {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 2px 0;
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .step-line .key {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .step-line .sep {
+    color: var(--text-dim);
+    margin: 0 6px;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5, 8, 12, 0.94);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 24px;
+    animation: lbFade 0.2s ease;
+  }
+  .lightbox.active { display: flex; }
+  @keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+  .lightbox img {
+    max-width: 96%;
+    max-height: 92vh;
+    border-radius: 10px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+    animation: lbZoom 0.25s ease;
+  }
+  @keyframes lbZoom {
+    from { transform: scale(0.94); opacity: 0.7; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .lightbox-close {
+    position: fixed;
+    top: 16px; right: 20px;
+    width: 44px; height: 44px;
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .lightbox-close:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(248, 81, 73, 0.15);
+  }
+  .lightbox-caption {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 13.5px;
+    color: var(--text-dim);
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 8px;
+    max-width: 80%;
+    text-align: center;
+  }
+
+  /* Мобильный */
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 160px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .side-tabs { top: auto; bottom: 12px; right: 12px; transform: none; }
+    .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; border-radius: 10px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+
+    .rules-section { padding: 16px; }
+    .rules-text { font-size: 13.5px; }
+    .image-pair { grid-template-columns: 1fr; gap: 12px; }
+    .single-image img { max-height: 320px; }
+    .image-pair img { max-height: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     ПАНЕЛЬ СЛЕВА
+     ============================================================ -->
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главная EMS</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     ПАНЕЛЬ СПРАВА
+     ============================================================ -->
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Калькулятор</span>
+  </a>
+  <a class="tab" href="departments.html">
+    <span class="tab-icon">🏥</span>
+    <span class="tab-label">Отделы</span>
+  </a>
+  <a class="tab" href="intro.html">
+    <span class="tab-icon">📖</span>
+    <span class="tab-label">Лекция</span>
+  </a>
+  <a class="tab tab-active" href="lecture-pills.html">
+    <span class="tab-icon">💊</span>
+    <span class="tab-label">Таблетки</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     КНОПКА ФОНА
+     ============================================================ -->
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     ОСНОВНОЙ КОНТЕНТ
+     ============================================================ -->
+<div class="container page-content">
+
+  <header>
+    <h1>Как правильно выдавать таблетки</h1>
+    <p>Пошаговая инструкция для сотрудников EMS</p>
+  </header>
+
+  <div class="breadcrumbs">
+    <a href="main.html">База знаний EMS</a>
+    <span class="sep">›</span>
+    <a href="intro.html">Обучение и правила</a>
+    <span class="sep">›</span>
+    <span class="current">Как правильно выдавать таблетки</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">💊</div>
+    <h2 class="hero-title">Как правильно выдавать таблетки</h2>
+    <p class="hero-subtitle">
+      Для выдачи таблеток вам понадобятся <strong>кодеиновые таблетки</strong>.
+      Максимальное количество за одно взятие — <strong>48 кодеиновых таблеток</strong>.
+    </p>
+  </div>
+
+  <!-- ==================== ЧТО НУЖНО ==================== -->
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">📦</span> Что нужно для выдачи</div>
+    <p class="rules-text">
+      Для выдачи таблеток вам понадобятся <strong>кодеиновые таблетки</strong>.
+      Максимальное количество за одно взятие — <strong>48 кодеиновых таблеток</strong>.
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/pill-boxes.jpg" alt="Упаковка кодеиновых таблеток" loading="lazy">
+      <figcaption>Кодеиновые таблетки — упаковка</figcaption>
+    </figure>
+  </div>
+
+  <!-- ==================== ГДЕ СТОЯТЬ ==================== -->
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">📍</span> Где стоять интернам</div>
+    <p class="rules-text">
+      Для выдачи таблеток <strong>интернам необходимо находиться у стойки
+      в отделении скорой помощи</strong>. Пример:
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/ems-counter.jpg" alt="Стойка в отделении скорой помощи" loading="lazy">
+      <figcaption>Стойка в отделении скорой помощи</figcaption>
+    </figure>
+  </div>
+
+  <!-- ==================== ВЫДАЧА ГРАЖДАНАМ ==================== -->
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">💰</span> Выдача таблетки гражданину</div>
+    <p class="rules-text">
+      Для выдачи таблетки гражданину необходимо нажать:
+    </p>
+    <p class="rules-text">
+      <span class="step-line">
+        <span class="key">G</span>
+        <span class="sep">›</span>
+        Фракционное
+        <span class="sep">›</span>
+        Продать таблетку
+      </span>
+    </p>
+
+    <div class="image-pair">
+      <figure data-lightbox>
+        <img src="images/menu-faction-1.jpg" alt="Меню G — открыть раздел Фракционное" loading="lazy">
+        <figcaption>Шаг 1. Открыть меню <b>G › Фракционное</b></figcaption>
+      </figure>
+      <figure data-lightbox>
+        <img src="images/menu-sell-pill.jpg" alt="Меню G — выбрать Продать таблетку" loading="lazy">
+        <figcaption>Шаг 2. Нажать <b>Продать таблетку</b></figcaption>
+      </figure>
+    </div>
+
+    <p class="rules-text" style="margin-top: 14px;">
+      <strong>Стоимость таблетки:</strong> зависит от уровня игрока, которому вы даёте таблетку.
+    </p>
+    <div class="price-row">
+      <div class="price-box">
+        <span class="label">Для обычного игрока:</span>
+        <span class="price">100$</span>
+      </div>
+      <div class="price-box">
+        <span class="label">Для игрока высокого уровня:</span>
+        <span class="price">300$</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ГОС. СОТРУДНИКАМ ==================== -->
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">🏥</span> Гос. сотрудникам — бесплатно</div>
+    <p class="rules-text">
+      Для гос. сотрудников таблетки являются <strong>бесплатными</strong>.
+      Сначала просим сотрудника показать <strong>удостоверение или жетон</strong>.
+      Далее нажимаем:
+    </p>
+    <p class="rules-text">
+      <span class="step-line">
+        <span class="key">G</span>
+        <span class="sep">›</span>
+        Фракционное
+        <span class="sep">›</span>
+        Вылечить игрока
+      </span>
+    </p>
+
+    <div class="image-pair">
+      <figure data-lightbox>
+        <img src="images/menu-faction-2.jpg" alt="Меню G — открыть раздел Фракционное" loading="lazy">
+        <figcaption>Шаг 1. Открыть меню <b>G › Фракционное</b></figcaption>
+      </figure>
+      <figure data-lightbox>
+        <img src="images/menu-heal-player.jpg" alt="Меню G — выбрать Вылечить игрока" loading="lazy">
+        <figcaption>Шаг 2. Нажать <b>Вылечить игрока</b></figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <footer>
+    База знаний EMS · <span id="year"></span> · Как правильно выдавать таблетки
+  </footer>
+
+</div>
+
+<!-- ============================================================
+     LIGHTBOX
+     ============================================================ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* ============================================================
+     LIGHTBOX
+     ============================================================ */
+  (function() {
+    const lb = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightbox-img");
+    const lbCap = document.getElementById("lightbox-caption");
+    const lbClose = document.getElementById("lightbox-close");
+
+    function open(src, caption) {
+      lbImg.src = src;
+      lbImg.alt = caption || "";
+      lbCap.textContent = caption || "";
+      lb.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      lb.classList.remove("active");
+      lbImg.src = "";
+      document.body.style.overflow = "";
+    }
+
+    document.querySelectorAll("[data-lightbox]").forEach(fig => {
+      const img = fig.querySelector("img");
+      if (!img) return;
+      const cap = fig.querySelector("figcaption");
+      fig.addEventListener("click", () => {
+        if (!img.complete || img.naturalWidth === 0) {
+          showToast("Картинка не загружена. Проверь путь.");
+          return;
+        }
+        open(img.src, cap ? cap.textContent.replace(/\s+/g, " ").trim() : img.alt);
+      });
+    });
+
+    lbClose.addEventListener("click", close);
+    lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lb.classList.contains("active")) close();
+    });
+  })();
+</script>
+</body>
+</html>

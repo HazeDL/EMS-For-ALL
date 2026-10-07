@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вступительная лекция — База знаний EMS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Левая панель */
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 180px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92);
+    color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Правая панель */
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 42px; --width: 180px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px; display: flex; align-items: center;
+    gap: 10px; padding: 0 14px 0 12px;
+    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 10px 0 0 10px; font-family: inherit;
+    font-size: 14px; font-weight: 500; cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab:active { transform: translateY(1px); }
+  .tab.tab-active {
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.9), rgba(22, 33, 62, 0.9));
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* --------- Хлебные крошки --------- */
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .breadcrumbs a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
+  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
+  .breadcrumbs .current { color: var(--text); }
+
+  /* --------- Секции --------- */
+  .rules-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+  }
+  .rules-title {
+    font-size: 14px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .rules-title .icon { font-size: 18px; }
+
+  .rules-text {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  .rules-text strong { color: var(--accent); }
+
+  /* --------- Иерархия --------- */
+  .hierarchy {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+  }
+  .rank {
+    display: inline-block;
+    padding: 6px 12px;
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.30);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .rank:hover { background: rgba(88, 166, 255, 0.20); transform: translateY(-1px); }
+  .rank-arrow { color: var(--text-dim); font-size: 14px; }
+
+  /* --------- Список обязанностей --------- */
+  .duties {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .duties li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.55;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .duties li:hover {
+    border-color: var(--accent);
+    background: rgba(28, 35, 48, 0.75);
+  }
+  .duties .check {
+    flex-shrink: 0;
+    color: var(--success);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* --------- Таблица медикаментов --------- */
+  .meds {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .med {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .med:hover { border-color: var(--accent); background: rgba(28, 35, 48, 0.75); }
+  .med-name { color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .med-count {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 15px;
+    background: rgba(210, 153, 34, 0.12);
+    border: 1px solid rgba(210, 153, 34, 0.28);
+    padding: 3px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .med-note {
+    color: var(--text-dim);
+    font-size: 12px;
+    display: block;
+    margin-left: 2px;
+  }
+
+  /* --------- Мобильный --------- */
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 160px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .side-tabs { top: auto; bottom: 12px; right: 12px; transform: none; }
+    .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; border-radius: 10px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+
+    .rules-section { padding: 16px; }
+    .rules-text { font-size: 13.5px; }
+    .rank { font-size: 12px; padding: 5px 9px; }
+    .duties li { font-size: 13px; padding: 10px 12px; }
+    .meds { grid-template-columns: 1fr; }
+    .med { font-size: 13px; padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     ПАНЕЛЬ СЛЕВА
+     ============================================================ -->
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главная EMS</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     ПАНЕЛЬ СПРАВА
+     ============================================================ -->
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Калькулятор</span>
+  </a>
+  <a class="tab" href="departments.html">
+    <span class="tab-icon">🏥</span>
+    <span class="tab-label">Отделы</span>
+  </a>
+  <a class="tab tab-active" href="intro.html">
+    <span class="tab-icon">📖</span>
+    <span class="tab-label">Лекция</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     КНОПКА ФОНА
+     ============================================================ -->
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     ОСНОВНОЙ КОНТЕНТ
+     ============================================================ -->
+<div class="container page-content">
+
+  <header>
+    <h1>Вступительная лекция</h1>
+    <p>Для новичков EMS · правила гос. организаций</p>
+  </header>
+
+  <div class="breadcrumbs">
+    <a href="main.html">База знаний EMS</a>
+    <span class="sep">›</span>
+    <span class="current">Вступительная лекция и правила гос. организаций</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">💓</div>
+    <h2 class="hero-title">Добро пожаловать в EMS!</h2>
+    <p class="hero-subtitle">
+      Наша служба занимается неотложной медицинской помощью, транспортировкой пострадавших,
+      санитарными проверками и обеспечением здоровья граждан штата.
+    </p>
+  </div>
+
+  <!-- ==================== РУКОВОДСТВО ==================== -->
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">👑</span> Руководство EMS</div>
+    <p class="rules-text">
+      EMS подчиняется <strong>Губернатору</strong>, <strong>Минздраву</strong> и
+      <strong>руководству больницы</strong>.
+    </p>
+    <p class="rules-text">
+      Внутри организации действует строгая иерархия:
+    </p>
+    <div class="hierarchy">
+      <span class="rank">Instructor</span>
+      <span class="rank-arrow">→</span>
+      <span class="rank">HAD</span>
+      <span class="rank-arrow">→</span>
+      <span class="rank">Deputy Head of Department</span>
+      <span class="rank-arrow">→</span>
+      <span class="rank">Head of Department</span>
+      <span class="rank-arrow">→</span>
+      <span class="rank">Assistant Chief Doctor</span>
+      <span class="rank-arrow">→</span>
+      <span class="rank">Deputy Chief Doctor</span>
+      <span class="rank-arrow">→</span>
+      <span class="rank">Chief Doctor</span>
+    </div>
+  </div>
+
+  <!-- ==================== ОБЯЗАННОСТИ ==================== -->
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">📌</span> Основные обязанности</div>
+    <ul class="duties">
+      <li><span class="check">✔</span> Оказывать помощь пострадавшим и транспортировать их в больницу.</li>
+      <li><span class="check">✔</span> Хранить и учитывать медикаменты, отчитываться о взятых препаратах в течение часа.</li>
+      <li><span class="check">✔</span> Соблюдать дресс-код своего отдела.</li>
+      <li><span class="check">✔</span> Присутствовать на брифингах HAD, старшего и руководящего состава.</li>
+      <li><span class="check">✔</span> Работать в соответствии с графиком смен.</li>
+      <li><span class="check">✔</span> Оказывать медицинские услуги в строго отведённых местах.</li>
+      <li><span class="check">✔</span> Отрабатывать выговоры в течение 48 часов.</li>
+      <li><span class="check">✔</span> Иметь действующую медицинскую справку о психическом и физическом здоровье.</li>
+    </ul>
+  </div>
+
+  <!-- ==================== МЕДИКАМЕНТЫ ==================== -->
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">💊</span> Допустимое количество медикаментов к взятию</div>
+    <div class="meds">
+      <div class="med">
+        <div class="med-name">🔹 Кодеин</div>
+        <span class="med-count">48 шт</span>
+      </div>
+      <div class="med">
+        <div class="med-name">
+          🔹 Эпинефрин
+          <span class="med-note">для отдела PM — 30 шт</span>
+        </div>
+        <span class="med-count">20 шт</span>
+      </div>
+      <div class="med">
+        <div class="med-name">🔹 Активированный уголь</div>
+        <span class="med-count">24 шт</span>
+      </div>
+      <div class="med">
+        <div class="med-name">🔹 Азитромицин</div>
+        <span class="med-count">24 шт</span>
+      </div>
+      <div class="med">
+        <div class="med-name">🔹 ИРП</div>
+        <span class="med-count">3 шт</span>
+      </div>
+      <div class="med">
+        <div class="med-name">🔹 Бинты</div>
+        <span class="med-count">40 шт</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    База знаний EMS · <span id="year"></span> · Вступительная лекция и правила гос. организаций
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
