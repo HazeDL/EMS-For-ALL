@@ -190,6 +190,43 @@
   .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+  /* --------- Панель слева — кнопка на калькулятор --------- */
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 48px; --width: 220px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 52px;
+    display: flex; align-items: center;
+    gap: 10px;
+    padding: 0 12px 0 12px;
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.92), rgba(22, 33, 62, 0.92));
+    color: var(--accent);
+    border: 1px solid var(--accent); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0;
+    background: linear-gradient(135deg, rgba(88, 166, 255, 0.25), rgba(26, 39, 68, 0.95));
+    color: var(--accent-hover);
+    box-shadow: 0 6px 24px rgba(88, 166, 255, 0.28);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 20px; width: 26px; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
   /* --------- Hero --------- */
   .hero {
     text-align: center;
@@ -347,6 +384,21 @@
     .side-tabs { top: auto; bottom: 12px; transform: none; }
     .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; }
     .tab-icon { font-size: 16px; width: 20px; }
+
+    /* Кнопка калькулятора слева — на мобилке сверху, компактнее */
+    .side-tabs-left {
+      top: auto; bottom: 12px; left: 12px; transform: none;
+    }
+    .tab-left {
+      --width: 180px; --visible: 44px;
+      height: 42px; font-size: 13px;
+      left: 0;
+      border-radius: 10px;
+      border-left: 1px solid var(--accent);
+      padding: 0 10px;
+    }
+    .tab-left:hover { left: 0; }
+
     .section { padding: 16px; }
     .cards { grid-template-columns: 1fr; gap: 10px; }
     .card { padding: 13px 14px; }
@@ -366,12 +418,28 @@
 </head>
 <body>
 
+<!-- ============================================================
+     ПАНЕЛЬ СЛЕВА — КНОПКА НА КАЛЬКУЛЯТОР
+     ============================================================ -->
+<nav class="side-tabs-left" aria-label="Быстрые ссылки">
+  <a class="tab-left" href="index.html" title="Перейти к калькулятору баллов">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Калькулятор баллов</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     ПАНЕЛЬ ВКЛАДОК СПРАВА
+     ============================================================ -->
 <nav class="side-tabs" aria-label="Разделы">
-  <a class="tab tab-active" href="#top" onclick="scrollTop(event)">
+  <a class="tab tab-active" href="main.html">
     <span class="tab-icon">🏠</span><span class="tab-label">Главная</span>
   </a>
 </nav>
 
+<!-- ============================================================
+     КНОПКА ФОНА
+     ============================================================ -->
 <div class="bg-controls">
   <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
   <div class="bg-menu" id="bg-menu" hidden>
@@ -392,6 +460,9 @@
   </div>
 </div>
 
+<!-- ============================================================
+     ОСНОВНОЙ КОНТЕНТ
+     ============================================================ -->
 <div class="container" id="top">
 
   <header>
