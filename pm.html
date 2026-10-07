@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM — Калькулятор баллов</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     ПАНЕЛЬ ВКЛАДОК СПРАВА
+     ============================================================ -->
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главное меню</span>
+  </a>
+  <a class="tab tab-active" href="pm.html">
+    <span class="tab-icon">📋</span>
+    <span class="tab-label">PM</span>
+  </a>
+  <a class="tab" href="di.html">
+    <span class="tab-icon">📊</span>
+    <span class="tab-label">DI</span>
+  </a>
+  <a class="tab" href="psid.html">
+    <span class="tab-icon">🏥</span>
+    <span class="tab-label">PSID</span>
+  </a>
+  <a class="tab" href="had.html">
+    <span class="tab-icon">💉</span>
+    <span class="tab-label">HAD</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     КНОПКА ФОНА
+     ============================================================ -->
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     ОСНОВНОЙ КОНТЕНТ
+     ============================================================ -->
+<div class="container page-content">
+
+  <header>
+    <h1>Калькулятор PM</h1>
+    <p>Введите количество — итог и шкала обновятся автоматически</p>
+  </header>
+
+  <div class="content-layout" id="content-pm">
+
+    <!-- ================= ШКАЛА СЛЕВА ================= -->
+    <aside class="progress-rail" data-rail="pm">
+      <div class="progress-rail-title">PM</div>
+      <div class="progress-rail-value" data-rail-value>0</div>
+      <div class="progress-rail-scale">
+        <div class="progress-rail-fill" data-rail-fill></div>
+        <div class="progress-rail-ticks">
+          <div class="progress-rail-tick" style="bottom: 100%;"><span class="progress-rail-tick-label">1500</span></div>
+          <div class="progress-rail-tick" style="bottom: 66.66%;"><span class="progress-rail-tick-label">1000</span></div>
+          <div class="progress-rail-tick" style="bottom: 33.33%;"><span class="progress-rail-tick-label">500</span></div>
+          <div class="progress-rail-tick" style="bottom: 16.66%;"><span class="progress-rail-tick-label">250</span></div>
+          <div class="progress-rail-tick" style="bottom: 6.66%;"><span class="progress-rail-tick-label">100</span></div>
+        </div>
+      </div>
+      <div class="progress-rail-status" data-rail-status>Начало</div>
+    </aside>
+
+    <!-- ================= ПРАВАЯ КОЛОНКА ================= -->
+    <div>
+
+      <div class="section">
+        <div class="section-title">Основная система PM</div>
+        <div class="row header-row">
+          <div class="cell">Действие</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
+        </div>
+        <div id="pm-main-items"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Дополнительно PM</div>
+        <div class="row header-row">
+          <div class="cell">Действие</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
+        </div>
+        <div id="pm-extra-items"></div>
+      </div>
+
+      <div class="total-box">
+        <span class="label">Итого баллов PM</span>
+        <span class="value" id="pm-total">0</span>
+      </div>
+
+      <div class="buttons">
+        <button class="primary" id="pm-btn-copy" type="button">📋 Копировать отчёт</button>
+        <button class="danger" id="pm-btn-reset" type="button">↺ Сбросить PM</button>
+      </div>
+
+      <div class="report" id="pm-report"></div>
+
+      <div class="section" style="margin-top: 20px;">
+        <div class="section-title">🔃 Замены</div>
+        <ul class="rules-list">
+          <li><b>1 вакцина в любой больнице</b> <span class="arrow">=</span> 1 ПМП</li>
+          <li><b>1 ПМП</b> <span class="arrow">=</span> 1 вакцина</li>
+          <li><b>5 таблеток в любой больнице</b> <span class="arrow">=</span> 1 вакцина или 1 ПМП</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    PM · Калькулятор баллов · <span id="year"></span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     ПОДКЛЮЧЕНИЕ СКРИПТОВ
+     ============================================================ -->
+<script src="common.js"></script>
+<script>
+/* ============================================================
+   СПИСОК УСЛУГ PM
+   ============================================================ */
+const PM_ITEMS = [
+  // Основная система PM
+  {key:"pm_pmp_day",      name:"ПМП днём",                              pts:3,   lim:0, sect:1},
+  {key:"pm_pmp_night",    name:"ПМП ночью",                             pts:5,   lim:0, sect:1},
+  {key:"pm_pmp_hospital", name:"ПМП в любой больнице и палатах",        pts:1,   lim:0, sect:1},
+  {key:"pm_pmp_rejected", name:"Отклонённый вызов",                     pts:1,   lim:0, sect:1},
+  {key:"pm_vax_elsh",     name:"Вакцина в ELSH",                        pts:3,   lim:0, sect:1},
+  {key:"pm_vax_ss",       name:"Вакцина в Sandy-Shores",                pts:4,   lim:0, sect:1},
+  {key:"pm_vax_pb",       name:"Вакцина в Paleto-Bay",                  pts:4,   lim:0, sect:1},
+  {key:"pm_pill_elsh",    name:"Таблетка в ELSH",                       pts:1,   lim:0, sect:1},
+  {key:"pm_pill_ss",      name:"Таблетка в Sandy-Shores",               pts:2,   lim:0, sect:1},
+  {key:"pm_pill_pb",      name:"Таблетка в Paleto-Bay",                 pts:2,   lim:0, sect:1},
+  {key:"pm_med_elsh",     name:"Справка в ELSH (каждая)",               pts:3,   lim:0, sect:1},
+  {key:"pm_med_ss",       name:"Справка в Sandy-Shores (каждая)",       pts:4,   lim:0, sect:1},
+  {key:"pm_med_pb",       name:"Справка в Paleto-Bay (каждая)",         pts:4,   lim:0, sect:1},
+
+  // Дополнительно PM
+  {key:"pm_q_therapist",  name:"Получение квалификации «Терапевт»",     pts:50,  lim:0, sect:2},
+  {key:"pm_q_surgeon",    name:"Получение квалификации «Хирург»",       pts:50,  lim:0, sect:2},
+  {key:"pm_q_vet",        name:"Получение квалификации «Ветеринар»",    pts:50,  lim:0, sect:2},
+  {key:"pm_q_recruiter",  name:"Получение квалификации «Рекрутер»",     pts:50,  lim:0, sect:2},
+  {key:"pm_lecture",      name:"Прослушивание лекции",                  pts:10,  lim:0, sect:2},
+  {key:"pm_exam",         name:"Прохождение экзамена",                  pts:10,  lim:0, sect:2},
+  {key:"pm_rp_op",        name:"Проведение 1 РП операции",              pts:100, lim:0, sect:2},
+  {key:"pm_recruit",      name:"Принятие 1 человека во фракцию",        pts:100, lim:0, sect:2},
+  {key:"pm_animal_check", name:"Проведение 1 осмотра служебных животных",pts:100,lim:0, sect:2},
+  {key:"pm_duty_elsh",    name:"Дежурство ELSH (30 минут)",             pts:10,  lim:0, sect:2},
+  {key:"pm_duty_ss",      name:"Дежурство Sandy-Shores (30 минут)",     pts:15,  lim:0, sect:2},
+  {key:"pm_duty_pb",      name:"Дежурство Paleto-Bay (30 минут)",       pts:15,  lim:0, sect:2},
+];
+
+const STORAGE_PM_STATE = "pm_calc_state_v1";
+
+/* ============================================================
+   ОТРИСОВКА СТРОК
+   ============================================================ */
+function renderPmItems() {
+  const elMain  = document.getElementById("pm-main-items");
+  const elExtra = document.getElementById("pm-extra-items");
+  if (!elMain || !elExtra) return;
+
+  PM_ITEMS.forEach(it => {
+    const container = it.sect === 1 ? elMain : elExtra;
+
+    const row = document.createElement("div");
+    row.className = "row";
+    row.dataset.key = it.key;
+
+    row.innerHTML = `
+      <div class="name">${it.name}</div>
+      <input type="number" min="0" step="1" data-role="count" data-key="${it.key}">
+      <input type="number" min="0" step="1" value="${it.pts}" data-role="point" data-key="${it.key}">
+      <div class="sum" data-role="sum" data-key="${it.key}">0</div>`;
+
+    container.appendChild(row);
+  });
+
+  document.querySelectorAll("#content-pm input[type=number]").forEach(inp => {
+    inp.addEventListener("input", recalcPm);
+  });
+}
+
+function getPmValue(key, role) {
+  const el = document.querySelector(`#content-pm input[data-role="${role}"][data-key="${key}"]`);
+  if (!el) return 0;
+  const v = parseInt(el.value, 10);
+  return isNaN(v) ? 0 : v;
+}
+
+/* ============================================================
+   ПЕРЕСЧЁТ
+   ============================================================ */
+function recalcPm() {
+  let total = 0;
+  const details = { main: [], extra: [], mainSum: 0, extraSum: 0 };
+
+  PM_ITEMS.forEach(it => {
+    const countEl = document.querySelector(`#content-pm input[data-role="count"][data-key="${it.key}"]`);
+    const sumEl   = document.querySelector(`#content-pm div[data-role="sum"][data-key="${it.key}"]`);
+    if (!countEl || !sumEl) return;
+
+    const count = getPmValue(it.key, "count");
+    const point = getPmValue(it.key, "point");
+    const sum = count * point;
+    total += sum;
+
+    popIfChanged(sumEl, sumEl.textContent, String(sum));
+    sumEl.classList.toggle("positive", sum > 0);
+
+    countEl.closest(".row").classList.toggle("active", count > 0);
+
+    if (count > 0) {
+      const e = {name: it.name, count, point, sum};
+      if (it.sect === 1) { details.main.push(e); details.mainSum += sum; }
+      else               { details.extra.push(e); details.extraSum += sum; }
+    }
+  });
+
+  const totalEl = document.getElementById("pm-total");
+  if (totalEl && parseInt(totalEl.textContent, 10) !== total) {
+    totalEl.textContent = total;
+    pulseEl(totalEl);
+  }
+
+  const reportEl = document.getElementById("pm-report");
+  if (reportEl) {
+    let report = "";
+    if (details.main.length) {
+      report += "── Основная система PM ──\n";
+      details.main.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
+      report += `  Подытог: ${details.mainSum}\n\n`;
+    }
+    if (details.extra.length) {
+      report += "── Дополнительно PM ──\n";
+      details.extra.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
+      report += `  Подытог: ${details.extraSum}\n\n`;
+    }
+    if (total > 0) report += `ИТОГО PM: ${total} баллов`;
+    reportEl.textContent = report;
+  }
+
+  updateRail("content-pm", total);
+  savePmState();
+}
+
+/* ============================================================
+   СОХРАНЕНИЕ / ЗАГРУЗКА
+   ============================================================ */
+function savePmState() {
+  const s = {};
+  PM_ITEMS.forEach(it => s[it.key] = { count: getPmValue(it.key, "count"), point: getPmValue(it.key, "point") });
+  try { localStorage.setItem(STORAGE_PM_STATE, JSON.stringify(s)); } catch (e) {}
+}
+
+function loadPmState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_PM_STATE);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    PM_ITEMS.forEach(it => {
+      if (!s[it.key]) return;
+      const c = s[it.key].count || 0;
+      const p = s[it.key].point != null ? s[it.key].point : it.pts;
+      const cEl = document.querySelector(`#content-pm input[data-role="count"][data-key="${it.key}"]`);
+      const pEl = document.querySelector(`#content-pm input[data-role="point"][data-key="${it.key}"]`);
+      if (cEl) cEl.value = c > 0 ? c : "";
+      if (pEl) pEl.value = p;
+    });
+  } catch (e) {}
+}
+
+/* ============================================================
+   КНОПКИ
+   ============================================================ */
+function resetPm() {
+  PM_ITEMS.forEach(it => {
+    const cEl = document.querySelector(`#content-pm input[data-role="count"][data-key="${it.key}"]`);
+    const pEl = document.querySelector(`#content-pm input[data-role="point"][data-key="${it.key}"]`);
+    if (cEl) cEl.value = "";
+    if (pEl) pEl.value = it.pts;
+  });
+  recalcPm();
+  showToast("PM сброшен");
+}
+
+function copyPmReport() {
+  const r = document.getElementById("pm-report").textContent;
+  if (!r) { showToast("Сначала введите данные"); return; }
+  navigator.clipboard.writeText("=== ОТЧЁТ PM ===\n\n" + r)
+    .then(() => showToast("Отчёт PM скопирован"))
+    .catch(() => showToast("Не удалось скопировать"));
+}
+
+/* ============================================================
+   ИНИЦИАЛИЗАЦИЯ
+   ============================================================ */
+renderPmItems();
+loadPmState();
+
+document.getElementById("pm-btn-copy").addEventListener("click", copyPmReport);
+document.getElementById("pm-btn-reset").addEventListener("click", resetPm);
+
+recalcPm();
+
+/* ---- Ctrl+S — копировать отчёт ---- */
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+    e.preventDefault();
+    copyPmReport();
+  }
+});
+
+/* ---- Пересчёт шкалы при ресайзе ---- */
+window.onCalcResize = function() {
+  recalcPm();
+};
+</script>
+</body>
+</html>

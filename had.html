@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HAD — Калькулятор баллов</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     ПАНЕЛЬ ВКЛАДОК СПРАВА
+     ============================================================ -->
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главное меню</span>
+  </a>
+  <a class="tab" href="pm.html">
+    <span class="tab-icon">📋</span>
+    <span class="tab-label">PM</span>
+  </a>
+  <a class="tab" href="di.html">
+    <span class="tab-icon">📊</span>
+    <span class="tab-label">DI</span>
+  </a>
+  <a class="tab" href="psid.html">
+    <span class="tab-icon">🏥</span>
+    <span class="tab-label">PSID</span>
+  </a>
+  <a class="tab tab-active" href="had.html">
+    <span class="tab-icon">💉</span>
+    <span class="tab-label">HAD</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     КНОПКА ФОНА
+     ============================================================ -->
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     ОСНОВНОЙ КОНТЕНТ
+     ============================================================ -->
+<div class="container page-content">
+
+  <header>
+    <h1>Калькулятор HAD</h1>
+    <p>Введите количество — итог и шкала обновятся автоматически</p>
+  </header>
+
+  <div class="content-layout" id="content-had">
+
+    <!-- ================= ШКАЛА СЛЕВА ================= -->
+    <aside class="progress-rail" data-rail="had">
+      <div class="progress-rail-title">HAD</div>
+      <div class="progress-rail-value" data-rail-value>0</div>
+      <div class="progress-rail-scale">
+        <div class="progress-rail-fill" data-rail-fill></div>
+        <div class="progress-rail-ticks">
+          <div class="progress-rail-tick" style="bottom: 100%;"><span class="progress-rail-tick-label">1500</span></div>
+          <div class="progress-rail-tick" style="bottom: 66.66%;"><span class="progress-rail-tick-label">1000</span></div>
+          <div class="progress-rail-tick" style="bottom: 33.33%;"><span class="progress-rail-tick-label">500</span></div>
+          <div class="progress-rail-tick" style="bottom: 16.66%;"><span class="progress-rail-tick-label">250</span></div>
+          <div class="progress-rail-tick" style="bottom: 6.66%;"><span class="progress-rail-tick-label">100</span></div>
+        </div>
+      </div>
+      <div class="progress-rail-status" data-rail-status>Начало</div>
+    </aside>
+
+    <!-- ================= ПРАВАЯ КОЛОНКА ================= -->
+    <div>
+
+      <div class="section">
+        <div class="section-title">Основные действия</div>
+        <div class="row header-row">
+          <div class="cell">Действие</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
+        </div>
+        <div id="had-main-items"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Инструктор HAD</div>
+        <div class="row header-row">
+          <div class="cell">Действие</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
+        </div>
+        <div id="had-instr-items"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Недельный отчёт</div>
+        <div class="row header-row">
+          <div class="cell">Услуга</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
+        </div>
+        <div id="had-weekly-items"></div>
+      </div>
+
+      <div class="total-box">
+        <span class="label">Итого баллов HAD</span>
+        <span class="value" id="had-total">0</span>
+      </div>
+
+      <div class="buttons">
+        <button class="primary" id="had-btn-copy" type="button">📋 Копировать отчёт</button>
+        <button class="danger" id="had-btn-reset" type="button">↺ Сбросить HAD</button>
+      </div>
+
+      <div class="report" id="had-report"></div>
+
+      <div class="section" style="margin-top: 20px;">
+        <div class="section-title">Возможные замены</div>
+        <ul class="rules-list">
+          <li><b>2 выговора</b> <span class="arrow">→</span> 1 проверка перерывов/отпусков</li>
+          <li><b>2 выговора</b> <span class="arrow">→</span> 1 вызов сотрудника по 10-20</li>
+          <li><b>1 проверка на прогул</b> <span class="arrow">→</span> 1 брифинг</li>
+          <li><b>1 проверка склада</b> <span class="arrow">→</span> 2 выговора</li>
+          <li><b>1 брифинг</b> <span class="arrow">→</span> 1 проверка на прогул</li>
+          <li><b>5 выговоров</b> <span class="arrow">→</span> 1 брифинг</li>
+          <li><b>15 ПМП</b> <span class="arrow">→</span> 1 проверка на прогул</li>
+          <li><b>5 ПМП</b> <span class="arrow">→</span> 1 проверка отпусков</li>
+          <li><b>5 вызовов по рации</b> <span class="arrow">→</span> 1 проверка на прогул</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Замены для инструкторов</div>
+        <ul class="rules-list">
+          <li><b>1 отчёт на повышение</b> <span class="arrow">→</span> 30 минут дежурства в больнице</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    HAD · Калькулятор баллов · <span id="year"></span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     ПОДКЛЮЧЕНИЕ СКРИПТОВ
+     ============================================================ -->
+<script src="common.js"></script>
+<script>
+/* ============================================================
+   СПИСОК УСЛУГ HAD
+   sect: 1 = основные действия, 2 = инструктор, 3 = недельный отчёт
+   ============================================================ */
+const HAD_ITEMS = [
+  // Основные действия
+  {key:"had_reprimand",    name:"Выдача выговоров",                          pts:5,  lim:0,   sect:1},
+  {key:"had_walk_check",   name:"Проверка на прогул",                        pts:5,  lim:0,   sect:1},
+  {key:"had_break_check",  name:"Проверка обедов / отпусков",                pts:3,  lim:0,   sect:1},
+  {key:"had_briefing",     name:"Проведение брифинга",                       pts:20, lim:0,   sect:1},
+  {key:"had_briefing_att", name:"Принять участие в брифинге",                pts:10, lim:0,   sect:1},
+  {key:"had_recert",       name:"Проверить переаттестацию",                  pts:5,  lim:0,   sect:1},
+  {key:"had_radio_call",   name:"Вызвать человека по рации (запрос 10-20)",  pts:3,  lim:0,   sect:1},
+  {key:"had_duty_check",   name:"Проверка дежурств",                         pts:15, lim:0,   sect:1},
+  {key:"had_hospital_duty",name:"Дежурство в больнице 30 мин",               pts:10, lim:0,   sect:1},
+  {key:"had_duty_accept",  name:"Принятие дежурств",                         pts:15, lim:0,   sect:1},
+
+  // Инструктор HAD
+  {key:"had_instr_promo",  name:"Проверка отчёта на повышение",              pts:20, lim:0,   sect:2},
+  {key:"had_instr_weekly", name:"Проверка недельного отчёта",                pts:25, lim:0,   sect:2},
+
+  // Недельный отчёт
+  {key:"had_w_duty",       name:"Дежурство в больнице 30 мин",               pts:10, lim:0,   sect:3},
+  {key:"had_w_accept",     name:"Принятие человека",                         pts:10, lim:0,   sect:3},
+  {key:"had_w_pmp_day",    name:"ПМП днём",                                  pts:2,  lim:100, sect:3},
+  {key:"had_w_pmp_night",  name:"ПМП ночью",                                 pts:4,  lim:100, sect:3},
+  {key:"had_w_vax",        name:"Вакцины",                                   pts:4,  lim:80,  sect:3},
+  {key:"had_w_pills",      name:"Таблетки",                                  pts:1,  lim:100, sect:3},
+  {key:"had_w_med_elsh",   name:"Медсправки в ELSH",                         pts:3,  lim:75,  sect:3},
+  {key:"had_w_med_ss_pb",  name:"Медсправки в SH/PB",                        pts:4,  lim:60,  sect:3},
+];
+
+const STORAGE_HAD_STATE = "had_calc_state_v1";
+
+/* ============================================================
+   ОТРИСОВКА СТРОК
+   ============================================================ */
+function renderHadItems() {
+  const elMain = document.getElementById("had-main-items");
+  const elIns  = document.getElementById("had-instr-items");
+  const elWeek = document.getElementById("had-weekly-items");
+  if (!elMain || !elIns || !elWeek) return;
+
+  HAD_ITEMS.forEach(it => {
+    const container = it.sect === 1 ? elMain : (it.sect === 2 ? elIns : elWeek);
+
+    const badge = it.lim > 0 ? `<span class="limit">макс ${it.lim}</span>` : "";
+
+    const row = document.createElement("div");
+    row.className = "row";
+    row.dataset.key = it.key;
+
+    row.innerHTML = `
+      <div class="name">${it.name}${badge}</div>
+      <input type="number" min="0" step="1" data-role="count" data-key="${it.key}">
+      <input type="number" min="0" step="1" value="${it.pts}" data-role="point" data-key="${it.key}">
+      <div class="sum" data-role="sum" data-key="${it.key}">0</div>`;
+
+    container.appendChild(row);
+  });
+
+  document.querySelectorAll("#content-had input[type=number]").forEach(inp => {
+    inp.addEventListener("input", recalcHad);
+  });
+}
+
+function getHadValue(key, role) {
+  const el = document.querySelector(`#content-had input[data-role="${role}"][data-key="${key}"]`);
+  if (!el) return 0;
+  const v = parseInt(el.value, 10);
+  return isNaN(v) ? 0 : v;
+}
+
+/* ============================================================
+   ПЕРЕСЧЁТ
+   ============================================================ */
+function recalcHad() {
+  let total = 0;
+  const details = {
+    main:   { title: "Основные действия", items: [], sum: 0 },
+    instr:  { title: "Инструктор HAD",    items: [], sum: 0 },
+    weekly: { title: "Недельный отчёт",   items: [], sum: 0 },
+  };
+
+  HAD_ITEMS.forEach(it => {
+    const countEl = document.querySelector(`#content-had input[data-role="count"][data-key="${it.key}"]`);
+    const sumEl   = document.querySelector(`#content-had div[data-role="sum"][data-key="${it.key}"]`);
+    if (!countEl || !sumEl) return;
+
+    let count = getHadValue(it.key, "count");
+    const point = getHadValue(it.key, "point");
+
+    const over = it.lim > 0 && count > it.lim;
+    if (over) count = it.lim;
+    countEl.classList.toggle("over-limit", over);
+
+    const sum = count * point;
+    total += sum;
+
+    popIfChanged(sumEl, sumEl.textContent, String(sum));
+    sumEl.classList.toggle("positive", sum > 0);
+
+    countEl.closest(".row").classList.toggle("active", count > 0);
+
+    if (count > 0) {
+      const e = {name: it.name, count, point, sum};
+      if (it.sect === 1)      { details.main.items.push(e);   details.main.sum += sum; }
+      else if (it.sect === 2) { details.instr.items.push(e);  details.instr.sum += sum; }
+      else                    { details.weekly.items.push(e); details.weekly.sum += sum; }
+    }
+  });
+
+  const totalEl = document.getElementById("had-total");
+  if (totalEl && parseInt(totalEl.textContent, 10) !== total) {
+    totalEl.textContent = total;
+    pulseEl(totalEl);
+  }
+
+  const reportEl = document.getElementById("had-report");
+  if (reportEl) {
+    let report = "";
+    ["main", "instr", "weekly"].forEach(k => {
+      const d = details[k];
+      if (!d.items.length) return;
+      report += `── ${d.title} ──\n`;
+      d.items.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
+      report += `  Подытог: ${d.sum}\n\n`;
+    });
+    if (total > 0) report += `ИТОГО HAD: ${total} баллов`;
+    reportEl.textContent = report;
+  }
+
+  updateRail("content-had", total);
+  saveHadState();
+}
+
+/* ============================================================
+   СОХРАНЕНИЕ / ЗАГРУЗКА
+   ============================================================ */
+function saveHadState() {
+  const s = {};
+  HAD_ITEMS.forEach(it => s[it.key] = { count: getHadValue(it.key, "count"), point: getHadValue(it.key, "point") });
+  try { localStorage.setItem(STORAGE_HAD_STATE, JSON.stringify(s)); } catch (e) {}
+}
+
+function loadHadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_HAD_STATE);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    HAD_ITEMS.forEach(it => {
+      if (!s[it.key]) return;
+      const c = s[it.key].count || 0;
+      const p = s[it.key].point != null ? s[it.key].point : it.pts;
+      const cEl = document.querySelector(`#content-had input[data-role="count"][data-key="${it.key}"]`);
+      const pEl = document.querySelector(`#content-had input[data-role="point"][data-key="${it.key}"]`);
+      if (cEl) cEl.value = c > 0 ? c : "";
+      if (pEl) pEl.value = p;
+    });
+  } catch (e) {}
+}
+
+/* ============================================================
+   КНОПКИ
+   ============================================================ */
+function resetHad() {
+  HAD_ITEMS.forEach(it => {
+    const cEl = document.querySelector(`#content-had input[data-role="count"][data-key="${it.key}"]`);
+    const pEl = document.querySelector(`#content-had input[data-role="point"][data-key="${it.key}"]`);
+    if (cEl) cEl.value = "";
+    if (pEl) pEl.value = it.pts;
+  });
+  recalcHad();
+  showToast("HAD сброшен");
+}
+
+function copyHadReport() {
+  const r = document.getElementById("had-report").textContent;
+  if (!r) { showToast("Сначала введите данные"); return; }
+  navigator.clipboard.writeText("=== ОТЧЁТ HAD ===\n\n" + r)
+    .then(() => showToast("Отчёт HAD скопирован"))
+    .catch(() => showToast("Не удалось скопировать"));
+}
+
+/* ============================================================
+   ИНИЦИАЛИЗАЦИЯ
+   ============================================================ */
+renderHadItems();
+loadHadState();
+
+document.getElementById("had-btn-copy").addEventListener("click", copyHadReport);
+document.getElementById("had-btn-reset").addEventListener("click", resetHad);
+
+recalcHad();
+
+/* ---- Ctrl+S — копировать отчёт ---- */
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+    e.preventDefault();
+    copyHadReport();
+  }
+});
+
+/* ---- Пересчёт шкалы при ресайзе ---- */
+window.onCalcResize = function() {
+  recalcHad();
+};
+</script>
+</body>
+</html>
