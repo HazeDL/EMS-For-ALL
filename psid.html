@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSID — Калькулятор баллов</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     ПАНЕЛЬ ВКЛАДОК СПРАВА
+     ============================================================ -->
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главное меню</span>
+  </a>
+  <a class="tab" href="pm.html">
+    <span class="tab-icon">📋</span>
+    <span class="tab-label">PM</span>
+  </a>
+  <a class="tab" href="di.html">
+    <span class="tab-icon">📊</span>
+    <span class="tab-label">DI</span>
+  </a>
+  <a class="tab tab-active" href="psid.html">
+    <span class="tab-icon">🏥</span>
+    <span class="tab-label">PSID</span>
+  </a>
+  <a class="tab" href="had.html">
+    <span class="tab-icon">💉</span>
+    <span class="tab-label">HAD</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     КНОПКА ФОНА
+     ============================================================ -->
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     ОСНОВНОЙ КОНТЕНТ
+     ============================================================ -->
+<div class="container page-content">
+
+  <header>
+    <h1>Калькулятор PSID</h1>
+    <p>Введите количество — итог и шкала обновятся автоматически</p>
+  </header>
+
+  <div class="content-layout" id="content-psid">
+
+    <!-- ================= ШКАЛА СЛЕВА ================= -->
+    <aside class="progress-rail" data-rail="psid">
+      <div class="progress-rail-title">PSID</div>
+      <div class="progress-rail-value" data-rail-value>0</div>
+      <div class="progress-rail-scale">
+        <div class="progress-rail-fill" data-rail-fill></div>
+        <div class="progress-rail-ticks">
+          <div class="progress-rail-tick" style="bottom: 100%;"><span class="progress-rail-tick-label">1500</span></div>
+          <div class="progress-rail-tick" style="bottom: 66.66%;"><span class="progress-rail-tick-label">1000</span></div>
+          <div class="progress-rail-tick" style="bottom: 33.33%;"><span class="progress-rail-tick-label">500</span></div>
+          <div class="progress-rail-tick" style="bottom: 16.66%;"><span class="progress-rail-tick-label">250</span></div>
+          <div class="progress-rail-tick" style="bottom: 6.66%;"><span class="progress-rail-tick-label">100</span></div>
+        </div>
+      </div>
+      <div class="progress-rail-status" data-rail-status>Начало</div>
+    </aside>
+
+    <!-- ================= ПРАВАЯ КОЛОНКА ================= -->
+    <div>
+
+      <div class="section">
+        <div class="section-title">Основная система баллов</div>
+        <div class="row header-row">
+          <div class="cell">Услуга</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
+        </div>
+        <div id="main-items"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Доп. система — Инструкторы PSID</div>
+        <div class="row header-row">
+          <div class="cell">Услуга</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
+        </div>
+        <div id="instr-items"></div>
+      </div>
+
+      <div class="total-box">
+        <span class="label">Итого баллов PSID</span>
+        <span class="value" id="total">0</span>
+      </div>
+
+      <div class="buttons">
+        <button class="primary" id="btn-copy" type="button">📋 Копировать отчёт</button>
+        <button id="btn-save" type="button">🔒 Сохранить баллы</button>
+        <button class="danger" id="btn-reset" type="button">↺ Сбросить PSID</button>
+      </div>
+
+      <div class="report" id="report"></div>
+
+    </div>
+  </div>
+
+  <footer>
+    PSID · Калькулятор баллов · <span id="year"></span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     ПОДКЛЮЧЕНИЕ СКРИПТОВ
+     ============================================================ -->
+<script src="common.js"></script>
+<script>
+/* ============================================================
+   СПИСОК УСЛУГ PSID
+   ============================================================ */
+const ITEMS = [
+  {key:"pill_day",       name:"Выдача таблетки днём",                   pts:2,  lim:100, sect:1},
+  {key:"pill_night",     name:"Выдача таблетки ночью",                  pts:2,  lim:100, sect:1},
+  {key:"vax_day",        name:"Выдача вакцины днём",                    pts:3,  lim:0,   sect:1},
+  {key:"vax_night",      name:"Выдача вакцины ночью",                   pts:4,  lim:0,   sect:1},
+  {key:"med_elsh",       name:"Мед. справка в ELSH",                    pts:5,  lim:0,   sect:1},
+  {key:"med_ss_pb",      name:"Мед. справка в СШ / Палето-Бей",         pts:6,  lim:0,   sect:1},
+  {key:"donor_day",      name:"Присутствие на Дне Донора",              pts:40, lim:0,   sect:1},
+  {key:"gov_check",      name:"Проверка гос. организации",              pts:50, lim:0,   sect:1},
+  {key:"psy_video",      name:"Псих. помощь с видео-откатом",           pts:50, lim:0,   sect:1},
+  {key:"pmp_day",        name:"Оказание ПМП днём",                      pts:3,  lim:3,   sect:1},
+  {key:"pmp_night",      name:"Оказание ПМП ночью",                     pts:4,  lim:0,   sect:1},
+  {key:"supply",         name:"Участие в поставках",                    pts:30, lim:0,   sect:1},
+  {key:"kpz_bank",       name:"Выезд. обследование (КПЗ/Банк/Похитка)", pts:45, lim:0,   sect:1},
+  {key:"rp_video",       name:"РП операция с видео-откатом",            pts:50, lim:0,   sect:1},
+  {key:"recruit",        name:"Принятие во фракцию (Рекрутер)",         pts:30, lim:0,   sect:1},
+  {key:"therapist_qual", name:"Принятие квал-ции Терапевта",            pts:20, lim:0,   sect:1},
+  {key:"duty_ss_pb",     name:"Дежурство 30 мин в СШ/ПБ",               pts:20, lim:0,   sect:1},
+  {key:"duty_elsh",      name:"Дежурство 30 мин в ELSH",                pts:10, lim:0,   sect:1},
+  {key:"instr_weekly",   name:"Проверка недельного отчёта",             pts:20, lim:0,   sect:2},
+  {key:"instr_theory",   name:"Принятие внутр. теор. экзамена",         pts:20, lim:0,   sect:2},
+  {key:"instr_practice", name:"Внутр. практ. экзамен интерну",          pts:30, lim:0,   sect:2},
+  {key:"instr_therapist",name:"Экзамен на квал-цию терапевта",          pts:15, lim:0,   sect:2},
+  {key:"instr_psy_rep",  name:"Проверка отчёта о псих. помощи",         pts:30, lim:0,   sect:2},
+  {key:"instr_psy_help", name:"Помощь в псих. помощи",                  pts:20, lim:0,   sect:2},
+  {key:"instr_gov",      name:"Доп. проверка гос. структур",            pts:20, lim:0,   sect:2},
+];
+
+const STORAGE_STATE    = "psid_calc_state_v1";
+const STORAGE_DEFAULTS = "psid_calc_defaults_v1";
+
+/* ============================================================
+   ОТРИСОВКА СТРОК
+   ============================================================ */
+function renderItems() {
+  const mainEl  = document.getElementById("main-items");
+  const instrEl = document.getElementById("instr-items");
+  if (!mainEl || !instrEl) return;
+
+  ITEMS.forEach(it => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.dataset.key = it.key;
+
+    const badge = it.lim > 0 ? `<span class="limit">макс ${it.lim}</span>` : "";
+
+    row.innerHTML = `
+      <div class="name">${it.name}${badge}</div>
+      <input type="number" min="0" step="1" data-role="count" data-key="${it.key}">
+      <input type="number" min="0" step="1" value="${it.pts}" data-role="point" data-key="${it.key}">
+      <div class="sum" data-role="sum" data-key="${it.key}">0</div>`;
+
+    if (it.sect === 1) mainEl.appendChild(row);
+    else               instrEl.appendChild(row);
+  });
+
+  document.querySelectorAll("#content-psid input[type=number]").forEach(inp => {
+    inp.addEventListener("input", recalc);
+  });
+}
+
+function getValue(key, role) {
+  const el = document.querySelector(`#content-psid input[data-role="${role}"][data-key="${key}"]`);
+  if (!el) return 0;
+  const v = parseInt(el.value, 10);
+  return isNaN(v) ? 0 : v;
+}
+
+/* ============================================================
+   ПЕРЕСЧЁТ
+   ============================================================ */
+function recalc() {
+  let total = 0;
+  const details = { main: [], instr: [], mainSum: 0, instrSum: 0 };
+
+  ITEMS.forEach(it => {
+    const countEl = document.querySelector(`#content-psid input[data-role="count"][data-key="${it.key}"]`);
+    const sumEl   = document.querySelector(`#content-psid div[data-role="sum"][data-key="${it.key}"]`);
+    if (!countEl || !sumEl) return;
+
+    let count = getValue(it.key, "count");
+    const point = getValue(it.key, "point");
+
+    const over = it.lim > 0 && count > it.lim;
+    if (over) count = it.lim;
+    countEl.classList.toggle("over-limit", over);
+
+    const sum = count * point;
+    total += sum;
+
+    popIfChanged(sumEl, sumEl.textContent, String(sum));
+    sumEl.classList.toggle("positive", sum > 0);
+
+    countEl.closest(".row").classList.toggle("active", count > 0);
+
+    if (count > 0) {
+      const e = {name: it.name, count, point, sum};
+      if (it.sect === 1) { details.main.push(e); details.mainSum += sum; }
+      else               { details.instr.push(e); details.instrSum += sum; }
+    }
+  });
+
+  const totalEl = document.getElementById("total");
+  if (totalEl && parseInt(totalEl.textContent, 10) !== total) {
+    totalEl.textContent = total;
+    pulseEl(totalEl);
+  }
+
+  const reportEl = document.getElementById("report");
+  if (reportEl) {
+    let report = "";
+    if (details.main.length) {
+      report += "── Основные услуги ──\n";
+      details.main.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
+      report += `  Подытог: ${details.mainSum}\n\n`;
+    }
+    if (details.instr.length) {
+      report += "── Инструкторы ──\n";
+      details.instr.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
+      report += `  Подытог: ${details.instrSum}\n\n`;
+    }
+    if (total > 0) report += `ИТОГО PSID: ${total} баллов`;
+    reportEl.textContent = report;
+  }
+
+  updateRail("content-psid", total);
+  saveState();
+}
+
+/* ============================================================
+   СОХРАНЕНИЕ / ЗАГРУЗКА
+   ============================================================ */
+function saveState() {
+  const s = {};
+  ITEMS.forEach(it => s[it.key] = { count: getValue(it.key, "count"), point: getValue(it.key, "point") });
+  try { localStorage.setItem(STORAGE_STATE, JSON.stringify(s)); } catch (e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_STATE);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    ITEMS.forEach(it => {
+      if (!s[it.key]) return;
+      const c = s[it.key].count || 0;
+      const p = s[it.key].point != null ? s[it.key].point : it.pts;
+      const cEl = document.querySelector(`#content-psid input[data-role="count"][data-key="${it.key}"]`);
+      const pEl = document.querySelector(`#content-psid input[data-role="point"][data-key="${it.key}"]`);
+      if (cEl) cEl.value = c > 0 ? c : "";
+      if (pEl) pEl.value = p;
+    });
+  } catch (e) {}
+}
+
+function loadSavedDefaults() {
+  try {
+    const raw = localStorage.getItem(STORAGE_DEFAULTS);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    ITEMS.forEach(it => {
+      if (d[it.key] != null) {
+        const pEl = document.querySelector(`#content-psid input[data-role="point"][data-key="${it.key}"]`);
+        if (pEl) pEl.value = d[it.key];
+      }
+    });
+  } catch (e) {}
+}
+
+/* ============================================================
+   КНОПКИ
+   ============================================================ */
+function resetAll() {
+  ITEMS.forEach(it => {
+    const cEl = document.querySelector(`#content-psid input[data-role="count"][data-key="${it.key}"]`);
+    const pEl = document.querySelector(`#content-psid input[data-role="point"][data-key="${it.key}"]`);
+    if (cEl) cEl.value = "";
+    if (pEl) pEl.value = it.pts;
+  });
+  recalc();
+  showToast("PSID сброшен");
+}
+
+function saveDefaults() {
+  const pts = {};
+  ITEMS.forEach(it => pts[it.key] = getValue(it.key, "point"));
+  try {
+    localStorage.setItem(STORAGE_DEFAULTS, JSON.stringify(pts));
+    showToast("Баллы PSID сохранены");
+  } catch (e) {
+    showToast("Не удалось сохранить");
+  }
+}
+
+function copyReport() {
+  const r = document.getElementById("report").textContent;
+  if (!r) { showToast("Сначала введите данные"); return; }
+  navigator.clipboard.writeText("=== ОТЧЁТ PSID ===\n\n" + r)
+    .then(() => showToast("Отчёт PSID скопирован"))
+    .catch(() => showToast("Не удалось скопировать"));
+}
+
+/* ============================================================
+   ИНИЦИАЛИЗАЦИЯ
+   ============================================================ */
+renderItems();
+loadSavedDefaults();
+loadState();
+
+document.getElementById("btn-copy").addEventListener("click", copyReport);
+document.getElementById("btn-save").addEventListener("click", saveDefaults);
+document.getElementById("btn-reset").addEventListener("click", resetAll);
+
+recalc();
+
+/* ---- Ctrl+S — копировать отчёт ---- */
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+    e.preventDefault();
+    copyReport();
+  }
+});
+
+/* ---- Пересчёт шкалы при ресайзе ---- */
+window.onCalcResize = function() {
+  recalc();
+};
+</script>
+</body>
+</html>

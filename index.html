@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор баллов — Главное меню</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     ПАНЕЛЬ ВКЛАДОК СПРАВА
+     ============================================================ -->
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab tab-active" href="index.html">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главное меню</span>
+  </a>
+  <a class="tab" href="pm.html">
+    <span class="tab-icon">📋</span>
+    <span class="tab-label">PM</span>
+  </a>
+  <a class="tab" href="di.html">
+    <span class="tab-icon">📊</span>
+    <span class="tab-label">DI</span>
+  </a>
+  <a class="tab" href="psid.html">
+    <span class="tab-icon">🏥</span>
+    <span class="tab-label">PSID</span>
+  </a>
+  <a class="tab" href="had.html">
+    <span class="tab-icon">💉</span>
+    <span class="tab-label">HAD</span>
+  </a>
+</nav>
+
+<!-- ============================================================
+     КНОПКА ФОНА
+     ============================================================ -->
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     ОСНОВНОЙ КОНТЕНТ
+     ============================================================ -->
+<div class="container page-content">
+
+  <header>
+    <h1>Калькулятор баллов</h1>
+    <p>Выберите отдел для расчёта баллов</p>
+  </header>
+
+  <div class="hero">
+    <div class="hero-icon">🏥</div>
+    <h2 class="hero-title">Система подсчёта баллов отделов</h2>
+    <p class="hero-subtitle">
+      Инструмент для подсчёта баллов сотрудников отделов PSID, PM, DI и HAD.
+      Каждый калькулятор — отдельная страница со своей системой баллов,
+      лимитами и шкалой прогресса.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Выберите отдел</div>
+    <div class="cards">
+      <a class="card" href="psid.html">
+        <div class="card-icon">🏥</div>
+        <div class="card-body">
+          <div class="card-title">PSID</div>
+          <div class="card-desc">Основная система баллов + Инструкторы PSID</div>
+        </div>
+      </a>
+      <a class="card" href="pm.html">
+        <div class="card-icon">📋</div>
+        <div class="card-body">
+          <div class="card-title">PM</div>
+          <div class="card-desc">ПМП, вакцины, таблетки, справки, квалификации</div>
+        </div>
+      </a>
+      <a class="card" href="di.html">
+        <div class="card-icon">📊</div>
+        <div class="card-body">
+          <div class="card-title">DI</div>
+          <div class="card-desc">Сотрудники и инструкторы DI, недельные нормы</div>
+        </div>
+      </a>
+      <a class="card" href="had.html">
+        <div class="card-icon">💉</div>
+        <div class="card-body">
+          <div class="card-title">HAD</div>
+          <div class="card-desc">Действия, недельный отчёт, замены инструкторов</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    Калькулятор баллов · <span id="year"></span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="common.js"></script>
+</body>
+</html>
