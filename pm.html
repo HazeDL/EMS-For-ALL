@@ -5,17 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PM — Калькулятор баллов</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Панель слева — переход на главную EMS */
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 180px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92);
+    color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 160px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .tab-left:hover { left: 0; }
+  }
+</style>
 </head>
 <body>
 
-<!-- ============================================================
-     ПАНЕЛЬ ВКЛАДОК СПРАВА
-     ============================================================ -->
-<nav class="side-tabs" aria-label="Разделы">
-  <a class="tab" href="index.html">
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
     <span class="tab-icon">🏠</span>
-    <span class="tab-label">Главное меню</span>
+    <span class="tab-label">Главная EMS</span>
   </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
   <a class="tab tab-active" href="pm.html">
     <span class="tab-icon">📋</span>
     <span class="tab-label">PM</span>
@@ -34,9 +82,6 @@
   </a>
 </nav>
 
-<!-- ============================================================
-     КНОПКА ФОНА
-     ============================================================ -->
 <div class="bg-controls">
   <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
   <div class="bg-menu" id="bg-menu" hidden>
@@ -58,9 +103,6 @@
   </div>
 </div>
 
-<!-- ============================================================
-     ОСНОВНОЙ КОНТЕНТ
-     ============================================================ -->
 <div class="container page-content">
 
   <header>
@@ -70,7 +112,6 @@
 
   <div class="content-layout" id="content-pm">
 
-    <!-- ================= ШКАЛА СЛЕВА ================= -->
     <aside class="progress-rail" data-rail="pm">
       <div class="progress-rail-title">PM</div>
       <div class="progress-rail-value" data-rail-value>0</div>
@@ -87,7 +128,6 @@
       <div class="progress-rail-status" data-rail-status>Начало</div>
     </aside>
 
-    <!-- ================= ПРАВАЯ КОЛОНКА ================= -->
     <div>
 
       <div class="section">
@@ -144,16 +184,9 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ============================================================
-     ПОДКЛЮЧЕНИЕ СКРИПТОВ
-     ============================================================ -->
 <script src="common.js"></script>
 <script>
-/* ============================================================
-   СПИСОК УСЛУГ PM
-   ============================================================ */
 const PM_ITEMS = [
-  // Основная система PM
   {key:"pm_pmp_day",      name:"ПМП днём",                              pts:3,   lim:0, sect:1},
   {key:"pm_pmp_night",    name:"ПМП ночью",                             pts:5,   lim:0, sect:1},
   {key:"pm_pmp_hospital", name:"ПМП в любой больнице и палатах",        pts:1,   lim:0, sect:1},
@@ -168,7 +201,6 @@ const PM_ITEMS = [
   {key:"pm_med_ss",       name:"Справка в Sandy-Shores (каждая)",       pts:4,   lim:0, sect:1},
   {key:"pm_med_pb",       name:"Справка в Paleto-Bay (каждая)",         pts:4,   lim:0, sect:1},
 
-  // Дополнительно PM
   {key:"pm_q_therapist",  name:"Получение квалификации «Терапевт»",     pts:50,  lim:0, sect:2},
   {key:"pm_q_surgeon",    name:"Получение квалификации «Хирург»",       pts:50,  lim:0, sect:2},
   {key:"pm_q_vet",        name:"Получение квалификации «Ветеринар»",    pts:50,  lim:0, sect:2},
@@ -185,9 +217,6 @@ const PM_ITEMS = [
 
 const STORAGE_PM_STATE = "pm_calc_state_v1";
 
-/* ============================================================
-   ОТРИСОВКА СТРОК
-   ============================================================ */
 function renderPmItems() {
   const elMain  = document.getElementById("pm-main-items");
   const elExtra = document.getElementById("pm-extra-items");
@@ -195,7 +224,6 @@ function renderPmItems() {
 
   PM_ITEMS.forEach(it => {
     const container = it.sect === 1 ? elMain : elExtra;
-
     const row = document.createElement("div");
     row.className = "row";
     row.dataset.key = it.key;
@@ -221,9 +249,6 @@ function getPmValue(key, role) {
   return isNaN(v) ? 0 : v;
 }
 
-/* ============================================================
-   ПЕРЕСЧЁТ
-   ============================================================ */
 function recalcPm() {
   let total = 0;
   const details = { main: [], extra: [], mainSum: 0, extraSum: 0 };
@@ -277,9 +302,6 @@ function recalcPm() {
   savePmState();
 }
 
-/* ============================================================
-   СОХРАНЕНИЕ / ЗАГРУЗКА
-   ============================================================ */
 function savePmState() {
   const s = {};
   PM_ITEMS.forEach(it => s[it.key] = { count: getPmValue(it.key, "count"), point: getPmValue(it.key, "point") });
@@ -303,9 +325,6 @@ function loadPmState() {
   } catch (e) {}
 }
 
-/* ============================================================
-   КНОПКИ
-   ============================================================ */
 function resetPm() {
   PM_ITEMS.forEach(it => {
     const cEl = document.querySelector(`#content-pm input[data-role="count"][data-key="${it.key}"]`);
@@ -325,9 +344,6 @@ function copyPmReport() {
     .catch(() => showToast("Не удалось скопировать"));
 }
 
-/* ============================================================
-   ИНИЦИАЛИЗАЦИЯ
-   ============================================================ */
 renderPmItems();
 loadPmState();
 
@@ -336,7 +352,6 @@ document.getElementById("pm-btn-reset").addEventListener("click", resetPm);
 
 recalcPm();
 
-/* ---- Ctrl+S — копировать отчёт ---- */
 document.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "s") {
     e.preventDefault();
@@ -344,7 +359,6 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* ---- Пересчёт шкалы при ресайзе ---- */
 window.onCalcResize = function() {
   recalcPm();
 };
