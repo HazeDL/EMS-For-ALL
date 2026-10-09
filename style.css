@@ -84,12 +84,26 @@ body.has-custom-bg::after {
   z-index: 1;
 }
 
+/* ============================================================
+   ЗАГОЛОВОК С ЛОГОТИПОМ
+   ============================================================ */
 header {
   text-align: center;
   margin-bottom: 36px;
   padding-bottom: 24px;
   border-bottom: 1px solid var(--border);
 }
+
+/* Логотип EMS */
+header .ems-logo {
+  display: block;
+  max-width: 480px;
+  width: 80%;
+  height: auto;
+  margin: 0 auto 18px;
+  filter: drop-shadow(0 4px 16px rgba(248, 81, 73, 0.25));
+}
+
 header h1 {
   font-size: 34px;
   font-weight: 700;
@@ -219,6 +233,13 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   border-color: var(--accent); color: var(--accent);
 }
 
+/* --------- Fade при загрузке --------- */
+.page-content { animation: fadeInPage 0.3s ease both; }
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* --------- Layout калькулятора --------- */
 .content-layout {
   display: grid; grid-template-columns: 130px 1fr;
@@ -282,7 +303,7 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   .progress-rail-title, .progress-rail-status { margin: 0; min-height: 0; }
 }
 
-/* --------- Секции калькулятора --------- */
+/* --------- Секции --------- */
 .section {
   background: var(--bg-alt);
   border: 1px solid var(--border);
@@ -301,6 +322,7 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
 }
 .section-title .icon { font-size: 22px; }
 
+/* --------- Строки калькулятора --------- */
 .row {
   display: grid; grid-template-columns: 1fr 110px 110px 110px;
   gap: 14px; align-items: center; padding: 10px 12px;
@@ -521,6 +543,10 @@ footer {
   body { padding: 20px 12px 60px; font-size: 15px; }
   header h1 { font-size: 26px; }
   header p { font-size: 14px; }
+  header .ems-logo {
+    max-width: 320px;
+    margin-bottom: 14px;
+  }
 
   .row { grid-template-columns: 1fr 70px 70px 70px; gap: 8px; padding: 8px 8px; }
   .name { font-size: 14px; }
