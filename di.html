@@ -6,14 +6,13 @@
 <title>DI — Калькулятор баллов</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Панель слева — переход на главную EMS */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 6px;
     pointer-events: none;
   }
   .tab-left {
-    --visible: 42px; --width: 180px;
+    --visible: 42px; --width: 200px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
     width: var(--width); height: 48px;
@@ -40,11 +39,15 @@
   .tab-left:active { transform: translateY(1px); }
   .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tab-left.tab-active {
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.95), rgba(22, 33, 62, 0.95));
+    border-color: var(--accent); color: var(--accent);
+  }
 
   @media (max-width: 640px) {
-    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
     .tab-left {
-      --width: 160px; --visible: 42px;
+      --width: 170px; --visible: 42px;
       height: 42px; font-size: 13px;
       left: 0; border-radius: 10px;
       border-left: 1px solid var(--border);
@@ -57,28 +60,28 @@
 <body>
 
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
+  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
     <span class="tab-icon">🏠</span>
     <span class="tab-label">Главная EMS</span>
   </a>
+  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Главное меню калькулятора</span>
+  </a>
 </nav>
 
-<nav class="side-tabs" aria-label="Разделы">
+<nav class="side-tabs" aria-label="Отделы">
   <a class="tab" href="pm.html">
-    <span class="tab-icon">📋</span>
-    <span class="tab-label">PM</span>
+    <span class="tab-icon">📋</span><span class="tab-label">PM</span>
   </a>
   <a class="tab tab-active" href="di.html">
-    <span class="tab-icon">📊</span>
-    <span class="tab-label">DI</span>
+    <span class="tab-icon">📊</span><span class="tab-label">DI</span>
   </a>
   <a class="tab" href="psid.html">
-    <span class="tab-icon">🏥</span>
-    <span class="tab-label">PSID</span>
+    <span class="tab-icon">🏥</span><span class="tab-label">PSID</span>
   </a>
   <a class="tab" href="had.html">
-    <span class="tab-icon">💉</span>
-    <span class="tab-label">HAD</span>
+    <span class="tab-icon">💉</span><span class="tab-label">HAD</span>
   </a>
 </nav>
 
@@ -87,7 +90,6 @@
   <div class="bg-menu" id="bg-menu" hidden>
     <div class="bg-section-label">Пресеты</div>
     <div class="bg-presets" id="bg-presets"></div>
-
     <div class="bg-section-label">Свои</div>
     <label class="bg-menu-item">
       📁 Загрузить картинку
@@ -133,10 +135,8 @@
       <div class="section">
         <div class="section-title">Для сотрудников DI</div>
         <div class="row header-row">
-          <div class="cell">Действие</div>
-          <div class="cell">Кол-во</div>
-          <div class="cell">Балл</div>
-          <div class="cell">Итог</div>
+          <div class="cell">Действие</div><div class="cell">Кол-во</div>
+          <div class="cell">Балл</div><div class="cell">Итог</div>
         </div>
         <div id="di-staff-items"></div>
       </div>
@@ -144,10 +144,8 @@
       <div class="section">
         <div class="section-title">Для инструкторов DI</div>
         <div class="row header-row">
-          <div class="cell">Действие</div>
-          <div class="cell">Кол-во</div>
-          <div class="cell">Балл</div>
-          <div class="cell">Итог</div>
+          <div class="cell">Действие</div><div class="cell">Кол-во</div>
+          <div class="cell">Балл</div><div class="cell">Итог</div>
         </div>
         <div id="di-instr-items"></div>
       </div>
@@ -155,10 +153,8 @@
       <div class="section">
         <div class="section-title">Дополнительная активность</div>
         <div class="row header-row">
-          <div class="cell">Действие</div>
-          <div class="cell">Кол-во</div>
-          <div class="cell">Балл</div>
-          <div class="cell">Итог</div>
+          <div class="cell">Действие</div><div class="cell">Кол-во</div>
+          <div class="cell">Балл</div><div class="cell">Итог</div>
         </div>
         <div id="di-extra-items"></div>
       </div>
@@ -228,7 +224,6 @@ const DI_ITEMS = [
   {key:"di_x_qual",       name:"Получение квалификации",            pts:50, lim:0, sect:3},
   {key:"di_x_specialist", name:"Деятельность хирурга / ветеринара / MCC", pts:50, lim:0, sect:3},
 ];
-
 const STORAGE_DI_STATE = "di_calc_state_v1";
 
 function renderDiItems() {
@@ -236,127 +231,78 @@ function renderDiItems() {
   const elInstr = document.getElementById("di-instr-items");
   const elExtra = document.getElementById("di-extra-items");
   if (!elStaff || !elInstr || !elExtra) return;
-
   DI_ITEMS.forEach(it => {
     const container = it.sect === 1 ? elStaff : (it.sect === 2 ? elInstr : elExtra);
-
     const row = document.createElement("div");
-    row.className = "row";
-    row.dataset.key = it.key;
-
+    row.className = "row"; row.dataset.key = it.key;
     row.innerHTML = `
       <div class="name">${it.name}</div>
       <input type="number" min="0" step="1" data-role="count" data-key="${it.key}">
       <input type="number" min="0" step="1" value="${it.pts}" data-role="point" data-key="${it.key}">
       <div class="sum" data-role="sum" data-key="${it.key}">0</div>`;
-
     container.appendChild(row);
   });
-
-  document.querySelectorAll("#content-di input[type=number]").forEach(inp => {
-    inp.addEventListener("input", recalcDi);
-  });
+  document.querySelectorAll("#content-di input[type=number]").forEach(inp => inp.addEventListener("input", recalcDi));
 }
-
 function getDiValue(key, role) {
   const el = document.querySelector(`#content-di input[data-role="${role}"][data-key="${key}"]`);
   if (!el) return 0;
   const v = parseInt(el.value, 10);
   return isNaN(v) ? 0 : v;
 }
-
 function recalcDi() {
   let total = 0;
   let instrActions = 0;
-
   const details = {
     staff: { title: "Для сотрудников DI", items: [], sum: 0 },
     instr: { title: "Для инструкторов DI", items: [], actions: 0 },
     extra: { title: "Дополнительная активность", items: [], sum: 0 },
   };
-
   DI_ITEMS.forEach(it => {
     const countEl = document.querySelector(`#content-di input[data-role="count"][data-key="${it.key}"]`);
     const sumEl   = document.querySelector(`#content-di div[data-role="sum"][data-key="${it.key}"]`);
     if (!countEl || !sumEl) return;
-
     const count = getDiValue(it.key, "count");
     const point = getDiValue(it.key, "point");
     const sum = count * point;
-
     popIfChanged(sumEl, sumEl.textContent, String(sum));
     sumEl.classList.toggle("positive", sum > 0);
-
     countEl.closest(".row").classList.toggle("active", count > 0);
-
     if (it.sect === 1) {
       total += sum;
-      if (count > 0) {
-        details.staff.items.push({name: it.name, count, point, sum});
-        details.staff.sum += sum;
-      }
+      if (count > 0) { details.staff.items.push({name: it.name, count, point, sum}); details.staff.sum += sum; }
     } else if (it.sect === 2) {
       instrActions += count;
-      if (count > 0) {
-        details.instr.items.push({name: it.name, count});
-        details.instr.actions += count;
-      }
+      if (count > 0) { details.instr.items.push({name: it.name, count}); details.instr.actions += count; }
     } else {
       total += sum;
-      if (count > 0) {
-        details.extra.items.push({name: it.name, count, point, sum});
-        details.extra.sum += sum;
-      }
+      if (count > 0) { details.extra.items.push({name: it.name, count, point, sum}); details.extra.sum += sum; }
     }
   });
-
   const totalEl = document.getElementById("di-total");
-  if (totalEl && parseInt(totalEl.textContent, 10) !== total) {
-    totalEl.textContent = total;
-    pulseEl(totalEl);
-  }
-
+  if (totalEl && parseInt(totalEl.textContent, 10) !== total) { totalEl.textContent = total; pulseEl(totalEl); }
   const instrEl = document.getElementById("di-instr-actions");
-  if (instrEl && parseInt(instrEl.textContent, 10) !== instrActions) {
-    instrEl.textContent = instrActions;
-    pulseEl(instrEl);
-  }
-
+  if (instrEl && parseInt(instrEl.textContent, 10) !== instrActions) { instrEl.textContent = instrActions; pulseEl(instrEl); }
   const reportEl = document.getElementById("di-report");
   if (reportEl) {
     let report = "";
-    if (details.staff.items.length) {
-      report += "── Для сотрудников DI ──\n";
-      details.staff.items.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
-      report += `  Подытог: ${details.staff.sum}\n\n`;
-    }
-    if (details.extra.items.length) {
-      report += "── Дополнительная активность ──\n";
-      details.extra.items.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
-      report += `  Подытог: ${details.extra.sum}\n\n`;
-    }
-    if (details.instr.items.length) {
-      report += "── Для инструкторов DI (действия) ──\n";
-      details.instr.items.forEach(e => report += `  ${e.name}: ${e.count} действий\n`);
-      report += `  Подытог: ${details.instr.actions} действий\n\n`;
-    }
+    if (details.staff.items.length) { report += "── Для сотрудников DI ──\n"; details.staff.items.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`); report += `  Подытог: ${details.staff.sum}\n\n`; }
+    if (details.extra.items.length) { report += "── Дополнительная активность ──\n"; details.extra.items.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`); report += `  Подытог: ${details.extra.sum}\n\n`; }
+    if (details.instr.items.length) { report += "── Для инструкторов DI (действия) ──\n"; details.instr.items.forEach(e => report += `  ${e.name}: ${e.count} действий\n`); report += `  Подытог: ${details.instr.actions} действий\n\n`; }
     if (total > 0 || instrActions > 0) {
       report += `ИТОГО DI: ${total} баллов`;
       if (instrActions > 0) report += `\nДействий инструктора: ${instrActions}`;
     }
     reportEl.textContent = report;
   }
-
   updateRail("content-di", total);
   saveDiState();
 }
-
 function saveDiState() {
   const s = {};
   DI_ITEMS.forEach(it => s[it.key] = { count: getDiValue(it.key, "count"), point: getDiValue(it.key, "point") });
   try { localStorage.setItem(STORAGE_DI_STATE, JSON.stringify(s)); } catch (e) {}
 }
-
 function loadDiState() {
   try {
     const raw = localStorage.getItem(STORAGE_DI_STATE);
@@ -373,7 +319,6 @@ function loadDiState() {
     });
   } catch (e) {}
 }
-
 function resetDi() {
   DI_ITEMS.forEach(it => {
     const cEl = document.querySelector(`#content-di input[data-role="count"][data-key="${it.key}"]`);
@@ -384,7 +329,6 @@ function resetDi() {
   recalcDi();
   showToast("DI сброшен");
 }
-
 function copyDiReport() {
   const r = document.getElementById("di-report").textContent;
   if (!r) { showToast("Сначала введите данные"); return; }
@@ -395,22 +339,14 @@ function copyDiReport() {
 
 renderDiItems();
 loadDiState();
-
 document.getElementById("di-btn-copy").addEventListener("click", copyDiReport);
 document.getElementById("di-btn-reset").addEventListener("click", resetDi);
-
 recalcDi();
 
 document.addEventListener("keydown", (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-    e.preventDefault();
-    copyDiReport();
-  }
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") { e.preventDefault(); copyDiReport(); }
 });
-
-window.onCalcResize = function() {
-  recalcDi();
-};
+window.onCalcResize = function() { recalcDi(); };
 </script>
 </body>
 </html>
