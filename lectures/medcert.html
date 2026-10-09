@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Регламент выдачи мед. справок — База знаний EMS</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 <style>
-  /* --------- Левая панель --------- */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 8px;
@@ -22,7 +21,7 @@
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-left: none;
     border-radius: 0 12px 12px 0;
-    font-family: inherit; font-size: 15px; font-weight: 500;
+    font-size: 15px; font-weight: 500;
     cursor: pointer; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
@@ -38,7 +37,6 @@
   .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Правая панель --------- */
   .side-tabs {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 8px;
@@ -51,8 +49,8 @@
     gap: 12px; padding: 0 16px;
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-right: none;
-    border-radius: 12px 0 0 12px; font-family: inherit;
-    font-size: 15px; font-weight: 500; cursor: pointer; text-align: left;
+    border-radius: 12px 0 0 12px;
+    font-size: 15px; font-weight: 500; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -63,7 +61,6 @@
     right: 0; background: rgba(30, 38, 52, 0.95);
     color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab:active { transform: translateY(1px); }
   .tab.tab-active {
     background: rgba(26, 39, 68, 0.92);
     border-color: var(--accent); color: var(--accent);
@@ -75,7 +72,6 @@
   .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Хлебные крошки --------- */
   .breadcrumbs {
     display: flex; align-items: center; gap: 10px;
     font-size: 14px; color: var(--text-dim);
@@ -86,7 +82,6 @@
   .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
   .breadcrumbs .current { color: var(--text); }
 
-  /* --------- Секции --------- */
   .rules-section {
     background: var(--bg-alt);
     border: 1px solid var(--border);
@@ -111,7 +106,6 @@
   }
   .rules-text strong { color: var(--text); font-weight: 600; }
 
-  /* --------- Плашки цен --------- */
   .price-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
   .price-box {
     display: flex;
@@ -127,7 +121,6 @@
   .price-box .price { font-weight: 700; color: var(--success); font-size: 18px; }
   .price-box .label { color: var(--text-dim); font-size: 14px; }
 
-  /* --------- Список-чек-лист --------- */
   .duties { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
   .duties li {
     display: flex; align-items: flex-start; gap: 14px;
@@ -150,7 +143,6 @@
     font-weight: 700; font-size: 14px;
   }
 
-  /* --------- Одиночная картинка --------- */
   .single-image { margin: 20px 0; text-align: center; }
   .single-image img {
     display: block;
@@ -173,7 +165,6 @@
     font-style: italic;
   }
 
-  /* --------- Отыгровки --------- */
   .rp-box {
     background: rgba(13, 17, 23, 0.65);
     border: 1px solid var(--border);
@@ -210,7 +201,6 @@
   .rp-content { display: none; }
   .rp-content.active { display: block; }
 
-  /* --------- Предупреждения и заметки --------- */
   .warning {
     padding: 16px 18px;
     margin: 14px 0;
@@ -235,7 +225,6 @@
   }
   .info-note strong { color: var(--accent); }
 
-  /* --------- Lightbox --------- */
   .lightbox {
     position: fixed; inset: 0; z-index: 9999;
     display: none; align-items: center; justify-content: center;
@@ -273,7 +262,6 @@
     max-width: 80%; text-align: center;
   }
 
-  /* --------- Hero --------- */
   .hero {
     text-align: center;
     padding: 48px 28px 40px;
@@ -288,14 +276,13 @@
   .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
   .hero-title {
     font-size: 26px; font-weight: 700; color: var(--text);
-    margin-bottom: 12px; letter-spacing: 0.2px;
+    margin-bottom: 12px;
   }
   .hero-subtitle {
     font-size: 16px; color: var(--text-dim);
     max-width: 640px; margin: 0 auto; line-height: 1.7;
   }
 
-  /* --------- Мобильный --------- */
   @media (max-width: 640px) {
     .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
     .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
@@ -321,36 +308,33 @@
 <body>
 
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
+  <a class="tab-left" href="../main.html" title="Перейти на главную EMS">
     <span class="tab-icon">🏠</span>
     <span class="tab-label">Главная EMS</span>
   </a>
-  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
+  <a class="tab-left" href="../calculators/index.html" title="Перейти к списку калькуляторов">
     <span class="tab-icon">🧮</span>
-    <span class="tab-label">Главное меню калькулятора</span>
+    <span class="tab-label">Калькулятор баллов</span>
   </a>
 </nav>
 
 <nav class="side-tabs" aria-label="Разделы">
-  <a class="tab" href="index.html">
-    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
-  </a>
   <a class="tab" href="departments.html">
     <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
   </a>
   <a class="tab" href="intro.html">
     <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
   </a>
-  <a class="tab" href="lecture-pills.html">
+  <a class="tab" href="pills.html">
     <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
   </a>
-  <a class="tab" href="lecture-vaccines.html">
+  <a class="tab" href="vaccines.html">
     <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
   </a>
-  <a class="tab tab-active" href="lecture-medcert.html">
+  <a class="tab tab-active" href="medcert.html">
     <span class="tab-icon">🧾</span><span class="tab-label">Справки</span>
   </a>
-  <a class="tab" href="lecture-pmp.html">
+  <a class="tab" href="pmp.html">
     <span class="tab-icon">🚑</span><span class="tab-label">ПМП</span>
   </a>
 </nav>
@@ -383,7 +367,7 @@
   </header>
 
   <div class="breadcrumbs">
-    <a href="main.html">База знаний EMS</a>
+    <a href="../main.html">База знаний EMS</a>
     <span class="sep">›</span>
     <a href="intro.html">Обучение и правила</a>
     <span class="sep">›</span>
@@ -403,13 +387,13 @@
     <div class="rules-title"><span class="icon">📍</span> Места выдачи справок</div>
     <p class="rules-text"><strong>Сенди-Шорс:</strong> Дежурный кабинет на 2 этаже.</p>
     <figure class="single-image" data-lightbox>
-      <img src="images/medcert-sandy.jpg" alt="Дежурный кабинет в Сенди-Шорс" loading="lazy">
+      <img src="../images/medcert-sandy.jpg" alt="Дежурный кабинет в Сенди-Шорс" loading="lazy">
       <figcaption>Сенди-Шорс — Дежурный кабинет на 2 этаже</figcaption>
     </figure>
 
     <p class="rules-text" style="margin-top: 14px;"><strong>Палето-Бэй:</strong> Операционная слева.</p>
     <figure class="single-image" data-lightbox>
-      <img src="images/medcert-paleto.jpg" alt="Операционная Палето-Бэй" loading="lazy">
+      <img src="../images/medcert-paleto.jpg" alt="Операционная Палето-Бэй" loading="lazy">
       <figcaption>Палето-Бэй — Операционная слева</figcaption>
     </figure>
 
@@ -417,7 +401,7 @@
       <strong>ELSH:</strong> Кабинеты 01, 02, 03 на втором этаже (коридор слева от лифта).
     </p>
     <figure class="single-image" data-lightbox>
-      <img src="images/medcert-elsh.jpg" alt="Кабинеты 01, 02, 03 в ELSH" loading="lazy">
+      <img src="../images/medcert-elsh.jpg" alt="Кабинеты 01, 02, 03 в ELSH" loading="lazy">
       <figcaption>ELSH — кабинеты 01, 02, 03 на втором этаже</figcaption>
     </figure>
   </div>
@@ -565,92 +549,4 @@
 <span class="cmd">/me</span> положив молоточек на стол, сделал запись в бланке мед. справки
 <span class="cmd">/me</span> достал градусник из верхнего ящика, приподнял руку пациента и вставил градусник под подмышку
 <span class="cmd">/do</span> Градусник издал характерный звук.
-<span class="cmd">/me</span> взял градусник в руку и посмотрел на результат, а после убрал обратно в верхний ящик, сделал пометки в бланке
-<span class="cmd">/do</span> Печать на столе.
-<span class="cmd">/me</span> взял медицинскую карту и печать, поставил печать в медицинскую карту
-<span class="cmd">/do</span> Медицинская карта о физическом состоянии пациента готова.</div>
-    </div>
-
-    <div class="rp-content" id="rp-psy-f">
-      <div class="rp-box"><span class="cmd">/me</span> достала блокнот и ручку из кармана медицинского халата
-<span class="cmd">/me</span> занесла ответы пациента в бланк
-<span class="cmd">/do</span> На столе лежит печать.
-<span class="cmd">/me</span> взяла медицинскую карту и печать, поставила печать в медицинскую карту
-<span class="cmd">/do</span> Медицинская карта о психологическом состоянии пациента готова.</div>
-    </div>
-
-    <div class="rp-content" id="rp-psy-m">
-      <div class="rp-box"><span class="cmd">/me</span> достал блокнот и ручку из кармана медицинского халата
-<span class="cmd">/me</span> занес ответы пациента в бланк
-<span class="cmd">/do</span> На столе лежит печать.
-<span class="cmd">/me</span> взял медицинскую карту и печать, поставил печать в медицинскую карту
-<span class="cmd">/do</span> Медицинская карта о психологическом состоянии пациента готова.</div>
-    </div>
-  </div>
-
-  <footer>
-    База знаний EMS · <span id="year"></span> · Регламент выдачи мед. справок
-  </footer>
-
-</div>
-
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">✕</button>
-  <img id="lightbox-img" src="" alt="">
-  <div class="lightbox-caption" id="lightbox-caption"></div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script src="common.js"></script>
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-
-  /* Переключение отыгровок */
-  document.querySelectorAll(".rp-tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".rp-tab").forEach(t => t.classList.remove("active"));
-      document.querySelectorAll(".rp-content").forEach(c => c.classList.remove("active"));
-      tab.classList.add("active");
-      const id = "rp-" + tab.dataset.tab;
-      const content = document.getElementById(id);
-      if (content) content.classList.add("active");
-    });
-  });
-
-  /* Lightbox */
-  (function() {
-    const lb = document.getElementById("lightbox");
-    const lbImg = document.getElementById("lightbox-img");
-    const lbCap = document.getElementById("lightbox-caption");
-    const lbClose = document.getElementById("lightbox-close");
-    function open(src, caption) {
-      lbImg.src = src; lbImg.alt = caption || "";
-      lbCap.textContent = caption || "";
-      lb.classList.add("active");
-      document.body.style.overflow = "hidden";
-    }
-    function close() {
-      lb.classList.remove("active");
-      lbImg.src = ""; document.body.style.overflow = "";
-    }
-    document.querySelectorAll("[data-lightbox]").forEach(fig => {
-      const img = fig.querySelector("img"); if (!img) return;
-      const cap = fig.querySelector("figcaption");
-      fig.addEventListener("click", () => {
-        if (!img.complete || img.naturalWidth === 0) {
-          showToast("Картинка не загружена. Проверь путь.");
-          return;
-        }
-        open(img.src, cap ? cap.textContent.replace(/\s+/g, " ").trim() : img.alt);
-      });
-    });
-    lbClose.addEventListener("click", close);
-    lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && lb.classList.contains("active")) close();
-    });
-  })();
-</script>
-</body>
-</html>
+<span class="cmd">/me</span> взял градусник в руку и посмотрел на результат, а после убрал
