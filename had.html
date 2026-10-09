@@ -6,14 +6,13 @@
 <title>HAD — Калькулятор баллов</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Панель слева — переход на главную EMS */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 6px;
     pointer-events: none;
   }
   .tab-left {
-    --visible: 42px; --width: 180px;
+    --visible: 42px; --width: 200px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
     width: var(--width); height: 48px;
@@ -40,11 +39,15 @@
   .tab-left:active { transform: translateY(1px); }
   .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tab-left.tab-active {
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.95), rgba(22, 33, 62, 0.95));
+    border-color: var(--accent); color: var(--accent);
+  }
 
   @media (max-width: 640px) {
-    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
     .tab-left {
-      --width: 160px; --visible: 42px;
+      --width: 170px; --visible: 42px;
       height: 42px; font-size: 13px;
       left: 0; border-radius: 10px;
       border-left: 1px solid var(--border);
@@ -57,28 +60,28 @@
 <body>
 
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
+  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
     <span class="tab-icon">🏠</span>
     <span class="tab-label">Главная EMS</span>
   </a>
+  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Главное меню калькулятора</span>
+  </a>
 </nav>
 
-<nav class="side-tabs" aria-label="Разделы">
+<nav class="side-tabs" aria-label="Отделы">
   <a class="tab" href="pm.html">
-    <span class="tab-icon">📋</span>
-    <span class="tab-label">PM</span>
+    <span class="tab-icon">📋</span><span class="tab-label">PM</span>
   </a>
   <a class="tab" href="di.html">
-    <span class="tab-icon">📊</span>
-    <span class="tab-label">DI</span>
+    <span class="tab-icon">📊</span><span class="tab-label">DI</span>
   </a>
   <a class="tab" href="psid.html">
-    <span class="tab-icon">🏥</span>
-    <span class="tab-label">PSID</span>
+    <span class="tab-icon">🏥</span><span class="tab-label">PSID</span>
   </a>
   <a class="tab tab-active" href="had.html">
-    <span class="tab-icon">💉</span>
-    <span class="tab-label">HAD</span>
+    <span class="tab-icon">💉</span><span class="tab-label">HAD</span>
   </a>
 </nav>
 
@@ -87,7 +90,6 @@
   <div class="bg-menu" id="bg-menu" hidden>
     <div class="bg-section-label">Пресеты</div>
     <div class="bg-presets" id="bg-presets"></div>
-
     <div class="bg-section-label">Свои</div>
     <label class="bg-menu-item">
       📁 Загрузить картинку
@@ -133,10 +135,8 @@
       <div class="section">
         <div class="section-title">Основные действия</div>
         <div class="row header-row">
-          <div class="cell">Действие</div>
-          <div class="cell">Кол-во</div>
-          <div class="cell">Балл</div>
-          <div class="cell">Итог</div>
+          <div class="cell">Действие</div><div class="cell">Кол-во</div>
+          <div class="cell">Балл</div><div class="cell">Итог</div>
         </div>
         <div id="had-main-items"></div>
       </div>
@@ -144,10 +144,8 @@
       <div class="section">
         <div class="section-title">Инструктор HAD</div>
         <div class="row header-row">
-          <div class="cell">Действие</div>
-          <div class="cell">Кол-во</div>
-          <div class="cell">Балл</div>
-          <div class="cell">Итог</div>
+          <div class="cell">Действие</div><div class="cell">Кол-во</div>
+          <div class="cell">Балл</div><div class="cell">Итог</div>
         </div>
         <div id="had-instr-items"></div>
       </div>
@@ -155,10 +153,8 @@
       <div class="section">
         <div class="section-title">Недельный отчёт</div>
         <div class="row header-row">
-          <div class="cell">Услуга</div>
-          <div class="cell">Кол-во</div>
-          <div class="cell">Балл</div>
-          <div class="cell">Итог</div>
+          <div class="cell">Услуга</div><div class="cell">Кол-во</div>
+          <div class="cell">Балл</div><div class="cell">Итог</div>
         </div>
         <div id="had-weekly-items"></div>
       </div>
@@ -234,7 +230,6 @@ const HAD_ITEMS = [
   {key:"had_w_med_elsh",   name:"Медсправки в ELSH",                         pts:3,  lim:75,  sect:3},
   {key:"had_w_med_ss_pb",  name:"Медсправки в SH/PB",                        pts:4,  lim:60,  sect:3},
 ];
-
 const STORAGE_HAD_STATE = "had_calc_state_v1";
 
 function renderHadItems() {
@@ -242,37 +237,26 @@ function renderHadItems() {
   const elIns  = document.getElementById("had-instr-items");
   const elWeek = document.getElementById("had-weekly-items");
   if (!elMain || !elIns || !elWeek) return;
-
   HAD_ITEMS.forEach(it => {
     const container = it.sect === 1 ? elMain : (it.sect === 2 ? elIns : elWeek);
-
     const badge = it.lim > 0 ? `<span class="limit">макс ${it.lim}</span>` : "";
-
     const row = document.createElement("div");
-    row.className = "row";
-    row.dataset.key = it.key;
-
+    row.className = "row"; row.dataset.key = it.key;
     row.innerHTML = `
       <div class="name">${it.name}${badge}</div>
       <input type="number" min="0" step="1" data-role="count" data-key="${it.key}">
       <input type="number" min="0" step="1" value="${it.pts}" data-role="point" data-key="${it.key}">
       <div class="sum" data-role="sum" data-key="${it.key}">0</div>`;
-
     container.appendChild(row);
   });
-
-  document.querySelectorAll("#content-had input[type=number]").forEach(inp => {
-    inp.addEventListener("input", recalcHad);
-  });
+  document.querySelectorAll("#content-had input[type=number]").forEach(inp => inp.addEventListener("input", recalcHad));
 }
-
 function getHadValue(key, role) {
   const el = document.querySelector(`#content-had input[data-role="${role}"][data-key="${key}"]`);
   if (!el) return 0;
   const v = parseInt(el.value, 10);
   return isNaN(v) ? 0 : v;
 }
-
 function recalcHad() {
   let total = 0;
   const details = {
@@ -280,27 +264,20 @@ function recalcHad() {
     instr:  { title: "Инструктор HAD",    items: [], sum: 0 },
     weekly: { title: "Недельный отчёт",   items: [], sum: 0 },
   };
-
   HAD_ITEMS.forEach(it => {
     const countEl = document.querySelector(`#content-had input[data-role="count"][data-key="${it.key}"]`);
     const sumEl   = document.querySelector(`#content-had div[data-role="sum"][data-key="${it.key}"]`);
     if (!countEl || !sumEl) return;
-
     let count = getHadValue(it.key, "count");
     const point = getHadValue(it.key, "point");
-
     const over = it.lim > 0 && count > it.lim;
     if (over) count = it.lim;
     countEl.classList.toggle("over-limit", over);
-
     const sum = count * point;
     total += sum;
-
     popIfChanged(sumEl, sumEl.textContent, String(sum));
     sumEl.classList.toggle("positive", sum > 0);
-
     countEl.closest(".row").classList.toggle("active", count > 0);
-
     if (count > 0) {
       const e = {name: it.name, count, point, sum};
       if (it.sect === 1)      { details.main.items.push(e);   details.main.sum += sum; }
@@ -308,13 +285,8 @@ function recalcHad() {
       else                    { details.weekly.items.push(e); details.weekly.sum += sum; }
     }
   });
-
   const totalEl = document.getElementById("had-total");
-  if (totalEl && parseInt(totalEl.textContent, 10) !== total) {
-    totalEl.textContent = total;
-    pulseEl(totalEl);
-  }
-
+  if (totalEl && parseInt(totalEl.textContent, 10) !== total) { totalEl.textContent = total; pulseEl(totalEl); }
   const reportEl = document.getElementById("had-report");
   if (reportEl) {
     let report = "";
@@ -328,17 +300,14 @@ function recalcHad() {
     if (total > 0) report += `ИТОГО HAD: ${total} баллов`;
     reportEl.textContent = report;
   }
-
   updateRail("content-had", total);
   saveHadState();
 }
-
 function saveHadState() {
   const s = {};
   HAD_ITEMS.forEach(it => s[it.key] = { count: getHadValue(it.key, "count"), point: getHadValue(it.key, "point") });
   try { localStorage.setItem(STORAGE_HAD_STATE, JSON.stringify(s)); } catch (e) {}
 }
-
 function loadHadState() {
   try {
     const raw = localStorage.getItem(STORAGE_HAD_STATE);
@@ -355,7 +324,6 @@ function loadHadState() {
     });
   } catch (e) {}
 }
-
 function resetHad() {
   HAD_ITEMS.forEach(it => {
     const cEl = document.querySelector(`#content-had input[data-role="count"][data-key="${it.key}"]`);
@@ -366,7 +334,6 @@ function resetHad() {
   recalcHad();
   showToast("HAD сброшен");
 }
-
 function copyHadReport() {
   const r = document.getElementById("had-report").textContent;
   if (!r) { showToast("Сначала введите данные"); return; }
@@ -377,22 +344,14 @@ function copyHadReport() {
 
 renderHadItems();
 loadHadState();
-
 document.getElementById("had-btn-copy").addEventListener("click", copyHadReport);
 document.getElementById("had-btn-reset").addEventListener("click", resetHad);
-
 recalcHad();
 
 document.addEventListener("keydown", (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-    e.preventDefault();
-    copyHadReport();
-  }
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") { e.preventDefault(); copyHadReport(); }
 });
-
-window.onCalcResize = function() {
-  recalcHad();
-};
+window.onCalcResize = function() { recalcHad(); };
 </script>
 </body>
 </html>
