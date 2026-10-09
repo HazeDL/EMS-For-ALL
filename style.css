@@ -1,6 +1,5 @@
 /* ============================================================
-   КАЛЬКУЛЯТОР БАЛЛОВ — ОБЩИЕ СТИЛИ
-   (обновлённая версия: крупнее, спокойнее)
+   ОБЩИЕ СТИЛИ — КАЛЬКУЛЯТОРЫ И ЛЕКЦИИ
    ============================================================ */
 
 :root {
@@ -21,11 +20,6 @@
   --shadow-strong: 0 6px 22px rgba(0,0,0,0.35);
   --blur: 12px;
   --font-base: 15.5px;
-  --font-small: 13.5px;
-  --font-large: 18px;
-  --font-h1: 34px;
-  --font-h2: 26px;
-  --font-h3: 18px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,7 +38,6 @@ body {
   background-size: 400% 400%;
   background-attachment: fixed;
   animation: gradientShift 30s ease infinite;
-  transition: background-color 0.4s ease;
 }
 body::before {
   content: "";
@@ -98,7 +91,7 @@ header {
   border-bottom: 1px solid var(--border);
 }
 header h1 {
-  font-size: var(--font-h1);
+  font-size: 34px;
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 10px;
@@ -163,7 +156,7 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   --visible: 48px; --width: 210px;
   position: relative; right: calc(-1 * (var(--width) - var(--visible)));
   width: var(--width); height: 54px; display: flex; align-items: center;
-  gap: 12px; padding: 0 16px 0 14px;
+  gap: 12px; padding: 0 16px;
   background: rgba(22, 27, 34, 0.86); color: var(--text);
   border: 1px solid var(--border); border-right: none;
   border-radius: 12px 0 0 12px; font-family: inherit;
@@ -226,20 +219,12 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   border-color: var(--accent); color: var(--accent);
 }
 
-/* --------- Fade --------- */
-.page-content { animation: fadeInPage 0.3s ease both; }
-@keyframes fadeInPage {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* --------- Layout --------- */
+/* --------- Layout калькулятора --------- */
 .content-layout {
   display: grid; grid-template-columns: 130px 1fr;
   gap: 26px; align-items: start;
 }
 
-/* --------- Шкала --------- */
 .progress-rail {
   position: sticky; top: 32px; height: 700px;
   padding: 24px 16px; background: var(--bg-alt);
@@ -263,8 +248,7 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
 }
 .progress-rail-fill {
   position: absolute; left: 0; right: 0; bottom: 0; height: 0%;
-  transition: height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              background 0.4s ease;
+  transition: height 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
   background: #f85149;
 }
 .progress-rail-ticks { position: absolute; inset: 0; pointer-events: none; }
@@ -298,7 +282,7 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   .progress-rail-title, .progress-rail-status { margin: 0; min-height: 0; }
 }
 
-/* --------- Секции --------- */
+/* --------- Секции калькулятора --------- */
 .section {
   background: var(--bg-alt);
   border: 1px solid var(--border);
@@ -310,16 +294,13 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
 }
 .section-title {
-  font-size: var(--font-h3); font-weight: 600; color: var(--text);
+  font-size: 18px; font-weight: 600; color: var(--text);
   margin-bottom: 20px; padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 12px;
-  letter-spacing: 0;
-  text-transform: none;
 }
 .section-title .icon { font-size: 22px; }
 
-/* --------- Строки таблицы --------- */
 .row {
   display: grid; grid-template-columns: 1fr 110px 110px 110px;
   gap: 14px; align-items: center; padding: 10px 12px;
@@ -377,7 +358,6 @@ input[type="number"].over-limit {
   100% { transform: scale(1); }
 }
 
-/* --------- Итог --------- */
 .total-box {
   display: flex; justify-content: space-between; align-items: center;
   background: rgba(26, 39, 68, 0.55);
@@ -393,7 +373,6 @@ input[type="number"].over-limit {
 .total-box .value {
   font-size: 40px; font-weight: 700;
   color: var(--accent); line-height: 1;
-  transition: transform 0.15s, color 0.3s;
 }
 .total-box .value.pulse { animation: totalPulse 0.3s ease; }
 @keyframes totalPulse {
@@ -402,7 +381,6 @@ input[type="number"].over-limit {
   100% { transform: scale(1); }
 }
 
-/* --------- Кнопки --------- */
 .buttons {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px; margin-bottom: 24px;
@@ -423,7 +401,6 @@ button.primary {
 button.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #0d1117; }
 button.danger:hover { border-color: var(--danger); color: var(--danger); background: rgba(248, 81, 73, 0.06); }
 
-/* --------- Отчёт --------- */
 .report {
   background: rgba(13, 17, 23, 0.6);
   border: 1px solid var(--border); border-radius: var(--radius);
@@ -438,7 +415,6 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
   color: var(--text-dim); font-style: italic;
 }
 
-/* --------- Списки правил --------- */
 .rules-list {
   list-style: none; padding: 0; margin: 0;
   display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 10px;
@@ -448,9 +424,7 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
   padding: 12px 16px; background: rgba(13, 17, 23, 0.45);
   border: 1px solid var(--border); border-radius: 10px;
   font-size: 14.5px; color: var(--text-dim); line-height: 1.5;
-  transition: border-color 0.15s;
 }
-.rules-list li:hover { border-color: var(--text-dim); }
 .rules-list .arrow { color: var(--accent); font-weight: 700; flex-shrink: 0; }
 .rules-list b { color: var(--text); }
 
@@ -465,8 +439,8 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
 }
 .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
 .hero-title {
-  font-size: var(--font-h2); font-weight: 700; color: var(--text);
-  margin-bottom: 12px; letter-spacing: 0.2px;
+  font-size: 26px; font-weight: 700; color: var(--text);
+  margin-bottom: 12px;
 }
 .hero-subtitle {
   font-size: 16px; color: var(--text-dim);
@@ -511,11 +485,6 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
   border: 1px solid rgba(88, 166, 255, 0.18);
   border-radius: 12px;
   font-size: 24px;
-  transition: background 0.18s, border-color 0.18s;
-}
-.card:hover .card-icon {
-  background: rgba(88, 166, 255, 0.18);
-  border-color: rgba(88, 166, 255, 0.4);
 }
 .card-body { flex: 1; min-width: 0; }
 .card-title {
@@ -527,7 +496,6 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
   line-height: 1.5;
 }
 
-/* --------- Подвал --------- */
 footer {
   text-align: center;
   margin-top: 48px;
@@ -537,7 +505,6 @@ footer {
   font-size: 13.5px;
 }
 
-/* --------- Toast --------- */
 .toast {
   position: fixed; bottom: 28px; left: 50%;
   transform: translateX(-50%) translateY(80px);
@@ -550,7 +517,6 @@ footer {
 }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* --------- Адаптив --------- */
 @media (max-width: 640px) {
   body { padding: 20px 12px 60px; font-size: 15px; }
   header h1 { font-size: 26px; }
@@ -563,7 +529,6 @@ footer {
 
   .total-box { padding: 18px; }
   .total-box .value { font-size: 30px; }
-  .total-box .label { font-size: 14px; }
 
   .buttons { grid-template-columns: 1fr 1fr; gap: 10px; }
   button { padding: 12px 14px; font-size: 14px; }
@@ -595,5 +560,4 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   body, body::before { animation: none !important; }
-  .page-content { animation: none; }
 }
