@@ -123,7 +123,12 @@
   }
   .duties li:hover { border-color: var(--accent); background: rgba(28, 35, 48, 0.75); }
   .duties .check { flex-shrink: 0; color: var(--success); font-weight: 700; font-size: 16px; line-height: 1.4; }
-  .duties .cross { flex-shrink: 0; color: var(--danger); font-weight: 700; font-size: 16px; line-height: 1.4; }
+  .duties .num {
+    flex-shrink: 0; width: 24px; height: 24px;
+    border-radius: 50%; background: var(--accent); color: #0d1117;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
 
   .meds { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 12px; }
   .med {
@@ -150,21 +155,54 @@
   }
   .priority .arrow { color: var(--accent); font-weight: 700; }
 
-  .single-image { margin: 16px 0; text-align: center; }
-  .single-image img {
-    display: block; max-width: 100%; height: auto; max-height: 520px;
-    margin: 0 auto; border-radius: 10px; border: 1px solid var(--border);
+  /* ============================================================
+     ГАЛЕРЕЯ
+     ============================================================ */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .gallery figure {
+    margin: 0;
     background: rgba(13, 17, 23, 0.55);
-    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
     cursor: zoom-in;
     transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
   }
-  .single-image img:hover {
-    transform: translateY(-3px); border-color: var(--accent);
-    box-shadow: 0 10px 28px rgba(88, 166, 255, 0.18);
+  .gallery figure:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 28px rgba(88, 166, 255, 0.15);
   }
-  .single-image figcaption { margin-top: 10px; font-size: 12.5px; color: var(--text-dim); font-style: italic; }
+  .gallery img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: rgba(22, 27, 34, 0.85);
+    transition: transform 0.25s;
+  }
+  .gallery figure:hover img {
+    transform: scale(1.05);
+  }
+  .gallery figcaption {
+    padding: 10px 14px;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    line-height: 1.45;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
+  /* Lightbox */
   .lightbox {
     position: fixed; inset: 0; z-index: 9999;
     display: none; align-items: center; justify-content: center;
@@ -190,7 +228,6 @@
     border: 1px solid var(--border); border-radius: 10px;
     color: var(--text); font-size: 22px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
   }
   .lightbox-close:hover { border-color: var(--danger); color: var(--danger); background: rgba(248, 81, 73, 0.15); }
   .lightbox-caption {
@@ -216,8 +253,10 @@
     .tab:hover { right: 0; }
     .rules-section { padding: 16px; }
     .rules-text { font-size: 13.5px; }
-    .single-image img { max-height: 340px; }
     .meds { grid-template-columns: 1fr; }
+    .gallery { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .gallery img { height: 130px; }
+    .gallery figcaption { font-size: 11.5px; padding: 8px 10px; min-height: 38px; }
   }
 </style>
 </head>
@@ -249,6 +288,12 @@
   </a>
   <a class="tab tab-active" href="lecture-vaccines.html">
     <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
+  </a>
+  <a class="tab" href="lecture-medcert.html">
+    <span class="tab-icon">🧾</span><span class="tab-label">Справки</span>
+  </a>
+  <a class="tab" href="lecture-pmp.html">
+    <span class="tab-icon">🚑</span><span class="tab-label">ПМП</span>
   </a>
 </nav>
 
@@ -295,6 +340,7 @@
     </p>
   </div>
 
+  <!-- ==================== ПРЕПАРАТЫ ==================== -->
   <div class="rules-section">
     <div class="rules-title"><span class="icon">📦</span> Что взять со склада</div>
     <p class="rules-text">
@@ -311,12 +357,20 @@
         <span class="med-count">24 шт</span>
       </div>
     </div>
-    <figure class="single-image" data-lightbox>
-      <img src="images/vax-meds.jpg" alt="Препараты для вакцинации" loading="lazy">
-      <figcaption>Азитромицин и активированный уголь</figcaption>
-    </figure>
+
+    <div class="gallery">
+      <figure data-lightbox>
+        <img src="images/vaccine-1.jpg" alt="Упаковка азитромицина" loading="lazy">
+        <figcaption>Упаковка азитромицина</figcaption>
+      </figure>
+      <figure data-lightbox>
+        <img src="images/vaccine-2.jpg" alt="Упаковка активированного угля" loading="lazy">
+        <figcaption>Упаковка активированного угля</figcaption>
+      </figure>
+    </div>
   </div>
 
+  <!-- ==================== ЗАБОЛЕВАНИЯ ==================== -->
   <div class="rules-section">
     <div class="rules-title"><span class="icon">🦠</span> От каких заболеваний применяются</div>
     <ul class="duties">
@@ -325,26 +379,34 @@
     </ul>
   </div>
 
+  <!-- ==================== КАБИНЕТЫ ==================== -->
   <div class="rules-section">
     <div class="rules-title"><span class="icon">🏥</span> Кабинеты для вакцинации</div>
     <p class="rules-text">
       <strong>Главная больница (ELSH):</strong> кабинеты для вакцинации и операций
       на <b>первом этаже</b>, а также кабинеты <b>W2, W4, W6</b> на <b>втором этаже</b>.
     </p>
-    <figure class="single-image" data-lightbox>
-      <img src="images/vax-cabinets.jpg" alt="Кабинеты для вакцинации в ELSH" loading="lazy">
-      <figcaption>Кабинеты для вакцинации и операций</figcaption>
-    </figure>
-
-    <p class="rules-text" style="margin-top: 14px;">
+    <p class="rules-text">
       <strong>Больница Палето-Бэй:</strong> Операционная (слева от входа).
     </p>
-    <figure class="single-image" data-lightbox>
-      <img src="images/vax-paleto.jpg" alt="Операционная Палето-Бэй" loading="lazy">
-      <figcaption>Операционная Палето-Бэй</figcaption>
-    </figure>
+
+    <div class="gallery">
+      <figure data-lightbox>
+        <img src="images/vaccine-3.jpg" alt="Кабинет вакцинации в ELSH — 1 этаж" loading="lazy">
+        <figcaption>Кабинет вакцинации в ELSH — 1 этаж</figcaption>
+      </figure>
+      <figure data-lightbox>
+        <img src="images/vaccine-4.jpg" alt="Кабинеты W2, W4, W6 в ELSH — 2 этаж" loading="lazy">
+        <figcaption>Кабинеты W2, W4, W6 — 2 этаж</figcaption>
+      </figure>
+      <figure data-lightbox>
+        <img src="images/vaccine-5.jpg" alt="Операционная Палето-Бэй" loading="lazy">
+        <figcaption>Операционная Палето-Бэй</figcaption>
+      </figure>
+    </div>
   </div>
 
+  <!-- ==================== ПРИОРИТЕТ ==================== -->
   <div class="rules-section">
     <div class="rules-title"><span class="icon">📍</span> Приоритет мест для вакцинации</div>
     <p class="rules-text">
@@ -362,6 +424,7 @@
     </div>
   </div>
 
+  <!-- ==================== ПОРЯДОК ВАКЦИНАЦИИ ==================== -->
   <div class="rules-section">
     <div class="rules-title"><span class="icon">👨‍⚕️</span> Как вакцинировать человека</div>
     <p class="rules-text">
@@ -369,16 +432,11 @@
       Ваши дальнейшие действия:
     </p>
     <ul class="duties">
-      <li><span class="check">1</span> Попросить снять верхнюю одежду.</li>
-      <li><span class="check">2</span> <span class="step-line"><span class="key">G</span><span class="sep">›</span>Фракционное<span class="sep">›</span>Диагностировать</span></li>
-      <li><span class="check">3</span> Сообщить пациенту, чем он болен, и попросить <b>4.000$</b> у гражданского и у гос. сотрудника.</li>
-      <li><span class="check">4</span> После передачи денег приступить к вакцинации: <span class="step-line"><span class="key">G</span><span class="sep">›</span>Фракционное<span class="sep">›</span>Вакцинировать</span></li>
+      <li><span class="num">1</span>Попросить снять верхнюю одежду.</li>
+      <li><span class="num">2</span><span class="step-line"><span class="key">G</span><span class="sep">›</span>Фракционное<span class="sep">›</span>Диагностировать</span></li>
+      <li><span class="num">3</span>Сообщить пациенту, чем он болен, и попросить <b>4.000$</b> у гражданского и у гос. сотрудника.</li>
+      <li><span class="num">4</span>После передачи денег приступить к вакцинации: <span class="step-line"><span class="key">G</span><span class="sep">›</span>Фракционное<span class="sep">›</span>Вакцинировать</span></li>
     </ul>
-
-    <figure class="single-image" data-lightbox>
-      <img src="images/vax-menu.jpg" alt="Меню G — Фракционное — Вакцинировать" loading="lazy">
-      <figcaption>Шаги в меню: Диагностировать → Вакцинировать</figcaption>
-    </figure>
 
     <p class="rules-text" style="margin-top: 14px;">
       После нажатия кнопки <strong>«Вакцинировать»</strong> появляется мини-игра, в которой
@@ -386,10 +444,25 @@
       <b>перетаскивать колбы на бактерии соответствующего цвета</b> и держать,
       пока не исчезнут.
     </p>
-    <figure class="single-image" data-lightbox>
-      <img src="images/vax-minigame.jpg" alt="Мини-игра вакцинации" loading="lazy">
-      <figcaption>Мини-игра: перетаскивайте колбы на бактерии соответствующего цвета</figcaption>
-    </figure>
+
+    <div class="gallery">
+      <figure data-lightbox>
+        <img src="images/vaccine-6.jpg" alt="Меню G — Фракционное" loading="lazy">
+        <figcaption>Шаг 1. Открыть <b>G › Фракционное</b></figcaption>
+      </figure>
+      <figure data-lightbox>
+        <img src="images/vaccine-7.jpg" alt="Меню G — Диагностировать" loading="lazy">
+        <figcaption>Шаг 2. Нажать <b>Диагностировать</b></figcaption>
+      </figure>
+      <figure data-lightbox>
+        <img src="images/vaccine-8.jpg" alt="Меню G — Вакцинировать" loading="lazy">
+        <figcaption>Шаг 3. Нажать <b>Вакцинировать</b></figcaption>
+      </figure>
+      <figure data-lightbox>
+        <img src="images/vaccine-9.jpg" alt="Мини-игра вакцинации" loading="lazy">
+        <figcaption>Мини-игра: перетаскивайте колбы на бактерии нужного цвета</figcaption>
+      </figure>
+    </div>
   </div>
 
   <footer>
