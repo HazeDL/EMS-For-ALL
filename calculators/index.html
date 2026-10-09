@@ -12,17 +12,16 @@
     pointer-events: none;
   }
   .tab-left {
-    --visible: 48px; --width: 220px;
+    --visible: 56px; --width: 260px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 54px;
+    width: var(--width); height: 62px;
     display: flex; align-items: center;
-    gap: 12px; padding: 0 16px;
+    gap: 14px; padding: 0 18px;
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-left: none;
-    border-radius: 0 12px 12px 0;
-    font-size: 15px; font-weight: 500; text-align: left;
-    cursor: pointer;
+    border-radius: 0 14px 14px 0;
+    font-size: 17px; font-weight: 500; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -33,7 +32,7 @@
     left: 0; background: rgba(30, 38, 52, 0.95);
     color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+  .tab-left .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .side-tabs {
@@ -42,15 +41,14 @@
     pointer-events: none;
   }
   .tab {
-    --visible: 48px; --width: 210px;
+    --visible: 52px; --width: 240px;
     position: relative; right: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 54px; display: flex; align-items: center;
-    gap: 12px; padding: 0 16px;
+    width: var(--width); height: 62px; display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-right: none;
-    border-radius: 12px 0 0 12px;
-    font-size: 15px; font-weight: 500; text-align: left;
-    cursor: pointer;
+    border-radius: 14px 0 0 14px;
+    font-size: 17px; font-weight: 500; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -66,136 +64,36 @@
     border-color: var(--accent); color: var(--accent);
   }
   .tab.tab-active::before {
-    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
+    content: ""; position: absolute; left: 0; top: 12px; bottom: 12px;
     width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
   }
-  .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+  .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .hero {
-    text-align: center; padding: 48px 28px 40px;
-    background: rgba(26, 39, 68, 0.4);
-    border: 1px solid var(--border); border-radius: 12px;
-    margin-bottom: 24px; box-shadow: var(--shadow);
-    backdrop-filter: blur(var(--blur)) saturate(140%);
-    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
-  }
-  .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
-  .hero-title {
-    font-size: 26px; font-weight: 700; color: var(--text);
-    margin-bottom: 12px;
-  }
-  .hero-subtitle {
-    font-size: 16px; color: var(--text-dim);
-    max-width: 640px; margin: 0 auto; line-height: 1.7;
-  }
-
-  .section {
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 26px;
-    margin-bottom: 24px;
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(var(--blur)) saturate(140%);
-    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
-  }
-  .section-title {
-    font-size: 18px; font-weight: 600; color: var(--text);
-    margin-bottom: 20px; padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 12px;
-  }
-  .section-title .icon { font-size: 22px; }
-
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 14px;
-  }
-  .card {
-    display: flex; align-items: center; gap: 16px;
-    padding: 20px 22px;
-    background: rgba(13, 17, 23, 0.5);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    text-decoration: none;
-    color: var(--text);
-    transition: border-color 0.18s, background 0.18s;
-    position: relative;
-  }
-  .card::after {
-    content: "→";
-    margin-left: auto;
-    color: var(--text-dim);
-    font-size: 20px;
-    transition: transform 0.18s, color 0.18s;
-  }
-  .card:hover {
-    border-color: var(--accent);
-    background: rgba(28, 35, 48, 0.7);
-  }
-  .card:hover::after { color: var(--accent); transform: translateX(4px); }
-  .card-icon {
-    flex-shrink: 0;
-    width: 48px; height: 48px;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(88, 166, 255, 0.10);
-    border: 1px solid rgba(88, 166, 255, 0.18);
-    border-radius: 12px;
-    font-size: 24px;
-  }
-  .card-body { flex: 1; min-width: 0; }
-  .card-title {
-    font-size: 16.5px; font-weight: 600; color: var(--text);
-    margin-bottom: 4px; line-height: 1.35;
-  }
-  .card-desc {
-    font-size: 13.5px; color: var(--text-dim);
-    line-height: 1.5;
-  }
-
   @media (max-width: 640px) {
-    body { padding: 20px 12px 60px; }
-    .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
-    .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
+    .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
     .side-tabs { top: auto; bottom: 14px; transform: none; }
-    .tab { --width: 160px; --visible: 46px; height: 46px; font-size: 14px; padding: 0 12px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
     .tab:hover { right: 0; }
-    .section { padding: 20px; }
-    .cards { grid-template-columns: 1fr; gap: 12px; }
-    .card { padding: 16px; }
-    .hero { padding: 34px 20px 28px; }
-    .hero-title { font-size: 22px; }
-    .hero-subtitle { font-size: 14.5px; }
-    .hero-icon { font-size: 52px; }
   }
 </style>
 </head>
 <body>
 
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="../main.html" title="Вернуться в базу знаний EMS">
-    <span class="tab-icon">🏠</span>
-    <span class="tab-label">Главная EMS</span>
+  <a class="tab-left" href="../main.html" title="База знаний">
+    <span class="tab-icon">📚</span>
+    <span class="tab-label">База знаний</span>
   </a>
 </nav>
 
-<nav class="side-tabs" aria-label="Отделы">
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="../main.html">
+    <span class="tab-icon">📚</span><span class="tab-label">База знаний</span>
+  </a>
   <a class="tab tab-active" href="index.html">
-    <span class="tab-icon">🧮</span><span class="tab-label">Главное меню</span>
-  </a>
-  <a class="tab" href="psid.html">
-    <span class="tab-icon">🏥</span><span class="tab-label">PSID</span>
-  </a>
-  <a class="tab" href="pm.html">
-    <span class="tab-icon">📋</span><span class="tab-label">PM</span>
-  </a>
-  <a class="tab" href="di.html">
-    <span class="tab-icon">📊</span><span class="tab-label">DI</span>
-  </a>
-  <a class="tab" href="had.html">
-    <span class="tab-icon">💉</span><span class="tab-label">HAD</span>
+    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
   </a>
 </nav>
 
