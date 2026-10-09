@@ -6,14 +6,14 @@
 <title>PSID — Калькулятор баллов</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Панель слева — переход на главную EMS */
+  /* ЛЕВАЯ ПАНЕЛЬ */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 6px;
     pointer-events: none;
   }
   .tab-left {
-    --visible: 42px; --width: 180px;
+    --visible: 42px; --width: 200px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
     width: var(--width); height: 48px;
@@ -40,11 +40,15 @@
   .tab-left:active { transform: translateY(1px); }
   .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tab-left.tab-active {
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.95), rgba(22, 33, 62, 0.95));
+    border-color: var(--accent); color: var(--accent);
+  }
 
   @media (max-width: 640px) {
-    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
     .tab-left {
-      --width: 160px; --visible: 42px;
+      --width: 170px; --visible: 42px;
       height: 42px; font-size: 13px;
       left: 0; border-radius: 10px;
       border-left: 1px solid var(--border);
@@ -56,47 +60,37 @@
 </head>
 <body>
 
-<!-- ============================================================
-     ПАНЕЛЬ СЛЕВА — ПЕРЕХОД НА ГЛАВНУЮ EMS
-     ============================================================ -->
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
+  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
     <span class="tab-icon">🏠</span>
     <span class="tab-label">Главная EMS</span>
   </a>
+  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Главное меню калькулятора</span>
+  </a>
 </nav>
 
-<!-- ============================================================
-     ПАНЕЛЬ ВКЛАДОК СПРАВА
-     ============================================================ -->
-<nav class="side-tabs" aria-label="Разделы">
+<nav class="side-tabs" aria-label="Отделы">
   <a class="tab" href="pm.html">
-    <span class="tab-icon">📋</span>
-    <span class="tab-label">PM</span>
+    <span class="tab-icon">📋</span><span class="tab-label">PM</span>
   </a>
   <a class="tab" href="di.html">
-    <span class="tab-icon">📊</span>
-    <span class="tab-label">DI</span>
+    <span class="tab-icon">📊</span><span class="tab-label">DI</span>
   </a>
   <a class="tab tab-active" href="psid.html">
-    <span class="tab-icon">🏥</span>
-    <span class="tab-label">PSID</span>
+    <span class="tab-icon">🏥</span><span class="tab-label">PSID</span>
   </a>
   <a class="tab" href="had.html">
-    <span class="tab-icon">💉</span>
-    <span class="tab-label">HAD</span>
+    <span class="tab-icon">💉</span><span class="tab-label">HAD</span>
   </a>
 </nav>
 
-<!-- ============================================================
-     КНОПКА ФОНА
-     ============================================================ -->
 <div class="bg-controls">
   <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
   <div class="bg-menu" id="bg-menu" hidden>
     <div class="bg-section-label">Пресеты</div>
     <div class="bg-presets" id="bg-presets"></div>
-
     <div class="bg-section-label">Свои</div>
     <label class="bg-menu-item">
       📁 Загрузить картинку
@@ -112,9 +106,6 @@
   </div>
 </div>
 
-<!-- ============================================================
-     ОСНОВНОЙ КОНТЕНТ
-     ============================================================ -->
 <div class="container page-content">
 
   <header>
@@ -190,9 +181,6 @@
 
 <script src="common.js"></script>
 <script>
-/* ============================================================
-   СПИСОК УСЛУГ PSID
-   ============================================================ */
 const ITEMS = [
   {key:"pill_day",       name:"Выдача таблетки днём",                   pts:2,  lim:100, sect:1},
   {key:"pill_night",     name:"Выдача таблетки ночью",                  pts:2,  lim:100, sect:1},
@@ -228,27 +216,18 @@ function renderItems() {
   const mainEl  = document.getElementById("main-items");
   const instrEl = document.getElementById("instr-items");
   if (!mainEl || !instrEl) return;
-
   ITEMS.forEach(it => {
     const row = document.createElement("div");
-    row.className = "row";
-    row.dataset.key = it.key;
-
+    row.className = "row"; row.dataset.key = it.key;
     const badge = it.lim > 0 ? `<span class="limit">макс ${it.lim}</span>` : "";
-
     row.innerHTML = `
       <div class="name">${it.name}${badge}</div>
       <input type="number" min="0" step="1" data-role="count" data-key="${it.key}">
       <input type="number" min="0" step="1" value="${it.pts}" data-role="point" data-key="${it.key}">
       <div class="sum" data-role="sum" data-key="${it.key}">0</div>`;
-
-    if (it.sect === 1) mainEl.appendChild(row);
-    else               instrEl.appendChild(row);
+    (it.sect === 1 ? mainEl : instrEl).appendChild(row);
   });
-
-  document.querySelectorAll("#content-psid input[type=number]").forEach(inp => {
-    inp.addEventListener("input", recalc);
-  });
+  document.querySelectorAll("#content-psid input[type=number]").forEach(inp => inp.addEventListener("input", recalc));
 }
 
 function getValue(key, role) {
@@ -261,57 +240,36 @@ function getValue(key, role) {
 function recalc() {
   let total = 0;
   const details = { main: [], instr: [], mainSum: 0, instrSum: 0 };
-
   ITEMS.forEach(it => {
     const countEl = document.querySelector(`#content-psid input[data-role="count"][data-key="${it.key}"]`);
     const sumEl   = document.querySelector(`#content-psid div[data-role="sum"][data-key="${it.key}"]`);
     if (!countEl || !sumEl) return;
-
     let count = getValue(it.key, "count");
     const point = getValue(it.key, "point");
-
     const over = it.lim > 0 && count > it.lim;
     if (over) count = it.lim;
     countEl.classList.toggle("over-limit", over);
-
     const sum = count * point;
     total += sum;
-
     popIfChanged(sumEl, sumEl.textContent, String(sum));
     sumEl.classList.toggle("positive", sum > 0);
-
     countEl.closest(".row").classList.toggle("active", count > 0);
-
     if (count > 0) {
       const e = {name: it.name, count, point, sum};
       if (it.sect === 1) { details.main.push(e); details.mainSum += sum; }
-      else               { details.instr.push(e); details.instrSum += sum; }
+      else { details.instr.push(e); details.instrSum += sum; }
     }
   });
-
   const totalEl = document.getElementById("total");
-  if (totalEl && parseInt(totalEl.textContent, 10) !== total) {
-    totalEl.textContent = total;
-    pulseEl(totalEl);
-  }
-
+  if (totalEl && parseInt(totalEl.textContent, 10) !== total) { totalEl.textContent = total; pulseEl(totalEl); }
   const reportEl = document.getElementById("report");
   if (reportEl) {
     let report = "";
-    if (details.main.length) {
-      report += "── Основные услуги ──\n";
-      details.main.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
-      report += `  Подытог: ${details.mainSum}\n\n`;
-    }
-    if (details.instr.length) {
-      report += "── Инструкторы ──\n";
-      details.instr.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`);
-      report += `  Подытог: ${details.instrSum}\n\n`;
-    }
+    if (details.main.length) { report += "── Основные услуги ──\n"; details.main.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`); report += `  Подытог: ${details.mainSum}\n\n`; }
+    if (details.instr.length) { report += "── Инструкторы ──\n"; details.instr.forEach(e => report += `  ${e.name}: ${e.count} × ${e.point} = ${e.sum}\n`); report += `  Подытог: ${details.instrSum}\n\n`; }
     if (total > 0) report += `ИТОГО PSID: ${total} баллов`;
     reportEl.textContent = report;
   }
-
   updateRail("content-psid", total);
   saveState();
 }
@@ -321,7 +279,6 @@ function saveState() {
   ITEMS.forEach(it => s[it.key] = { count: getValue(it.key, "count"), point: getValue(it.key, "point") });
   try { localStorage.setItem(STORAGE_STATE, JSON.stringify(s)); } catch (e) {}
 }
-
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_STATE);
@@ -338,7 +295,6 @@ function loadState() {
     });
   } catch (e) {}
 }
-
 function loadSavedDefaults() {
   try {
     const raw = localStorage.getItem(STORAGE_DEFAULTS);
@@ -352,7 +308,6 @@ function loadSavedDefaults() {
     });
   } catch (e) {}
 }
-
 function resetAll() {
   ITEMS.forEach(it => {
     const cEl = document.querySelector(`#content-psid input[data-role="count"][data-key="${it.key}"]`);
@@ -363,18 +318,12 @@ function resetAll() {
   recalc();
   showToast("PSID сброшен");
 }
-
 function saveDefaults() {
   const pts = {};
   ITEMS.forEach(it => pts[it.key] = getValue(it.key, "point"));
-  try {
-    localStorage.setItem(STORAGE_DEFAULTS, JSON.stringify(pts));
-    showToast("Баллы PSID сохранены");
-  } catch (e) {
-    showToast("Не удалось сохранить");
-  }
+  try { localStorage.setItem(STORAGE_DEFAULTS, JSON.stringify(pts)); showToast("Баллы PSID сохранены"); }
+  catch (e) { showToast("Не удалось сохранить"); }
 }
-
 function copyReport() {
   const r = document.getElementById("report").textContent;
   if (!r) { showToast("Сначала введите данные"); return; }
@@ -386,23 +335,15 @@ function copyReport() {
 renderItems();
 loadSavedDefaults();
 loadState();
-
 document.getElementById("btn-copy").addEventListener("click", copyReport);
 document.getElementById("btn-save").addEventListener("click", saveDefaults);
 document.getElementById("btn-reset").addEventListener("click", resetAll);
-
 recalc();
 
 document.addEventListener("keydown", (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-    e.preventDefault();
-    copyReport();
-  }
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") { e.preventDefault(); copyReport(); }
 });
-
-window.onCalcResize = function() {
-  recalc();
-};
+window.onCalcResize = function() { recalc(); };
 </script>
 </body>
 </html>
