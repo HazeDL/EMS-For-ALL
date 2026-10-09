@@ -4,22 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>База знаний EMS</title>
+<link rel="stylesheet" href="style.css">
 <style>
   :root {
     --bg: #0d1117;
-    --bg-alt: rgba(22, 27, 34, 0.72);
-    --bg-hover: rgba(28, 35, 48, 0.85);
-    --border: rgba(42, 49, 64, 0.8);
+    --bg-alt: rgba(22, 27, 34, 0.65);
+    --bg-hover: rgba(28, 35, 48, 0.75);
+    --border: rgba(48, 56, 72, 0.7);
     --text: #e6edf3;
-    --text-dim: #8b949e;
+    --text-dim: #93a0ae;
     --accent: #58a6ff;
     --accent-hover: #79b8ff;
     --success: #3fb950;
     --danger: #f85149;
     --gold: #d29922;
-    --radius: 10px;
-    --shadow: 0 4px 16px rgba(0,0,0,0.35);
-    --blur: 14px;
+    --radius: 12px;
+    --shadow: 0 2px 10px rgba(0,0,0,0.25);
+    --blur: 12px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,15 +30,15 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: var(--bg);
     color: var(--text);
-    line-height: 1.5;
-    padding: 24px 16px 60px;
+    font-size: 15.5px;
+    line-height: 1.6;
+    padding: 32px 20px 80px;
     position: relative;
     overflow-x: hidden;
     background-image: linear-gradient(-45deg, #0a0e14, #0d1117, #101828, #0d1117);
     background-size: 400% 400%;
     background-attachment: fixed;
-    animation: gradientShift 22s ease infinite;
-    transition: background-color 0.4s ease;
+    animation: gradientShift 30s ease infinite;
   }
   body::before {
     content: "";
@@ -46,10 +47,10 @@
     z-index: 0;
     pointer-events: none;
     background-image:
-      linear-gradient(rgba(88, 166, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(88, 166, 255, 0.05) 1px, transparent 1px);
-    background-size: 50px 50px;
-    animation: gridMove 30s linear infinite;
+      linear-gradient(rgba(88, 166, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(88, 166, 255, 0.035) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 60s linear infinite;
   }
   body.has-custom-bg::before { display: none; }
   body.has-custom-bg {
@@ -65,7 +66,7 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background: rgba(13, 17, 23, 0.72);
+    background: rgba(13, 17, 23, 0.75);
   }
 
   @keyframes gradientShift {
@@ -74,196 +75,156 @@
   }
   @keyframes gridMove {
     from { background-position: 0 0; }
-    to   { background-position: 50px 50px; }
+    to   { background-position: 60px 60px; }
   }
 
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
+  .container { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
 
   header {
     text-align: center;
-    margin-bottom: 28px;
-    padding-bottom: 20px;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
     border-bottom: 1px solid var(--border);
   }
   header h1 {
-    font-size: 30px;
+    font-size: 34px;
     font-weight: 700;
     color: var(--accent);
-    margin-bottom: 8px;
-    letter-spacing: 0.3px;
+    margin-bottom: 10px;
   }
-  header p {
-    color: var(--text-dim);
-    font-size: 14px;
-    max-width: 540px;
-    margin: 0 auto;
-  }
+  header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 auto; }
 
   /* Кнопка фона */
-  .bg-controls { position: fixed; top: 16px; right: 16px; z-index: 100; }
+  .bg-controls { position: fixed; top: 20px; right: 20px; z-index: 100; }
   .bg-btn {
     background: var(--bg-alt); color: var(--text);
-    border: 1px solid var(--border); border-radius: 8px;
-    padding: 8px 14px; font-size: 13px; font-family: inherit; font-weight: 500;
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 16px; font-size: 14px; font-family: inherit; font-weight: 500;
     cursor: pointer; box-shadow: var(--shadow); transition: all 0.15s;
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
   }
-  .bg-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-hover); }
+  .bg-btn:hover { border-color: var(--accent); color: var(--accent); }
   .bg-menu {
-    position: absolute; top: calc(100% + 6px); right: 0; width: 320px;
-    background: rgba(22, 27, 34, 0.95); border: 1px solid var(--border);
-    border-radius: 10px; padding: 8px; box-shadow: var(--shadow);
+    position: absolute; top: calc(100% + 8px); right: 0; width: 340px;
+    background: rgba(22, 27, 34, 0.96); border: 1px solid var(--border);
+    border-radius: 12px; padding: 10px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.35);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
   }
   .bg-menu[hidden] { display: none; }
   .bg-section-label {
-    font-size: 11px; color: var(--text-dim); text-transform: uppercase;
-    letter-spacing: 1px; padding: 8px 8px 6px; font-weight: 600;
+    font-size: 12px; color: var(--text-dim); text-transform: uppercase;
+    letter-spacing: 1px; padding: 10px 8px 8px; font-weight: 600;
   }
-  .bg-presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 4px 8px; }
+  .bg-presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 4px 10px; }
   .bg-preset {
-    height: 46px; border-radius: 8px; border: 1px solid var(--border);
+    height: 52px; border-radius: 8px; border: 1px solid var(--border);
     cursor: pointer; background-size: cover; background-position: center;
-    transition: transform 0.15s, border-color 0.15s; position: relative; overflow: hidden;
+    transition: border-color 0.15s; position: relative; overflow: hidden;
   }
-  .bg-preset:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .bg-preset:hover { border-color: var(--accent); }
   .bg-preset .bg-preset-title {
-    position: absolute; bottom: 0; left: 0; right: 0; font-size: 10px;
-    text-align: center; padding: 3px 2px; background: rgba(0,0,0,0.55);
+    position: absolute; bottom: 0; left: 0; right: 0; font-size: 11px;
+    text-align: center; padding: 4px 2px; background: rgba(0,0,0,0.55);
     color: #fff; font-weight: 500;
   }
   .bg-menu-item {
     background: transparent; color: var(--text); border: none;
-    border-radius: 6px; padding: 10px 12px; font-size: 13px;
+    border-radius: 8px; padding: 12px 14px; font-size: 14px;
     font-family: inherit; text-align: left; cursor: pointer;
     display: block; width: 100%; transition: background 0.12s, color 0.12s;
   }
   .bg-menu-item:hover { background: var(--bg-hover); color: var(--accent); }
   .bg-menu-item.danger:hover { background: rgba(248, 81, 73, 0.1); color: var(--danger); }
   .bg-menu-item input[type="color"] {
-    width: 100%; height: 28px; margin-top: 6px;
+    width: 100%; height: 32px; margin-top: 8px;
     background: transparent; border: 1px solid var(--border);
     border-radius: 6px; cursor: pointer;
   }
 
-  /* Панель вкладок справа */
+  /* Правая панель */
   .side-tabs {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
-    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
     pointer-events: none;
   }
   .tab {
-    --visible: 42px; --width: 180px;
+    --visible: 48px; --width: 210px;
     position: relative; right: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 48px; display: flex; align-items: center;
-    gap: 10px; padding: 0 14px 0 12px;
-    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    width: var(--width); height: 54px; display: flex; align-items: center;
+    gap: 12px; padding: 0 16px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-right: none;
-    border-radius: 10px 0 0 10px; font-family: inherit;
-    font-size: 14px; font-weight: 500; cursor: pointer; text-align: left;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    border-radius: 12px 0 0 12px;
+    font-size: 15px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
-    pointer-events: auto;
-    text-decoration: none;
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
   }
   .tab:hover {
-    right: 0; background: rgba(28, 35, 48, 0.98);
-    color: var(--accent); border-color: var(--accent);
-    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+    right: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab:active { transform: translateY(1px); }
   .tab.tab-active {
-    background: linear-gradient(135deg, rgba(26, 39, 68, 0.9), rgba(22, 33, 62, 0.9));
+    background: rgba(26, 39, 68, 0.92);
     border-color: var(--accent); color: var(--accent);
   }
   .tab.tab-active::before {
-    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
     width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
   }
-  .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* Панель слева */
+  /* Левая панель */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
-    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
     pointer-events: none;
   }
   .tab-left {
-    --visible: 48px; --width: 220px;
+    --visible: 52px; --width: 240px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 52px;
+    width: var(--width); height: 54px;
     display: flex; align-items: center;
-    gap: 10px;
-    padding: 0 12px 0 12px;
-    background: linear-gradient(135deg, rgba(26, 39, 68, 0.92), rgba(22, 33, 62, 0.92));
-    color: var(--accent);
-    border: 1px solid var(--accent); border-left: none;
-    border-radius: 0 10px 10px 0;
-    font-family: inherit; font-size: 14px; font-weight: 600;
-    cursor: pointer; text-align: left;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    gap: 12px; padding: 0 16px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 12px 12px 0;
+    font-size: 15px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.15s, color 0.15s, box-shadow 0.15s;
-    pointer-events: auto;
-    text-decoration: none;
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
   }
   .tab-left:hover {
-    left: 0;
-    background: linear-gradient(135deg, rgba(88, 166, 255, 0.25), rgba(26, 39, 68, 0.95));
-    color: var(--accent-hover);
-    box-shadow: 0 6px 24px rgba(88, 166, 255, 0.28);
+    left: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab-left:active { transform: translateY(1px); }
-  .tab-left .tab-icon { font-size: 20px; width: 26px; }
+  .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Hero */
   .hero {
-    text-align: center;
-    padding: 36px 24px 30px;
-    background: linear-gradient(135deg, rgba(26, 39, 68, 0.6), rgba(22, 33, 62, 0.6));
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(var(--blur)) saturate(160%);
-    -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+    text-align: center; padding: 48px 28px 40px;
+    background: rgba(26, 39, 68, 0.4);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    margin-bottom: 24px; box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
   }
-  .hero-icon { font-size: 52px; line-height: 1; margin-bottom: 10px; display: block; }
+  .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
   .hero-title {
-    font-size: 22px; font-weight: 700; color: var(--accent);
-    margin-bottom: 8px;
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin-bottom: 12px;
   }
   .hero-subtitle {
-    font-size: 14px; color: var(--text-dim);
-    max-width: 540px; margin: 0 auto; line-height: 1.7;
-  }
-
-  /* Контейнер блоков */
-  #content { min-height: 120px; }
-  #content:empty::before {
-    content: "Разделы появятся здесь по мере поступления данных.";
-    display: block;
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 13.5px;
-    font-style: italic;
-    padding: 40px 20px;
-    background: var(--bg-alt);
-    border: 1px dashed var(--border);
-    border-radius: var(--radius);
-    backdrop-filter: blur(var(--blur));
-    -webkit-backdrop-filter: blur(var(--blur));
+    font-size: 16px; color: var(--text-dim);
+    max-width: 640px; margin: 0 auto; line-height: 1.7;
   }
 
   /* Секции */
@@ -271,155 +232,121 @@
     background: var(--bg-alt);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 22px;
-    margin-bottom: 20px;
+    padding: 26px;
+    margin-bottom: 24px;
     box-shadow: var(--shadow);
-    backdrop-filter: blur(var(--blur)) saturate(160%);
-    -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
   }
   .section-title {
-    font-size: 14px; font-weight: 600; color: var(--accent);
-    text-transform: uppercase; letter-spacing: 1px;
-    margin-bottom: 16px; padding-bottom: 10px;
+    font-size: 18px; font-weight: 600; color: var(--text);
+    margin-bottom: 20px; padding-bottom: 12px;
     border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center; gap: 12px;
   }
-  .section-title .icon { font-size: 18px; }
+  .section-title .icon { font-size: 22px; }
 
-  /* Карточки-ссылки */
+  /* Карточки */
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
   }
   .card {
-    display: flex; align-items: center; gap: 14px;
-    padding: 16px 18px;
-    background: rgba(13, 17, 23, 0.55);
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 22px;
+    background: rgba(13, 17, 23, 0.5);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 12px;
     text-decoration: none;
     color: var(--text);
-    transition: border-color 0.18s, background 0.18s, transform 0.18s, box-shadow 0.18s;
+    transition: border-color 0.18s, background 0.18s;
     position: relative;
-    overflow: hidden;
   }
   .card::after {
     content: "→";
     margin-left: auto;
     color: var(--text-dim);
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 20px;
     transition: transform 0.18s, color 0.18s;
   }
   .card:hover {
     border-color: var(--accent);
-    background: rgba(28, 35, 48, 0.85);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(88, 166, 255, 0.15);
+    background: rgba(28, 35, 48, 0.7);
   }
-  .card:hover::after {
-    color: var(--accent);
-    transform: translateX(4px);
-  }
+  .card:hover::after { color: var(--accent); transform: translateX(4px); }
   .card-icon {
     flex-shrink: 0;
-    width: 42px; height: 42px;
+    width: 48px; height: 48px;
     display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(88, 166, 255, 0.18), rgba(88, 166, 255, 0.06));
-    border: 1px solid rgba(88, 166, 255, 0.25);
-    border-radius: 10px;
-    font-size: 20px;
-    transition: background 0.18s, border-color 0.18s;
-  }
-  .card:hover .card-icon {
-    background: linear-gradient(135deg, rgba(88, 166, 255, 0.30), rgba(88, 166, 255, 0.12));
-    border-color: var(--accent);
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.18);
+    border-radius: 12px;
+    font-size: 24px;
   }
   .card-body { flex: 1; min-width: 0; }
   .card-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 3px;
+    font-size: 16.5px; font-weight: 600; color: var(--text);
+    margin-bottom: 4px; line-height: 1.35;
   }
   .card-desc {
-    font-size: 12.5px;
-    color: var(--text-dim);
-    line-height: 1.45;
+    font-size: 13.5px; color: var(--text-dim);
+    line-height: 1.5;
   }
 
   /* Плашка сервера */
   .server-card {
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 22px;
-    background: linear-gradient(135deg, rgba(26, 39, 68, 0.75), rgba(22, 33, 62, 0.75));
+    gap: 24px;
+    padding: 26px;
+    background: rgba(26, 39, 68, 0.5);
     border: 1px solid var(--border);
     border-radius: 12px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s;
   }
-  .server-card::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), transparent);
-    opacity: 0.6;
-  }
-  .server-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 8px 28px rgba(88, 166, 255, 0.15);
-  }
+  .server-card:hover { border-color: var(--accent); }
   .server-icon {
     flex-shrink: 0;
-    width: 76px; height: 76px;
+    width: 84px; height: 84px;
     display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(88, 166, 255, 0.22), rgba(88, 166, 255, 0.05));
-    border: 1px solid rgba(88, 166, 255, 0.35);
-    border-radius: 14px;
-    font-size: 36px;
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.25);
+    border-radius: 16px;
+    font-size: 40px;
   }
   .server-info { flex: 1; min-width: 0; }
   .server-name {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--text);
     margin-bottom: 4px;
-    letter-spacing: 0.3px;
   }
   .server-sub {
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-  }
-  .server-desc {
     font-size: 14px;
-    color: var(--text);
-    line-height: 1.6;
+    color: var(--text-dim);
     margin-bottom: 12px;
   }
-  .server-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+  .server-desc {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 14px;
   }
+  .server-badges { display: flex; flex-wrap: wrap; gap: 10px; }
   .server-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    font-size: 12.5px;
+    gap: 8px;
+    padding: 6px 14px;
+    font-size: 13.5px;
     font-weight: 600;
-    border-radius: 6px;
+    border-radius: 8px;
     white-space: nowrap;
   }
   .server-badge.online {
-    background: rgba(63, 185, 80, 0.12);
-    border: 1px solid rgba(63, 185, 80, 0.35);
+    background: rgba(63, 185, 80, 0.10);
+    border: 1px solid rgba(63, 185, 80, 0.30);
     color: var(--success);
   }
   .server-badge.online .dot {
@@ -433,61 +360,69 @@
     50%      { opacity: 0.4; }
   }
   .server-badge.newbie {
-    background: rgba(88, 166, 255, 0.12);
-    border: 1px solid rgba(88, 166, 255, 0.35);
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.28);
     color: var(--accent);
   }
   .server-badge.opened {
-    background: rgba(210, 153, 34, 0.12);
-    border: 1px solid rgba(210, 153, 34, 0.35);
+    background: rgba(210, 153, 34, 0.10);
+    border: 1px solid rgba(210, 153, 34, 0.28);
     color: var(--gold);
   }
 
   /* Подвал */
   footer {
     text-align: center;
-    margin-top: 40px;
-    padding-top: 20px;
+    margin-top: 48px;
+    padding-top: 24px;
     border-top: 1px solid var(--border);
     color: var(--text-dim);
-    font-size: 12.5px;
+    font-size: 13.5px;
   }
 
-  /* Адаптив */
-  @media (max-width: 640px) {
-    body { padding: 16px 10px 40px; }
-    header h1 { font-size: 22px; }
-    header p { font-size: 12.5px; }
-    .bg-controls { top: 10px; right: 10px; }
-    .bg-btn { padding: 6px 10px; font-size: 12px; }
-    .bg-menu { width: 260px; }
-    .side-tabs { top: auto; bottom: 12px; transform: none; }
-    .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; }
-    .tab-icon { font-size: 16px; width: 20px; }
-    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
-    .tab-left {
-      --width: 180px; --visible: 44px;
-      height: 42px; font-size: 13px;
-      left: 0; border-radius: 10px;
-      border-left: 1px solid var(--accent);
-      padding: 0 10px;
-    }
-    .tab-left:hover { left: 0; }
-    .section { padding: 16px; }
-    .cards { grid-template-columns: 1fr; gap: 10px; }
-    .card { padding: 13px 14px; }
-    .card-icon { width: 38px; height: 38px; font-size: 18px; }
-    .card-title { font-size: 14px; }
-    .card-desc { font-size: 12px; }
-    .hero { padding: 26px 16px 22px; }
-    .hero-title { font-size: 18px; }
-    .hero-subtitle { font-size: 13px; }
-    .hero-icon { font-size: 40px; }
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(22, 27, 34, 0.96); color: var(--text);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 14px 24px; font-size: 15px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+    opacity: 0; transition: transform 0.3s, opacity 0.3s;
+    pointer-events: none; z-index: 2000;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    .server-card { flex-direction: column; align-items: flex-start; gap: 14px; padding: 16px; }
-    .server-icon { width: 60px; height: 60px; font-size: 28px; }
-    .server-name { font-size: 19px; }
-    .server-desc { font-size: 13px; }
+  /* Мобильный */
+  @media (max-width: 640px) {
+    body { padding: 20px 12px 60px; font-size: 15px; }
+    header h1 { font-size: 26px; }
+    header p { font-size: 14px; }
+    .bg-controls { top: 12px; right: 12px; }
+    .bg-btn { padding: 8px 12px; font-size: 13px; }
+    .bg-menu { width: 280px; }
+    .side-tabs { top: auto; bottom: 14px; transform: none; }
+    .tab { --width: 160px; --visible: 46px; height: 46px; font-size: 14px; padding: 0 12px; }
+    .tab-icon { font-size: 18px; width: 22px; }
+    .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
+    .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+
+    .section { padding: 20px; margin-bottom: 20px; }
+    .cards { grid-template-columns: 1fr; gap: 12px; }
+    .card { padding: 16px; gap: 14px; }
+    .card-icon { width: 44px; height: 44px; font-size: 22px; }
+    .card-title { font-size: 15.5px; }
+    .card-desc { font-size: 13px; }
+
+    .hero { padding: 34px 20px 28px; }
+    .hero-title { font-size: 22px; }
+    .hero-subtitle { font-size: 14.5px; }
+    .hero-icon { font-size: 52px; }
+
+    .server-card { flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px; }
+    .server-icon { width: 68px; height: 68px; font-size: 32px; }
+    .server-name { font-size: 20px; }
+    .server-desc { font-size: 14px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -497,28 +432,19 @@
 </head>
 <body>
 
-<!-- ============================================================
-     ПАНЕЛЬ СЛЕВА — КНОПКА НА КАЛЬКУЛЯТОР
-     ============================================================ -->
 <nav class="side-tabs-left" aria-label="Быстрые ссылки">
-  <a class="tab-left" href="index.html"href="calculators/index.html" title="Перейти к калькулятору баллов">
+  <a class="tab-left" href="calculators/index.html" title="Перейти к калькулятору баллов">
     <span class="tab-icon">🧮</span>
     <span class="tab-label">Калькулятор баллов</span>
   </a>
 </nav>
 
-<!-- ============================================================
-     ПАНЕЛЬ ВКЛАДОК СПРАВА
-     ============================================================ -->
 <nav class="side-tabs" aria-label="Разделы">
   <a class="tab tab-active" href="main.html">
     <span class="tab-icon">🏠</span><span class="tab-label">Главная</span>
   </a>
 </nav>
 
-<!-- ============================================================
-     КНОПКА ФОНА
-     ============================================================ -->
 <div class="bg-controls">
   <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
   <div class="bg-menu" id="bg-menu" hidden>
@@ -539,28 +465,23 @@
   </div>
 </div>
 
-<!-- ============================================================
-     ОСНОВНОЙ КОНТЕНТ
-     ============================================================ -->
 <div class="container" id="top">
 
   <header>
     <h1>База знаний EMS</h1>
-    <p>Единый справочник по медицине, отделам и протоколам. Разделы появятся по мере поступления данных.</p>
+    <p>Единый справочник по медицине, отделам и протоколам.</p>
   </header>
 
   <div class="hero">
     <div class="hero-icon">🚑</div>
     <h2 class="hero-title">Добро пожаловать</h2>
     <p class="hero-subtitle">
-      Сайт в разработке. По мере поступления новых данных здесь будут появляться разделы,
-      протоколы и материалы EMS.
+      Разделы пополняются по мере поступления данных. Выбирай нужную тему ниже.
     </p>
   </div>
 
   <div id="content">
 
-    <!-- ==================== ИНФОРМАЦИЯ ОБ ОТДЕЛАХ ==================== -->
     <div class="section">
       <div class="section-title"><span class="icon">🏥</span> Информация об отделах</div>
       <div class="cards">
@@ -574,7 +495,6 @@
       </div>
     </div>
 
-    <!-- ==================== ОБУЧЕНИЕ И ПРАВИЛА ==================== -->
     <div class="section">
       <div class="section-title"><span class="icon">📖</span> Обучение и правила</div>
       <div class="cards">
@@ -591,7 +511,7 @@
           <div class="card-icon">💊</div>
           <div class="card-body">
             <div class="card-title">Как правильно выдавать таблетки</div>
-            <div class="card-desc">Пошаговая инструкция с картинками: где стоять, как продать, гос. сотрудникам</div>
+            <div class="card-desc">Пошаговая инструкция с картинками: где стоять, как продать</div>
           </div>
         </a>
 
@@ -622,7 +542,6 @@
       </div>
     </div>
 
-    <!-- ==================== СЕРВЕР SEATTLE ==================== -->
     <div class="section">
       <div class="section-title"><span class="icon">🖥️</span> Сервер Seattle</div>
 
@@ -657,122 +576,8 @@
 
 </div>
 
-<script>
-/* ============================================================
-   ПРЕСЕТЫ ФОНОВ
-   ============================================================ */
-const BG_PRESETS = [
-  { id: "med-blue", title: "Медицина", css: "linear-gradient(135deg, #0a1f3d 0%, #0d2f4a 40%, #0a1f3d 100%)" },
-  { id: "med-soft", title: "Soft", css: "linear-gradient(160deg, #1a2a3a 0%, #0f1e2e 50%, #05111c 100%)" },
-  { id: "dots", title: "Точки",
-    css: "radial-gradient(circle at 25% 25%, rgba(88,166,255,0.12) 1px, transparent 2px) 0 0 / 24px 24px, " +
-         "radial-gradient(circle at 75% 75%, rgba(88,166,255,0.08) 1px, transparent 2px) 12px 12px / 24px 24px, " +
-         "linear-gradient(135deg, #0d1117, #0a0e14)" },
-  { id: "grid", title: "Сетка",
-    css: "linear-gradient(rgba(88,166,255,0.07) 1px, transparent 1px) 0 0 / 40px 40px, " +
-         "linear-gradient(90deg, rgba(88,166,255,0.07) 1px, transparent 1px) 0 0 / 40px 40px, " +
-         "linear-gradient(160deg, #0a0e14, #101828)" },
-  { id: "sunset", title: "Закат", css: "linear-gradient(160deg, #2a1830 0%, #3a1f2a 35%, #1a1428 100%)" },
-  { id: "aurora", title: "Aurora",
-    css: "radial-gradient(ellipse at 20% 20%, rgba(88,166,255,0.35), transparent 50%), " +
-         "radial-gradient(ellipse at 70% 75%, rgba(255,122,184,0.20), transparent 55%), " +
-         "linear-gradient(160deg, #05111c, #0d1117)" },
-];
+<div class="toast" id="toast"></div>
 
-(function() {
-  const KEY = "ems_bg_v1";
-  const body = document.body;
-  const btnMenu    = document.getElementById("bg-menu-btn");
-  const menu       = document.getElementById("bg-menu");
-  const presetsEl  = document.getElementById("bg-presets");
-  const inputFile  = document.getElementById("bg-file");
-  const inputColor = document.getElementById("bg-color");
-  const btnGrad    = document.getElementById("bg-gradient");
-  const btnReset   = document.getElementById("bg-reset");
-  if (!btnMenu || !menu) return;
-
-  if (presetsEl) {
-    BG_PRESETS.forEach(p => {
-      const el = document.createElement("div");
-      el.className = "bg-preset"; el.title = p.title;
-      el.style.background = p.css;
-      el.innerHTML = `<div class="bg-preset-title">${p.title}</div>`;
-      el.addEventListener("click", () => { applyBackground({type: "preset", id: p.id, css: p.css}); menu.hidden = true; });
-      presetsEl.appendChild(el);
-    });
-  }
-  btnMenu.addEventListener("click", (e) => { e.stopPropagation(); menu.hidden = !menu.hidden; });
-  document.addEventListener("click", (e) => {
-    if (!menu.hidden && !menu.contains(e.target) && e.target !== btnMenu) menu.hidden = true;
-  });
-
-  function applyBackground(cfg, persist = true) {
-    body.classList.remove("has-custom-bg");
-    body.style.backgroundColor = "";
-    body.style.backgroundImage = "";
-    body.style.animation = "";
-    if (!cfg || cfg.type === "gradient") { if (persist) save({type: "gradient"}); return; }
-    if (cfg.type === "color") { body.style.backgroundImage = "none"; body.style.backgroundColor = cfg.value; body.style.animation = "none"; if (persist) save(cfg); return; }
-    if (cfg.type === "preset") { body.classList.add("has-custom-bg"); body.style.backgroundImage = cfg.css; if (persist) save(cfg); return; }
-    if (cfg.type === "image")  { body.classList.add("has-custom-bg"); body.style.backgroundImage = `url("${cfg.value}")`; if (persist) save(cfg); }
-  }
-  function save(cfg) {
-    try { localStorage.setItem(KEY, JSON.stringify(cfg)); }
-    catch (e) { showToast("Фон не сохранён (файл слишком большой)"); }
-  }
-  function load() { try { const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } }
-
-  inputFile.addEventListener("change", (e) => {
-    const file = e.target.files && e.target.files[0]; if (!file) return;
-    if (file.size > 4 * 1024 * 1024) showToast("Файл > 4 МБ. Может не поместиться.");
-    const reader = new FileReader();
-    reader.onload = () => { applyBackground({type: "image", value: reader.result}); menu.hidden = true; };
-    reader.onerror = () => showToast("Не удалось прочитать файл");
-    reader.readAsDataURL(file);
-  });
-  inputColor.addEventListener("input", (e) => applyBackground({type: "color", value: e.target.value}));
-  btnGrad.addEventListener("click", () => { applyBackground({type: "gradient"}); menu.hidden = true; });
-  btnReset.addEventListener("click", () => { applyBackground({type: "color", value: "#0d1117"}); menu.hidden = true; });
-  const saved = load();
-  if (saved) applyBackground(saved, false);
-})();
-
-/* ============================================================
-   TOAST
-   ============================================================ */
-function showToast(msg) {
-  let t = document.getElementById("toast");
-  if (!t) {
-    t = document.createElement("div");
-    t.id = "toast";
-    t.style.cssText = `
-      position: fixed; bottom: 24px; left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: rgba(22,27,34,0.95); color: #e6edf3;
-      border: 1px solid #58a6ff; border-radius: 8px;
-      padding: 12px 20px; font-size: 14px; z-index: 2000;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
-      opacity: 0; transition: transform .3s, opacity .3s;
-      pointer-events: none; backdrop-filter: blur(14px);
-    `;
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  requestAnimationFrame(() => {
-    t.style.transform = "translateX(-50%) translateY(0)";
-    t.style.opacity = "1";
-  });
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => {
-    t.style.transform = "translateX(-50%) translateY(80px)";
-    t.style.opacity = "0";
-  }, 2200);
-}
-
-/* ============================================================
-   ГОД В ПОДВАЛЕ
-   ============================================================ */
-document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+<script src="common.js"></script>
 </body>
 </html>
