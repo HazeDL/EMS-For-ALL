@@ -549,4 +549,90 @@
 <span class="cmd">/me</span> положив молоточек на стол, сделал запись в бланке мед. справки
 <span class="cmd">/me</span> достал градусник из верхнего ящика, приподнял руку пациента и вставил градусник под подмышку
 <span class="cmd">/do</span> Градусник издал характерный звук.
-<span class="cmd">/me</span> взял градусник в руку и посмотрел на результат, а после убрал
+<span class="cmd">/me</span> взял градусник в руку и посмотрел на результат, а после убрал обратно в верхний ящик, сделал пометки в бланке
+<span class="cmd">/do</span> Печать на столе.
+<span class="cmd">/me</span> взял медицинскую карту и печать, поставил печать в медицинскую карту
+<span class="cmd">/do</span> Медицинская карта о физическом состоянии пациента готова.</div>
+    </div>
+
+    <div class="rp-content" id="rp-psy-f">
+      <div class="rp-box"><span class="cmd">/me</span> достала блокнот и ручку из кармана медицинского халата
+<span class="cmd">/me</span> занесла ответы пациента в бланк
+<span class="cmd">/do</span> На столе лежит печать.
+<span class="cmd">/me</span> взяла медицинскую карту и печать, поставила печать в медицинскую карту
+<span class="cmd">/do</span> Медицинская карта о психологическом состоянии пациента готова.</div>
+    </div>
+
+    <div class="rp-content" id="rp-psy-m">
+      <div class="rp-box"><span class="cmd">/me</span> достал блокнот и ручку из кармана медицинского халата
+<span class="cmd">/me</span> занес ответы пациента в бланк
+<span class="cmd">/do</span> На столе лежит печать.
+<span class="cmd">/me</span> взял медицинскую карту и печать, поставил печать в медицинскую карту
+<span class="cmd">/do</span> Медицинская карта о психологическом состоянии пациента готова.</div>
+    </div>
+  </div>
+
+  <footer>
+    База знаний EMS · <span id="year"></span> · Регламент выдачи мед. справок
+  </footer>
+
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../common.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  document.querySelectorAll(".rp-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".rp-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".rp-content").forEach(c => c.classList.remove("active"));
+      tab.classList.add("active");
+      const id = "rp-" + tab.dataset.tab;
+      const content = document.getElementById(id);
+      if (content) content.classList.add("active");
+    });
+  });
+
+  (function() {
+    const lb = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightbox-img");
+    const lbCap = document.getElementById("lightbox-caption");
+    const lbClose = document.getElementById("lightbox-close");
+    function open(src, caption) {
+      lbImg.src = src; lbImg.alt = caption || "";
+      lbCap.textContent = caption || "";
+      lb.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      lb.classList.remove("active");
+      lbImg.src = ""; document.body.style.overflow = "";
+    }
+    document.querySelectorAll("[data-lightbox]").forEach(fig => {
+      const img = fig.querySelector("img"); if (!img) return;
+      const cap = fig.querySelector("figcaption");
+      fig.addEventListener("click", () => {
+        if (!img.complete || img.naturalWidth === 0) {
+          showToast("Картинка не загружена. Проверь путь.");
+          return;
+        }
+        open(img.src, cap ? cap.textContent.replace(/\s+/g, " ").trim() : img.alt);
+      });
+    });
+    lbClose.addEventListener("click", close);
+    lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lb.classList.contains("active")) close();
+    });
+  })();
+</script>
+</body>
+</html>
