@@ -1,11 +1,7 @@
 /* ============================================================
-   КАЛЬКУЛЯТОР БАЛЛОВ — ОБЩИЙ СКРИПТ
-   Подключается на каждой странице (index.html, pm.html и т.д.)
+   ОБЩИЙ СКРИПТ — подключается со всех страниц
    ============================================================ */
 
-/* ============================================================
-   ПРЕСЕТЫ ФОНОВ
-   ============================================================ */
 const BG_PRESETS = [
   { id: "med-blue", title: "Медицина", css: "linear-gradient(135deg, #0a1f3d 0%, #0d2f4a 40%, #0a1f3d 100%)" },
   { id: "med-soft", title: "Soft", css: "linear-gradient(160deg, #1a2a3a 0%, #0f1e2e 50%, #05111c 100%)" },
@@ -24,13 +20,8 @@ const BG_PRESETS = [
          "linear-gradient(160deg, #05111c, #0d1117)" },
 ];
 
-/* ============================================================
-   ЗАГРУЗЧИК ФОНА
-   Ключ в localStorage общий для всех страниц, поэтому фон
-   сохраняется при переходах между калькуляторами.
-   ============================================================ */
 (function() {
-  const KEY = "calc_bg_v1";
+  const KEY = "ems_bg_v1";
   const body = document.body;
   const btnMenu    = document.getElementById("bg-menu-btn");
   const menu       = document.getElementById("bg-menu");
@@ -39,126 +30,70 @@ const BG_PRESETS = [
   const inputColor = document.getElementById("bg-color");
   const btnGrad    = document.getElementById("bg-gradient");
   const btnReset   = document.getElementById("bg-reset");
-
   if (!btnMenu || !menu) return;
 
-  // Отрисовать пресеты
   if (presetsEl) {
     BG_PRESETS.forEach(p => {
       const el = document.createElement("div");
-      el.className = "bg-preset";
-      el.title = p.title;
+      el.className = "bg-preset"; el.title = p.title;
       el.style.background = p.css;
       el.innerHTML = `<div class="bg-preset-title">${p.title}</div>`;
-      el.addEventListener("click", () => {
-        applyBackground({type: "preset", id: p.id, css: p.css});
-        menu.hidden = true;
-      });
+      el.addEventListener("click", () => { applyBackground({type: "preset", id: p.id, css: p.css}); menu.hidden = true; });
       presetsEl.appendChild(el);
     });
   }
-
-  // Открытие / закрытие меню
-  btnMenu.addEventListener("click", (e) => {
-    e.stopPropagation();
-    menu.hidden = !menu.hidden;
-  });
+  btnMenu.addEventListener("click", (e) => { e.stopPropagation(); menu.hidden = !menu.hidden; });
   document.addEventListener("click", (e) => {
-    if (!menu.hidden && !menu.contains(e.target) && e.target !== btnMenu) {
-      menu.hidden = true;
-    }
+    if (!menu.hidden && !menu.contains(e.target) && e.target !== btnMenu) menu.hidden = true;
   });
 
-  // Применить фон
   function applyBackground(cfg, persist = true) {
     body.classList.remove("has-custom-bg");
     body.style.backgroundColor = "";
     body.style.backgroundImage = "";
     body.style.animation = "";
-
-    if (!cfg || cfg.type === "gradient") {
-      if (persist) save({type: "gradient"});
-      return;
-    }
-    if (cfg.type === "color") {
-      body.style.backgroundImage = "none";
-      body.style.backgroundColor = cfg.value;
-      body.style.animation = "none";
-      if (persist) save(cfg);
-      return;
-    }
-    if (cfg.type === "preset") {
-      body.classList.add("has-custom-bg");
-      body.style.backgroundImage = cfg.css;
-      if (persist) save(cfg);
-      return;
-    }
-    if (cfg.type === "image") {
-      body.classList.add("has-custom-bg");
-      body.style.backgroundImage = `url("${cfg.value}")`;
-      if (persist) save(cfg);
-    }
+    if (!cfg || cfg.type === "gradient") { if (persist) save({type: "gradient"}); return; }
+    if (cfg.type === "color") { body.style.backgroundImage = "none"; body.style.backgroundColor = cfg.value; body.style.animation = "none"; if (persist) save(cfg); return; }
+    if (cfg.type === "preset") { body.classList.add("has-custom-bg"); body.style.backgroundImage = cfg.css; if (persist) save(cfg); return; }
+    if (cfg.type === "image")  { body.classList.add("has-custom-bg"); body.style.backgroundImage = `url("${cfg.value}")`; if (persist) save(cfg); }
   }
-
   function save(cfg) {
     try { localStorage.setItem(KEY, JSON.stringify(cfg)); }
     catch (e) { showToast("Фон не сохранён (файл слишком большой)"); }
   }
-  function load() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) { return null; }
-  }
+  function load() { try { const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } }
 
-  // Свои картинки
   inputFile.addEventListener("change", (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
+    const file = e.target.files && e.target.files[0]; if (!file) return;
     if (file.size > 4 * 1024 * 1024) showToast("Файл > 4 МБ. Может не поместиться.");
     const reader = new FileReader();
-    reader.onload = () => {
-      applyBackground({type: "image", value: reader.result});
-      menu.hidden = true;
-    };
+    reader.onload = () => { applyBackground({type: "image", value: reader.result}); menu.hidden = true; };
     reader.onerror = () => showToast("Не удалось прочитать файл");
     reader.readAsDataURL(file);
   });
-
-  inputColor.addEventListener("input", (e) => {
-    applyBackground({type: "color", value: e.target.value});
-  });
-
-  btnGrad.addEventListener("click", () => {
-    applyBackground({type: "gradient"});
-    menu.hidden = true;
-  });
-  btnReset.addEventListener("click", () => {
-    applyBackground({type: "color", value: "#0d1117"});
-    menu.hidden = true;
-  });
-
-  // Восстановить сохранённый фон
+  inputColor.addEventListener("input", (e) => applyBackground({type: "color", value: e.target.value}));
+  btnGrad.addEventListener("click", () => { applyBackground({type: "gradient"}); menu.hidden = true; });
+  btnReset.addEventListener("click", () => { applyBackground({type: "color", value: "#0d1117"}); menu.hidden = true; });
   const saved = load();
   if (saved) applyBackground(saved, false);
 })();
 
-/* ============================================================
-   TOAST — всплывающее уведомление
-   ============================================================ */
-let _toastTimer = null;
+/* --------- Toast --------- */
 function showToast(msg) {
-  const el = document.getElementById("toast");
-  if (!el) return;
-  el.textContent = msg;
-  el.classList.add("show");
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => el.classList.remove("show"), 2000);
+  let t = document.getElementById("toast");
+  if (!t) {
+    t = document.createElement("div");
+    t.id = "toast";
+    t.className = "toast";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove("show"), 2200);
 }
 
-/* ============================================================
-   АНИМАЦИЯ ЦИФР В ЯЧЕЙКАХ «ИТОГ»
-   ============================================================ */
+/* --------- Утилиты --------- */
 function popIfChanged(el, oldText, newText) {
   if (!el) return;
   if (oldText !== newText) {
@@ -168,10 +103,6 @@ function popIfChanged(el, oldText, newText) {
     el.classList.add("pop");
   }
 }
-
-/* ============================================================
-   АНИМАЦИЯ КРУПНОГО ИТОГА
-   ============================================================ */
 function pulseEl(el) {
   if (!el) return;
   el.classList.remove("pulse");
@@ -179,16 +110,7 @@ function pulseEl(el) {
   el.classList.add("pulse");
 }
 
-/* ============================================================
-   ШКАЛА ПРОГРЕССА
-   Логарифмическая шкала со сегментами:
-   0..100 → 0..6.66%
-   100..250 → 6.66..16.66%
-   250..500 → 16.66..33.33%
-   500..1000 → 33.33..66.66%
-   1000..1500 → 66.66..100%
-   Цвет: красный → оранжевый → жёлтый → зелёный
-   ============================================================ */
+/* --------- Шкала --------- */
 const RAIL_SEGMENTS = [
   { from: 0,    to: 100,  posFrom: 0,      posTo: 6.66  },
   { from: 100,  to: 250,  posFrom: 6.66,   posTo: 16.66 },
@@ -196,7 +118,6 @@ const RAIL_SEGMENTS = [
   { from: 500,  to: 1000, posFrom: 33.33,  posTo: 66.66 },
   { from: 1000, to: 1500, posFrom: 66.66,  posTo: 100   },
 ];
-
 function valueToPercent(total) {
   if (total <= 0) return 0;
   if (total >= 1500) return 100;
@@ -208,7 +129,6 @@ function valueToPercent(total) {
   }
   return 100;
 }
-
 function valueToColor(total) {
   const stops = [
     { v: 0,    c: [248, 81, 73] },
@@ -232,7 +152,6 @@ function valueToColor(total) {
   }
   return "rgb(63, 185, 80)";
 }
-
 function statusText(total) {
   if (total <= 0)   return "Начало";
   if (total < 100)  return "Старт";
@@ -242,21 +161,16 @@ function statusText(total) {
   if (total < 1500) return "Супер";
   return "Максимум";
 }
-
-/* Обновить шкалу на странице с указанным id-секции */
 function updateRail(sectionId, total) {
   const section = document.getElementById(sectionId);
   if (!section) return;
   const rail = section.querySelector(".progress-rail");
   if (!rail) return;
-
   const valueEl  = rail.querySelector("[data-rail-value]");
   const fillEl   = rail.querySelector("[data-rail-fill]");
   const statusEl = rail.querySelector("[data-rail-status]");
-
   const percent = valueToPercent(total);
   const color = valueToColor(total);
-
   if (valueEl && valueEl.textContent !== String(total)) {
     valueEl.textContent = total;
     valueEl.style.color = color;
@@ -274,41 +188,13 @@ function updateRail(sectionId, total) {
   }
 }
 
-/* ============================================================
-   СКАЧИВАНИЕ ФАЙЛА (на будущее — если пригодится)
-   ============================================================ */
-function downloadBlob(content, filename) {
-  const blob = new Blob([content], {type: "text/csv;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-/* ============================================================
-   ГОД В ПОДВАЛЕ + ОБЩИЕ ИНИЦИАЛИЗАЦИИ
-   ============================================================ */
+/* --------- Год в подвале --------- */
 document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  // пересчёт шкал при ресайзе
-  if (typeof window.onCalcResize === "function") {
-    let t;
-    window.addEventListener("resize", () => {
-      clearTimeout(t);
-      t = setTimeout(() => window.onCalcResize(), 120);
-    });
-  }
 });
 
-/* ============================================================
-   ГВОЗДЬ НА СЛУЧАЙ ОШИБОК — выводим в консоль с префиксом
-   ============================================================ */
+/* --------- Отлов ошибок --------- */
 window.addEventListener("error", (e) => {
   console.error("[Calc error]", e.message, e.filename, e.lineno);
 });
