@@ -104,6 +104,7 @@
     margin: 0 auto;
   }
 
+  /* Кнопка фона */
   .bg-controls { position: fixed; top: 16px; right: 16px; z-index: 100; }
   .bg-btn {
     background: var(--bg-alt); color: var(--text);
@@ -150,6 +151,7 @@
     border-radius: 6px; cursor: pointer;
   }
 
+  /* Панель вкладок справа */
   .side-tabs {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 6px;
@@ -188,6 +190,7 @@
   .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+  /* Панель слева */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 6px;
@@ -224,6 +227,7 @@
   .tab-left .tab-icon { font-size: 20px; width: 26px; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+  /* Hero */
   .hero {
     text-align: center;
     padding: 36px 24px 30px;
@@ -245,6 +249,7 @@
     max-width: 540px; margin: 0 auto; line-height: 1.7;
   }
 
+  /* Контейнер блоков */
   #content { min-height: 120px; }
   #content:empty::before {
     content: "Разделы появятся здесь по мере поступления данных.";
@@ -261,6 +266,7 @@
     -webkit-backdrop-filter: blur(var(--blur));
   }
 
+  /* Секции */
   .section {
     background: var(--bg-alt);
     border: 1px solid var(--border);
@@ -280,6 +286,7 @@
   }
   .section-title .icon { font-size: 18px; }
 
+  /* Карточки-ссылки */
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -342,6 +349,101 @@
     line-height: 1.45;
   }
 
+  /* Плашка сервера */
+  .server-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 22px;
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.75), rgba(22, 33, 62, 0.75));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .server-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0.6;
+  }
+  .server-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 8px 28px rgba(88, 166, 255, 0.15);
+  }
+  .server-icon {
+    flex-shrink: 0;
+    width: 76px; height: 76px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, rgba(88, 166, 255, 0.22), rgba(88, 166, 255, 0.05));
+    border: 1px solid rgba(88, 166, 255, 0.35);
+    border-radius: 14px;
+    font-size: 36px;
+  }
+  .server-info { flex: 1; min-width: 0; }
+  .server-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+  }
+  .server-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .server-desc {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .server-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .server-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .server-badge.online {
+    background: rgba(63, 185, 80, 0.12);
+    border: 1px solid rgba(63, 185, 80, 0.35);
+    color: var(--success);
+  }
+  .server-badge.online .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: pulseDot 1.8s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+  }
+  .server-badge.newbie {
+    background: rgba(88, 166, 255, 0.12);
+    border: 1px solid rgba(88, 166, 255, 0.35);
+    color: var(--accent);
+  }
+  .server-badge.opened {
+    background: rgba(210, 153, 34, 0.12);
+    border: 1px solid rgba(210, 153, 34, 0.35);
+    color: var(--gold);
+  }
+
+  /* Подвал */
   footer {
     text-align: center;
     margin-top: 40px;
@@ -351,6 +453,7 @@
     font-size: 12.5px;
   }
 
+  /* Адаптив */
   @media (max-width: 640px) {
     body { padding: 16px 10px 40px; }
     header h1 { font-size: 22px; }
@@ -361,7 +464,7 @@
     .side-tabs { top: auto; bottom: 12px; transform: none; }
     .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; }
     .tab-icon { font-size: 16px; width: 20px; }
-    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
+    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
     .tab-left {
       --width: 180px; --visible: 44px;
       height: 42px; font-size: 13px;
@@ -369,6 +472,7 @@
       border-left: 1px solid var(--accent);
       padding: 0 10px;
     }
+    .tab-left:hover { left: 0; }
     .section { padding: 16px; }
     .cards { grid-template-columns: 1fr; gap: 10px; }
     .card { padding: 13px 14px; }
@@ -379,6 +483,11 @@
     .hero-title { font-size: 18px; }
     .hero-subtitle { font-size: 13px; }
     .hero-icon { font-size: 40px; }
+
+    .server-card { flex-direction: column; align-items: flex-start; gap: 14px; padding: 16px; }
+    .server-icon { width: 60px; height: 60px; font-size: 28px; }
+    .server-name { font-size: 19px; }
+    .server-desc { font-size: 13px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -389,7 +498,7 @@
 <body>
 
 <!-- ============================================================
-     ПАНЕЛЬ СЛЕВА
+     ПАНЕЛЬ СЛЕВА — КНОПКА НА КАЛЬКУЛЯТОР
      ============================================================ -->
 <nav class="side-tabs-left" aria-label="Быстрые ссылки">
   <a class="tab-left" href="index.html" title="Перейти к калькулятору баллов">
@@ -399,7 +508,7 @@
 </nav>
 
 <!-- ============================================================
-     ПАНЕЛЬ СПРАВА
+     ПАНЕЛЬ ВКЛАДОК СПРАВА
      ============================================================ -->
 <nav class="side-tabs" aria-label="Разделы">
   <a class="tab tab-active" href="main.html">
@@ -469,6 +578,7 @@
     <div class="section">
       <div class="section-title"><span class="icon">📖</span> Обучение и правила</div>
       <div class="cards">
+
         <a class="card" href="intro.html">
           <div class="card-icon">💓</div>
           <div class="card-body">
@@ -476,6 +586,7 @@
             <div class="card-desc">Руководство, иерархия, обязанности сотрудника, лимиты медикаментов</div>
           </div>
         </a>
+
         <a class="card" href="lecture-pills.html">
           <div class="card-icon">💊</div>
           <div class="card-body">
@@ -483,6 +594,58 @@
             <div class="card-desc">Пошаговая инструкция с картинками: где стоять, как продать, гос. сотрудникам</div>
           </div>
         </a>
+
+        <a class="card" href="lecture-vaccines.html">
+          <div class="card-icon">💉</div>
+          <div class="card-body">
+            <div class="card-title">Как правильно проводить вакцинацию</div>
+            <div class="card-desc">Препараты, кабинеты, приоритет мест, мини-игра вакцинации</div>
+          </div>
+        </a>
+
+        <a class="card" href="lecture-medcert.html">
+          <div class="card-icon">🧾</div>
+          <div class="card-body">
+            <div class="card-title">Регламент выдачи мед. справок</div>
+            <div class="card-desc">Цены, порядок осмотра, вопросы пациенту, отыгровки для врачей</div>
+          </div>
+        </a>
+
+        <a class="card" href="lecture-pmp.html">
+          <div class="card-icon">🚑</div>
+          <div class="card-body">
+            <div class="card-title">Памятка по оказанию ПМП</div>
+            <div class="card-desc">АСМП, дефибриллятор, эпинефрин, патрулирование и запреты</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ==================== СЕРВЕР SEATTLE ==================== -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🖥️</span> Сервер Seattle</div>
+
+      <div class="server-card">
+        <div class="server-icon">🖥️</div>
+        <div class="server-info">
+          <div class="server-name">Seattle</div>
+          <div class="server-sub">Majestic RP · сервер ru14</div>
+          <div class="server-desc">
+            Четырнадцатый сервер проекта Majestic RP. Открыт 31 января 2025 года.
+            Относится к категории «Для новичков» — рекомендуется новым игрокам
+            для спокойного старта и постепенного освоения механик проекта.
+            Сервер активно развивается, на нём регулярно проходят наборы в государственные
+            структуры, включая EMS.
+          </div>
+          <div class="server-badges">
+            <span class="server-badge online">
+              <span class="dot"></span> Онлайн
+            </span>
+            <span class="server-badge newbie">🌱 Для новичков</span>
+            <span class="server-badge opened">📅 Открыт 31.01.2025</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -495,6 +658,9 @@
 </div>
 
 <script>
+/* ============================================================
+   ПРЕСЕТЫ ФОНОВ
+   ============================================================ */
 const BG_PRESETS = [
   { id: "med-blue", title: "Медицина", css: "linear-gradient(135deg, #0a1f3d 0%, #0d2f4a 40%, #0a1f3d 100%)" },
   { id: "med-soft", title: "Soft", css: "linear-gradient(160deg, #1a2a3a 0%, #0f1e2e 50%, #05111c 100%)" },
@@ -571,6 +737,9 @@ const BG_PRESETS = [
   if (saved) applyBackground(saved, false);
 })();
 
+/* ============================================================
+   TOAST
+   ============================================================ */
 function showToast(msg) {
   let t = document.getElementById("toast");
   if (!t) {
@@ -600,6 +769,9 @@ function showToast(msg) {
   }, 2200);
 }
 
+/* ============================================================
+   ГОД В ПОДВАЛЕ
+   ============================================================ */
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 </body>
