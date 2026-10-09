@@ -33,7 +33,6 @@
     left: 0; background: rgba(30, 38, 52, 0.95);
     color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab-left:active { transform: translateY(1px); }
   .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -507,10 +506,10 @@
     <div class="rules-title"><span class="icon">🎭</span> Отыгровки</div>
 
     <div class="rp-tabs">
-      <button class="rp-tab active" data-tab="phys-f">Физическая · Ж</button>
-      <button class="rp-tab" data-tab="phys-m">Физическая · М</button>
-      <button class="rp-tab" data-tab="psy-f">Психическая · Ж</button>
-      <button class="rp-tab" data-tab="psy-m">Психическая · М</button>
+      <button class="rp-tab active" data-tab="phys-f" type="button">Физическая · Ж</button>
+      <button class="rp-tab" data-tab="phys-m" type="button">Физическая · М</button>
+      <button class="rp-tab" data-tab="psy-f" type="button">Психическая · Ж</button>
+      <button class="rp-tab" data-tab="psy-m" type="button">Психическая · М</button>
     </div>
 
     <div class="rp-content active" id="rp-phys-f">
