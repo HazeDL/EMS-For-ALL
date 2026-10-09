@@ -94,7 +94,6 @@ header {
   border-bottom: 1px solid var(--border);
 }
 
-/* Логотип EMS */
 header .ems-logo {
   display: block;
   max-width: 480px;
@@ -160,21 +159,21 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   border-radius: 6px; cursor: pointer;
 }
 
-/* --------- Вкладки справа --------- */
+/* --------- Вкладки справа (увеличены) --------- */
 .side-tabs {
   position: fixed; top: 50%; right: 0; transform: translateY(-50%);
   z-index: 90; display: flex; flex-direction: column; gap: 8px;
   pointer-events: none;
 }
 .tab {
-  --visible: 48px; --width: 210px;
+  --visible: 52px; --width: 240px;
   position: relative; right: calc(-1 * (var(--width) - var(--visible)));
-  width: var(--width); height: 54px; display: flex; align-items: center;
-  gap: 12px; padding: 0 16px;
+  width: var(--width); height: 62px; display: flex; align-items: center;
+  gap: 14px; padding: 0 18px;
   background: rgba(22, 27, 34, 0.86); color: var(--text);
   border: 1px solid var(--border); border-right: none;
-  border-radius: 12px 0 0 12px; font-family: inherit;
-  font-size: 15px; font-weight: 500; cursor: pointer; text-align: left;
+  border-radius: 14px 0 0 14px; font-family: inherit;
+  font-size: 17px; font-weight: 500; cursor: pointer; text-align: left;
   box-shadow: var(--shadow);
   backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
   transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -191,29 +190,29 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   border-color: var(--accent); color: var(--accent);
 }
 .tab.tab-active::before {
-  content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
+  content: ""; position: absolute; left: 0; top: 12px; bottom: 12px;
   width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
 }
-.tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+.tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
 .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* --------- Левая панель --------- */
+/* --------- Левая панель (увеличена) --------- */
 .side-tabs-left {
   position: fixed; top: 50%; left: 0; transform: translateY(-50%);
   z-index: 90; display: flex; flex-direction: column; gap: 8px;
   pointer-events: none;
 }
 .tab-left {
-  --visible: 52px; --width: 240px;
+  --visible: 56px; --width: 260px;
   position: relative;
   left: calc(-1 * (var(--width) - var(--visible)));
-  width: var(--width); height: 54px;
+  width: var(--width); height: 62px;
   display: flex; align-items: center;
-  gap: 12px; padding: 0 16px;
+  gap: 14px; padding: 0 18px;
   background: rgba(22, 27, 34, 0.86); color: var(--text);
   border: 1px solid var(--border); border-left: none;
-  border-radius: 0 12px 12px 0;
-  font-family: inherit; font-size: 15px; font-weight: 500;
+  border-radius: 0 14px 14px 0;
+  font-family: inherit; font-size: 17px; font-weight: 500;
   cursor: pointer; text-align: left;
   box-shadow: var(--shadow);
   backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
@@ -226,14 +225,14 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
   color: var(--accent-hover); border-color: var(--accent);
 }
 .tab-left:active { transform: translateY(1px); }
-.tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+.tab-left .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
 .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tab-left.tab-active {
   background: rgba(26, 39, 68, 0.92);
   border-color: var(--accent); color: var(--accent);
 }
 
-/* --------- Fade при загрузке --------- */
+/* --------- Fade --------- */
 .page-content { animation: fadeInPage 0.3s ease both; }
 @keyframes fadeInPage {
   from { opacity: 0; transform: translateY(6px); }
@@ -322,7 +321,6 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
 }
 .section-title .icon { font-size: 22px; }
 
-/* --------- Строки калькулятора --------- */
 .row {
   display: grid; grid-template-columns: 1fr 110px 110px 110px;
   gap: 14px; align-items: center; padding: 10px 12px;
@@ -403,14 +401,15 @@ input[type="number"].over-limit {
   100% { transform: scale(1); }
 }
 
+/* --------- Кнопки (увеличены) --------- */
 .buttons {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px; margin-bottom: 24px;
 }
 button {
   background: var(--bg-alt); color: var(--text);
-  border: 1px solid var(--border); border-radius: 10px;
-  padding: 14px 20px; font-size: 15px; font-weight: 500;
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px 24px; font-size: 16.5px; font-weight: 500;
   font-family: inherit; cursor: pointer; transition: all 0.15s;
   backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
 }
@@ -469,18 +468,18 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
   max-width: 640px; margin: 0 auto; line-height: 1.7;
 }
 
-/* --------- Карточки-ссылки --------- */
+/* --------- Карточки (увеличены) --------- */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
 }
 .card {
-  display: flex; align-items: center; gap: 16px;
-  padding: 20px 22px;
+  display: flex; align-items: center; gap: 18px;
+  padding: 24px 26px;
   background: rgba(13, 17, 23, 0.5);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   text-decoration: none;
   color: var(--text);
   transition: border-color 0.18s, background 0.18s;
@@ -491,7 +490,7 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
   content: "→";
   margin-left: auto;
   color: var(--text-dim);
-  font-size: 20px;
+  font-size: 22px;
   transition: transform 0.18s, color 0.18s;
 }
 .card:hover {
@@ -501,20 +500,20 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
 .card:hover::after { color: var(--accent); transform: translateX(4px); }
 .card-icon {
   flex-shrink: 0;
-  width: 48px; height: 48px;
+  width: 54px; height: 54px;
   display: flex; align-items: center; justify-content: center;
   background: rgba(88, 166, 255, 0.10);
   border: 1px solid rgba(88, 166, 255, 0.18);
-  border-radius: 12px;
-  font-size: 24px;
+  border-radius: 14px;
+  font-size: 28px;
 }
 .card-body { flex: 1; min-width: 0; }
 .card-title {
-  font-size: 16.5px; font-weight: 600; color: var(--text);
-  margin-bottom: 4px; line-height: 1.35;
+  font-size: 18px; font-weight: 600; color: var(--text);
+  margin-bottom: 5px; line-height: 1.35;
 }
 .card-desc {
-  font-size: 13.5px; color: var(--text-dim);
+  font-size: 14.5px; color: var(--text-dim);
   line-height: 1.5;
 }
 
@@ -543,10 +542,7 @@ footer {
   body { padding: 20px 12px 60px; font-size: 15px; }
   header h1 { font-size: 26px; }
   header p { font-size: 14px; }
-  header .ems-logo {
-    max-width: 320px;
-    margin-bottom: 14px;
-  }
+  header .ems-logo { max-width: 320px; margin-bottom: 14px; }
 
   .row { grid-template-columns: 1fr 70px 70px 70px; gap: 8px; padding: 8px 8px; }
   .name { font-size: 14px; }
@@ -557,23 +553,24 @@ footer {
   .total-box .value { font-size: 30px; }
 
   .buttons { grid-template-columns: 1fr 1fr; gap: 10px; }
-  button { padding: 12px 14px; font-size: 14px; }
+  button { padding: 14px 18px; font-size: 15px; }
 
   .report { font-size: 13px; padding: 14px; }
 
   .side-tabs { top: auto; bottom: 14px; transform: none; }
-  .tab { --width: 160px; --visible: 46px; height: 46px; font-size: 14px; padding: 0 12px; }
-  .tab-icon { font-size: 18px; width: 22px; }
+  .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+  .tab:hover { right: 0; }
+  .tab-icon { font-size: 20px; width: 24px; }
 
-  .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
-  .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+  .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
+  .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
 
   .section { padding: 20px; margin-bottom: 20px; }
-  .cards { grid-template-columns: 1fr; gap: 12px; }
-  .card { padding: 16px; gap: 14px; }
-  .card-icon { width: 44px; height: 44px; font-size: 22px; }
-  .card-title { font-size: 15.5px; }
-  .card-desc { font-size: 13px; }
+  .cards { grid-template-columns: 1fr; gap: 14px; }
+  .card { padding: 18px; gap: 14px; }
+  .card-icon { width: 48px; height: 48px; font-size: 24px; }
+  .card-title { font-size: 16.5px; }
+  .card-desc { font-size: 13.5px; }
 
   .hero { padding: 34px 20px 28px; }
   .hero-title { font-size: 22px; }
