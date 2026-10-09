@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регламент выдачи мед. справок — База знаний EMS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 200px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 42px; --width: 180px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px; display: flex; align-items: center;
+    gap: 10px; padding: 0 14px 0 12px;
+    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 10px 0 0 10px; font-family: inherit;
+    font-size: 14px; font-weight: 500; cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab:active { transform: translateY(1px); }
+  .tab.tab-active {
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.9), rgba(22, 33, 62, 0.9));
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-dim);
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .breadcrumbs a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
+  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
+  .breadcrumbs .current { color: var(--text); }
+
+  .rules-section {
+    background: var(--bg-alt); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px; margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+  }
+  .rules-title {
+    font-size: 14px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .rules-title .icon { font-size: 18px; }
+  .rules-text { font-size: 14.5px; color: var(--text); line-height: 1.7; margin-bottom: 10px; }
+  .rules-text strong { color: var(--accent); }
+
+  .price-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .price-box {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px;
+    background: rgba(63, 185, 80, 0.10);
+    border: 1px solid rgba(63, 185, 80, 0.30);
+    border-radius: 8px; font-size: 15px; color: var(--text);
+  }
+  .price-box .price { font-weight: 700; color: var(--success); font-size: 17px; }
+  .price-box .label { color: var(--text-dim); font-size: 13px; }
+
+  .duties { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .duties li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 14px; background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px; color: var(--text); line-height: 1.55;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .duties li:hover { border-color: var(--accent); background: rgba(28, 35, 48, 0.75); }
+  .duties .check { flex-shrink: 0; color: var(--success); font-weight: 700; font-size: 16px; line-height: 1.4; }
+  .duties .cross { flex-shrink: 0; color: var(--danger); font-weight: 700; font-size: 16px; line-height: 1.4; }
+  .duties .num {
+    flex-shrink: 0; width: 24px; height: 24px;
+    border-radius: 50%; background: var(--accent); color: #0d1117;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
+
+  .single-image { margin: 16px 0; text-align: center; }
+  .single-image img {
+    display: block; max-width: 100%; height: auto; max-height: 480px;
+    margin: 0 auto; border-radius: 10px; border: 1px solid var(--border);
+    background: rgba(13, 17, 23, 0.55);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+    cursor: zoom-in;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .single-image img:hover {
+    transform: translateY(-3px); border-color: var(--accent);
+    box-shadow: 0 10px 28px rgba(88, 166, 255, 0.18);
+  }
+  .single-image figcaption { margin-top: 10px; font-size: 12.5px; color: var(--text-dim); font-style: italic; }
+
+  /* Отыгровки */
+  .rp-box {
+    background: rgba(13, 17, 23, 0.75);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 13px; color: var(--text);
+    white-space: pre-wrap; line-height: 1.6;
+    margin-top: 10px;
+    overflow-x: auto;
+  }
+  .rp-box .cmd { color: var(--accent); font-weight: 700; }
+  .rp-tabs { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .rp-tab {
+    padding: 6px 14px; font-size: 13px;
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text-dim); cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .rp-tab.active {
+    background: rgba(88, 166, 255, 0.18);
+    border-color: var(--accent); color: var(--accent); font-weight: 600;
+  }
+  .rp-tab:hover { border-color: var(--accent); }
+  .rp-content { display: none; }
+  .rp-content.active { display: block; }
+
+  .warning {
+    padding: 14px 16px; margin: 12px 0;
+    background: rgba(248, 81, 73, 0.08);
+    border: 1px solid rgba(248, 81, 73, 0.30);
+    border-radius: 8px;
+    font-size: 14px; color: var(--text); line-height: 1.6;
+  }
+  .warning strong { color: var(--danger); }
+
+  .info-note {
+    padding: 14px 16px; margin: 12px 0;
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.30);
+    border-radius: 8px;
+    font-size: 14px; color: var(--text); line-height: 1.6;
+  }
+  .info-note strong { color: var(--accent); }
+
+  .lightbox {
+    position: fixed; inset: 0; z-index: 9999;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(5, 8, 12, 0.94);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 24px; animation: lbFade 0.2s ease;
+  }
+  .lightbox.active { display: flex; }
+  @keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+  .lightbox img {
+    max-width: 96%; max-height: 92vh; border-radius: 10px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+    animation: lbZoom 0.25s ease;
+  }
+  @keyframes lbZoom {
+    from { transform: scale(0.94); opacity: 0.7; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .lightbox-close {
+    position: fixed; top: 16px; right: 20px;
+    width: 44px; height: 44px;
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text); font-size: 22px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lightbox-close:hover { border-color: var(--danger); color: var(--danger); background: rgba(248, 81, 73, 0.15); }
+  .lightbox-caption {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    font-size: 13.5px; color: var(--text-dim);
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 8px;
+    max-width: 80%; text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 170px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .side-tabs { top: auto; bottom: 12px; right: 12px; transform: none; }
+    .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; border-radius: 10px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+    .rules-section { padding: 16px; }
+    .rules-text { font-size: 13.5px; }
+    .single-image img { max-height: 320px; }
+    .rp-box { font-size: 12px; padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главная EMS</span>
+  </a>
+  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Главное меню калькулятора</span>
+  </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
+  </a>
+  <a class="tab" href="departments.html">
+    <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
+  </a>
+  <a class="tab" href="intro.html">
+    <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
+  </a>
+  <a class="tab" href="lecture-pills.html">
+    <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
+  </a>
+  <a class="tab" href="lecture-vaccines.html">
+    <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
+  </a>
+  <a class="tab tab-active" href="lecture-medcert.html">
+    <span class="tab-icon">🧾</span><span class="tab-label">Справки</span>
+  </a>
+</nav>
+
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<div class="container page-content">
+
+  <header>
+    <h1>Регламент выдачи мед. справок</h1>
+    <p>Физическое и психическое здоровье · цены и процесс</p>
+  </header>
+
+  <div class="breadcrumbs">
+    <a href="main.html">База знаний EMS</a>
+    <span class="sep">›</span>
+    <a href="intro.html">Обучение и правила</a>
+    <span class="sep">›</span>
+    <span class="current">Регламент выдачи мед. справок</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">🧾</div>
+    <h2 class="hero-title">Медицинские справки</h2>
+    <p class="hero-subtitle">
+      Места выдачи, цены, порядок осмотра, вопросы пациенту и отыгровки для выдачи
+      физической и психической справок.
+    </p>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">📍</span> Места выдачи справок</div>
+    <p class="rules-text"><strong>Сенди-Шорс:</strong> Дежурный кабинет на 2 этаже.</p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/medcert-sandy.jpg" alt="Дежурный кабинет в Сенди-Шорс" loading="lazy">
+      <figcaption>Сенди-Шорс — Дежурный кабинет на 2 этаже</figcaption>
+    </figure>
+
+    <p class="rules-text" style="margin-top: 14px;"><strong>Палето-Бэй:</strong> Операционная слева.</p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/medcert-paleto.jpg" alt="Операционная Палето-Бэй" loading="lazy">
+      <figcaption>Палето-Бэй — Операционная слева</figcaption>
+    </figure>
+
+    <p class="rules-text" style="margin-top: 14px;">
+      <strong>ELSH:</strong> Кабинеты 01, 02, 03 на втором этаже (коридор слева от лифта).
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/medcert-elsh.jpg" alt="Кабинеты 01, 02, 03 в ELSH" loading="lazy">
+      <figcaption>ELSH — кабинеты 01, 02, 03 на втором этаже</figcaption>
+    </figure>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">💰</span> Цены и срок действия</div>
+    <ul class="duties">
+      <li><span class="check">✔</span>Уточняем, какие справки нужны, и уведомляем о стоимости.</li>
+      <li><span class="check">✔</span>Уведомляем, что справки действительны <b>14 дней</b>.</li>
+    </ul>
+    <div class="price-row">
+      <div class="price-box"><span class="label">Физическая справка:</span><span class="price">2 500$</span></div>
+      <div class="price-box"><span class="label">Психическая справка:</span><span class="price">5 000$</span></div>
+    </div>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">⚠️</span> Обязательные правила</div>
+    <div class="warning">
+      <strong>ОБЯЗАТЕЛЬНО:</strong> при выдаче мед. справок включённая <b>боди-камера</b>.
+    </div>
+    <div class="info-note">
+      Приоритет на выдачу мед. справок в любое время отдаётся отделу <strong>PSID</strong>.
+      В случае несоблюдения — <b>выговор</b>.
+    </div>
+    <ul class="duties">
+      <li><span class="check">✔</span>Перед физическим осмотром интересуемся, есть ли у человека жалобы на физическое здоровье. Если есть — направляем на приём к <b>Хирургу</b>.</li>
+      <li><span class="check">✔</span>Если гражданин пришёл <b>обновить</b> справки и жалоб нет — в физ. осмотре не нуждается. Просто заполняем физ. справку и выдаём. По псих. справке задаём 2–3 основных вопроса без ситуаций.</li>
+      <li><span class="cross">✖</span>Выдавать справки без предварительного осмотра (<b>кидать справки в лицо</b>) категорически запрещено.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">📋</span> Процесс выдачи справок</div>
+    <ul class="duties">
+      <li><span class="num">1</span>Уточняем, какие справки нужны, и уведомляем о стоимости + срок действия 14 дней.</li>
+      <li><span class="num">2</span>Спрашиваем, получает человек справки впервые или обновляет.</li>
+      <li><span class="num">3</span>Просим показать паспорт. Если справки обновляются, просим показать просроченные (обращаем внимание на дату. Если менее <b>7 дней</b> назад — уведомляем и <b>не обновляем</b>).</li>
+      <li><span class="num">4</span>Уведомляем пациента, что ко всем вопросам нужно относиться серьёзно, и любой «шуточный» ответ может повлечь отказ и направление на соответствующее лечение.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">💪</span> Выдача справки о физическом здоровье</div>
+    <ul class="duties">
+      <li><span class="num">1</span>Просим снять верх и слушаем пациента.<br><i style="color: var(--text-dim);">1.1 Если есть грипп или отравление — сразу делаем вакцину.</i></li>
+      <li><span class="num">2</span>Подходим к столу с бланками, задаём вопросы:
+        <br>— Получали ли вы травмы в ближайшие недели?
+        <br>— Имеются ли хронические заболевания или аллергия на что-либо?
+        <br>— Противопоказания на какие-либо препараты имеются?
+      </li>
+      <li><span class="num">3</span>Общий осмотр:
+        <br>3.1 После ответов просим лечь на кушетку и проводим общую проверку (кардиограмма, проверка температуры, оценка опорно-двигательных рефлексов).
+        <br>3.2 После проверки просим встать с кушетки и надеть одежду.
+        <br>3.3 Подходим к столу и выписываем справку о физ. здоровье.
+      </li>
+      <li><span class="num">4</span>Составляем отчётность о выданной справке.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">🧠</span> Выдача справки о психическом здоровье</div>
+    <ul class="duties">
+      <li><span class="num">1</span>Находясь у стола, задаём вопросы:
+        <br>— Сколько часов в сутки спите?
+        <br>— Имеются ли суицидальные мысли? А тревожные?
+        <br>— Употребляете ли наркотики? А алкоголь?
+        <br>— Оцениваете себя больше как оптимист или пессимист?
+        <br>— Как часто бывает подавленное настроение? Что может его вызвать?
+      </li>
+      <li><span class="num">2</span>После предлагаем представить ситуации:</li>
+    </ul>
+
+    <p class="rules-text"><strong>2.1</strong> Вы вечером гуляете со своей второй половинкой. Подходит человек и начинает её оскорблять. Ваши действия?</p>
+    <div class="info-note">
+      Если говорит, что начнёт драку — спрашиваем, что бы он делал в этой ситуации будь у него пистолет.
+      <br>• Ответ «выстрел в воздух / в землю / в ногу / в руку» → <b>справку выдать можно</b>.
+      <br>• Ответ «стрелять в тело или голову» → <b>в выдаче отказано</b>.
+    </div>
+
+    <p class="rules-text"><strong>2.2</strong> Вас окружили 4 вооружённых человека, требуют телефон и деньги, а у вас при себе ручная граната. Ваши действия?</p>
+    <div class="info-note">
+      Если ответит, что воспользуется гранатой — <b>в выдаче отказано</b>.
+    </div>
+
+    <p class="rules-text"><strong>2.3</strong> Для чего и зачем используется огнестрельное оружие?</p>
+    <div class="info-note">
+      Если в ответе присутствует угроза жизни другим людям (исключение — самооборона, см. п. 2.1) — <b>в выдаче отказано</b>.
+    </div>
+
+    <p class="rules-text"><strong>2.4</strong> Врач оставляет за собой право на проведение дополнительной целенаправленной диагностики в случае неопределённости с оценкой психоэмоционального статуса и вегетативного фона пациента.</p>
+
+    <ul class="duties" style="margin-top: 14px;">
+      <li><span class="num">3</span>Подходим к столу и выписываем пациенту справку о псих. здоровье.</li>
+    </ul>
+
+    <div class="warning" style="margin-top: 14px;">
+      Нарушение одного из пунктов регламента — <strong>выговор</strong>.
+    </div>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">🎭</span> Отыгровки</div>
+
+    <div class="rp-tabs">
+      <button class="rp-tab active" data-tab="phys-f">Физическая · Ж</button>
+      <button class="rp-tab" data-tab="phys-m">Физическая · М</button>
+      <button class="rp-tab" data-tab="psy-f">Психическая · Ж</button>
+      <button class="rp-tab" data-tab="psy-m">Психическая · М</button>
+    </div>
+
+    <div class="rp-content active" id="rp-phys-f">
+      <div class="rp-box"><span class="cmd">/b f2</span> -анимации-позы-лежать на спине 1 (объяснение для пациента)
+<span class="cmd">/do</span> Кардио-прибор находится на процедурном столе рядом.
+<span class="cmd">/me</span> взяла со стола чистый бланк, достала ручку из нагрудного кармана и заполнил данные
+<span class="cmd">/me</span> взяв датчики прибора, установила их на тело пациента
+<span class="cmd">/do</span> Прибор издала характерный звук.
+<span class="cmd">/me</span> сделала кардиограмму, сняла показания с датчиков прибора и взглянула на результаты, сделала пометки в бланке
+<span class="cmd">/do</span> Прибор ЭКГ издала характерный звук.
+<span class="cmd">/me</span> сняв датчики с пациента, положила их на процедурный столик
+<span class="cmd">/me</span> прочитав показания прибора внесла их в электронный журнал
+<span class="cmd">/do</span> Неврологический молоточек лежит на столе.
+<span class="cmd">/me</span> взяв молоточек со стола легким движением руки постучала по коленным суставам пациента
+<span class="cmd">/me</span> положив молоточек на стол, сделала запись в бланке мед.справки
+<span class="cmd">/me</span> достала градусник из верхнего ящика, приподнял руку пациента и вставила градусник под подмышку
+<span class="cmd">/do</span> Градусник издал характерный звук.
+<span class="cmd">/me</span> взяла градусник в руку и посмотрела на результат, а после убрала обратно в верхний ящик, сделала пометки в бланке
+<span class="cmd">/do</span> Печать на столе.
+<span class="cmd">/me</span> взяла медицинскую карту и печать, поставила печать в медицинскую карту
+<span class="cmd">/do</span> Медицинская карта о физическом состоянии пациента готова.</div>
+    </div>
+
+    <div class="rp-content" id="rp-phys-m">
+      <div class="rp-box"><span class="cmd">/b f2</span>-анимации-позы-лежать на спине 1 (объяснение для пациента)
+<span class="cmd">/do</span> Кардио-прибор находится на процедурном столике рядом.
+<span class="cmd">/me</span> взял со стола чистый бланк, достал ручку из нагрудного кармана и заполнил данные
+<span class="cmd">/me</span> взяв датчики прибора, установил их на тело пациента
+<span class="cmd">/do</span> Прибор издал характерный звук.
+<span class="cmd">/me</span> сделал кардиограмму, снял показания с датчиков прибора и взглянул на результаты, сделал пометки в бланке
+<span class="cmd">/do</span> Прибор ЭКГ издал характерный звук.
+<span class="cmd">/me</span> сняв датчики с пациента, положил их на процедурный столик
+<span class="cmd">/me</span> прочитав показания прибора внес их в электронный журнал
+<span class="cmd">/do</span> Неврологический молоточек лежит на столе.
+<span class="cmd">/me</span> взяв молоточек со стола легким движением руки постучал по коленным суставам пациента
+<span class="cmd">/me</span> положив молоточек на стол, сделал запись в бланке мед. справки
+<span class="cmd">/me</span> достал градусник из верхнего ящика, приподнял руку пациента и вставил градусник под подмышку
+<span class="cmd">/do</span> Градусник издал характерный звук.
+<span class="cmd">/me</span> взял градусник в руку и посмотрел на результат, а после убрал обратно в верхний ящик, сделал пометки в бланке
+<span class="cmd">/do</span> Печать на столе.
+<span class="cmd">/me</span> взял медицинскую карту и печать, поставил печать в медицинскую карту
+<span class="cmd">/do</span> Медицинская карта о физическом состоянии пациента готова.</div>
+    </div>
+
+    <div class="rp-content" id="rp-psy-f">
+      <div class="rp-box"><span class="cmd">/me</span> достала блокнот и ручку из кармана медицинского халата
+<span class="cmd">/me</span> занесла ответы пациента в бланк
+<span class="cmd">/do</span> На столе лежит печать.
+<span class="cmd">/me</span> взяла медицинскую карту и печать, поставила печать в медицинскую карту
+<span class="cmd">/do</span> Медицинская карта о психологическом состоянии пациента готова.</div>
+    </div>
+
+    <div class="rp-content" id="rp-psy-m">
+      <div class="rp-box"><span class="cmd">/me</span> достал блокнот и ручку из кармана медицинского халата
+<span class="cmd">/me</span> занес ответы пациента в бланк
+<span class="cmd">/do</span> На столе лежит печать.
+<span class="cmd">/me</span> взял медицинскую карту и печать, поставил печать в медицинскую карту
+<span class="cmd">/do</span> Медицинская карта о психологическом состоянии пациента готова.</div>
+    </div>
+  </div>
+
+  <footer>
+    База знаний EMS · <span id="year"></span> · Регламент выдачи мед. справок
+  </footer>
+
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* Переключение отыгровок */
+  document.querySelectorAll(".rp-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".rp-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".rp-content").forEach(c => c.classList.remove("active"));
+      tab.classList.add("active");
+      const id = "rp-" + tab.dataset.tab;
+      const content = document.getElementById(id);
+      if (content) content.classList.add("active");
+    });
+  });
+
+  /* Lightbox */
+  (function() {
+    const lb = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightbox-img");
+    const lbCap = document.getElementById("lightbox-caption");
+    const lbClose = document.getElementById("lightbox-close");
+    function open(src, caption) {
+      lbImg.src = src; lbImg.alt = caption || "";
+      lbCap.textContent = caption || "";
+      lb.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      lb.classList.remove("active");
+      lbImg.src = ""; document.body.style.overflow = "";
+    }
+    document.querySelectorAll("[data-lightbox]").forEach(fig => {
+      const img = fig.querySelector("img"); if (!img) return;
+      const cap = fig.querySelector("figcaption");
+      fig.addEventListener("click", () => {
+        if (!img.complete || img.naturalWidth === 0) {
+          showToast("Картинка не загружена. Проверь путь.");
+          return;
+        }
+        open(img.src, cap ? cap.textContent.replace(/\s+/g, " ").trim() : img.alt);
+      });
+    });
+    lbClose.addEventListener("click", close);
+    lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lb.classList.contains("active")) close();
+    });
+  })();
+</script>
+</body>
+</html>

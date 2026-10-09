@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Памятка по оказанию ПМП — База знаний EMS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 200px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 42px; --width: 180px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px; display: flex; align-items: center;
+    gap: 10px; padding: 0 14px 0 12px;
+    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 10px 0 0 10px; font-family: inherit;
+    font-size: 14px; font-weight: 500; cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab:active { transform: translateY(1px); }
+  .tab.tab-active {
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.9), rgba(22, 33, 62, 0.9));
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-dim);
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .breadcrumbs a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
+  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
+  .breadcrumbs .current { color: var(--text); }
+
+  .rules-section {
+    background: var(--bg-alt); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px; margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+  }
+  .rules-title {
+    font-size: 14px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .rules-title .icon { font-size: 18px; }
+  .rules-text { font-size: 14.5px; color: var(--text); line-height: 1.7; margin-bottom: 10px; }
+  .rules-text strong { color: var(--accent); }
+
+  .duties { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .duties li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 14px; background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px; color: var(--text); line-height: 1.55;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .duties li:hover { border-color: var(--accent); background: rgba(28, 35, 48, 0.75); }
+  .duties .check { flex-shrink: 0; color: var(--success); font-weight: 700; font-size: 16px; line-height: 1.4; }
+  .duties .cross { flex-shrink: 0; color: var(--danger); font-weight: 700; font-size: 16px; line-height: 1.4; }
+
+  .step-line {
+    display: inline-block; padding: 4px 10px; margin: 2px 0;
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border); border-radius: 6px;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 13px; color: var(--text);
+  }
+  .step-line .key { color: var(--accent); font-weight: 700; }
+  .step-line .sep { color: var(--text-dim); margin: 0 6px; }
+
+  .meds { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 12px; }
+  .med {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 16px;
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px;
+  }
+  .med-name { color: var(--text); }
+  .med-count {
+    color: var(--gold); font-weight: 700; font-size: 15px;
+    background: rgba(210, 153, 34, 0.12);
+    border: 1px solid rgba(210, 153, 34, 0.28);
+    padding: 3px 10px; border-radius: 6px; white-space: nowrap;
+  }
+
+  .single-image { margin: 16px 0; text-align: center; }
+  .single-image img {
+    display: block; max-width: 100%; height: auto; max-height: 520px;
+    margin: 0 auto; border-radius: 10px; border: 1px solid var(--border);
+    background: rgba(13, 17, 23, 0.55);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+    cursor: zoom-in;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .single-image img:hover {
+    transform: translateY(-3px); border-color: var(--accent);
+    box-shadow: 0 10px 28px rgba(88, 166, 255, 0.18);
+  }
+  .single-image figcaption { margin-top: 10px; font-size: 12.5px; color: var(--text-dim); font-style: italic; }
+
+  .warning {
+    padding: 14px 16px; margin: 12px 0;
+    background: rgba(248, 81, 73, 0.08);
+    border: 1px solid rgba(248, 81, 73, 0.30);
+    border-radius: 8px;
+    font-size: 14px; color: var(--text); line-height: 1.6;
+  }
+  .warning strong { color: var(--danger); }
+
+  .info-note {
+    padding: 14px 16px; margin: 12px 0;
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.30);
+    border-radius: 8px;
+    font-size: 14px; color: var(--text); line-height: 1.6;
+  }
+  .info-note strong { color: var(--accent); }
+
+  .lightbox {
+    position: fixed; inset: 0; z-index: 9999;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(5, 8, 12, 0.94);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 24px; animation: lbFade 0.2s ease;
+  }
+  .lightbox.active { display: flex; }
+  @keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+  .lightbox img {
+    max-width: 96%; max-height: 92vh; border-radius: 10px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+    animation: lbZoom 0.25s ease;
+  }
+  @keyframes lbZoom {
+    from { transform: scale(0.94); opacity: 0.7; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .lightbox-close {
+    position: fixed; top: 16px; right: 20px;
+    width: 44px; height: 44px;
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text); font-size: 22px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lightbox-close:hover { border-color: var(--danger); color: var(--danger); background: rgba(248, 81, 73, 0.15); }
+  .lightbox-caption {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    font-size: 13.5px; color: var(--text-dim);
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 8px;
+    max-width: 80%; text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 170px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .side-tabs { top: auto; bottom: 12px; right: 12px; transform: none; }
+    .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; border-radius: 10px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+    .rules-section { padding: 16px; }
+    .rules-text { font-size: 13.5px; }
+    .single-image img { max-height: 340px; }
+    .meds { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главная EMS</span>
+  </a>
+  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Главное меню калькулятора</span>
+  </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
+  </a>
+  <a class="tab" href="departments.html">
+    <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
+  </a>
+  <a class="tab" href="intro.html">
+    <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
+  </a>
+  <a class="tab" href="lecture-pills.html">
+    <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
+  </a>
+  <a class="tab" href="lecture-vaccines.html">
+    <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
+  </a>
+  <a class="tab" href="lecture-medcert.html">
+    <span class="tab-icon">🧾</span><span class="tab-label">Справки</span>
+  </a>
+  <a class="tab tab-active" href="lecture-pmp.html">
+    <span class="tab-icon">🚑</span><span class="tab-label">ПМП</span>
+  </a>
+</nav>
+
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<div class="container page-content">
+
+  <header>
+    <h1>Памятка по оказанию ПМП</h1>
+    <p>Первая медицинская помощь и патрулирование на АСМП</p>
+  </header>
+
+  <div class="breadcrumbs">
+    <a href="main.html">База знаний EMS</a>
+    <span class="sep">›</span>
+    <a href="intro.html">Обучение и правила</a>
+    <span class="sep">›</span>
+    <span class="current">Памятка по оказанию ПМП</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">🚑</div>
+    <h2 class="hero-title">Первая медицинская помощь</h2>
+    <p class="hero-subtitle">
+      Правила использования АСМП, дефибриллятор, эпинефрин, патрулирование и оказание ПМП на вызовах.
+    </p>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">🚗</span> Что такое АСМП</div>
+    <p class="rules-text">
+      <strong>А.С.М.П.</strong> (Автомобиль Скорой Медицинской Помощи) — транспорт EMS,
+      используемый для выездов на вызовы, оказания первой медицинской помощи (ПМП),
+      а также помощи государственным организациям и гражданам.
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/pmp-car.jpg" alt="АСМП — автомобиль скорой медицинской помощи" loading="lazy">
+      <figcaption>АСМП, на котором можно выполнять вызовы</figcaption>
+    </figure>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">📜</span> Правила использования АСМП</div>
+    <ul class="duties">
+      <li><span class="check">✔</span>АСМП разрешено брать с <b>3-го ранга (Paramedic)</b>.</li>
+      <li><span class="check">✔</span>Спец. сигналы (сирена, мигалки) задействуются только в <b>экстренных ситуациях</b>.</li>
+      <li><span class="check">✔</span>Нарушать ПДД можно только при включённых спец. сигналах.</li>
+      <li><span class="cross">✖</span>Запрещено оставлять А.С.М.П. у главного входа в больницу дольше <b>5 минут</b> (исключение — доставка пострадавшего).</li>
+      <li><span class="cross">✖</span>Нельзя оставлять А.С.М.П. без присмотра более <b>10 минут</b> (исключение — угроза жизни или экстренная ситуация).</li>
+      <li><span class="check">✔</span>В случае утери транспорта разрешается взять новый.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">⚡</span> Дефибриллятор и эпинефрин</div>
+    <p class="rules-text">
+      Перед выездом на первый вызов вам необходимо получить <strong>дефибриллятор</strong>.
+      Дефибриллятор — это медицинское устройство для нормализации сердечного ритма
+      путём подачи электрического разряда. Запросить можно у старшего состава
+      в спец. связи в канале <b>«Запрос на дефибриллятор»</b>.
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/pmp-defib.jpg" alt="Дефибриллятор" loading="lazy">
+      <figcaption>Дефибриллятор</figcaption>
+    </figure>
+
+    <p class="rules-text" style="margin-top: 14px;">
+      Далее понадобится <strong>эпинефрин</strong> — без него дефибриллятор абсолютно бесполезен.
+      Используется для привода игрока в сознание, вместе с дефибриллятором.
+    </p>
+    <div class="meds">
+      <div class="med">
+        <span class="med-name">💉 Эпинефрин (для отдела PM)</span>
+        <span class="med-count">30 шт</span>
+      </div>
+      <div class="med">
+        <span class="med-name">💉 Эпинефрин (остальные отделы)</span>
+        <span class="med-count">20 шт</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">🗺️</span> Патрулирование и вызовы</div>
+    <ul class="duties">
+      <li><span class="check">1</span>Отправляемся на парковку и берём фракционную машину: <b>Планшет → EMS → Доставка транспорта</b>.</li>
+      <li><span class="check">2</span>Открываем планшет: <b>EMS → Вызовы</b>. Нажимаем ползунок в правом верхнем углу <b>«В патруле»</b>. Далее будут приходить уведомления о вызовах.</li>
+    </ul>
+    <figure class="single-image" data-lightbox>
+      <img src="images/pmp-call.jpg" alt="Уведомление о вызове" loading="lazy">
+      <figcaption>Пример уведомления о вызове</figcaption>
+    </figure>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">🚨</span> Действия на вызове</div>
+    <p class="rules-text">
+      По прибытии на вызов нажать на человека:
+      <span class="step-line"><span class="key">G</span><span class="sep">›</span>Реанимировать</span>
+      — пройти мини-игру с пробелом (нужно попасть пульсом в зелёную зону).
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/pmp-reanim.jpg" alt="Реанимация и мини-игра" loading="lazy">
+      <figcaption>Реанимация и мини-игра с пульсом</figcaption>
+    </figure>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">⛔</span> Запрещено</div>
+    <div class="warning">
+      <ul class="duties">
+        <li><span class="cross">✖</span>оказывать ПМП в зоне перестрелок;</li>
+        <li><span class="cross">✖</span>оказывать ПМП, если вам угрожают оружием;</li>
+        <li><span class="cross">✖</span>оказывать ПМП в радиусе <b>1 км</b> вокруг зоны ДРОПА;</li>
+        <li><span class="cross">✖</span>поднимать гражданских до оказания ПМП гос. сотруднику. Сначала поднимаем сотрудника гос. службы — потом гражданского;</li>
+        <li><span class="cross">✖</span>оказывать ПМП, если у вас нет дефибриллятора;</li>
+        <li><span class="cross">✖</span>оказывать ПМП на закрытых территориях без сопровождения.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">❗</span> ВАЖНО</div>
+    <div class="info-note">
+      Если вы приезжаете на вызов и <strong>не видите пострадавшего</strong> — напишите в репорт:
+      <br><i>«Здравствуйте, приехал(а) на вызов, не вижу пострадавшего»</i>
+      — и администратор ответит вам, есть ли человек в том месте. Если человек есть — вам помогут
+      и вы сможете оказать реанимацию.
+    </div>
+    <figure class="single-image" data-lightbox>
+      <img src="images/pmp-report.jpg" alt="Пример обращения в репорт" loading="lazy">
+      <figcaption>Пример обращения в репорт</figcaption>
+    </figure>
+  </div>
+
+  <footer>
+    База знаний EMS · <span id="year"></span> · Памятка по оказанию ПМП
+  </footer>
+
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+  (function() {
+    const lb = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightbox-img");
+    const lbCap = document.getElementById("lightbox-caption");
+    const lbClose = document.getElementById("lightbox-close");
+    function open(src, caption) {
+      lbImg.src = src; lbImg.alt = caption || "";
+      lbCap.textContent = caption || "";
+      lb.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      lb.classList.remove("active");
+      lbImg.src = ""; document.body.style.overflow = "";
+    }
+    document.querySelectorAll("[data-lightbox]").forEach(fig => {
+      const img = fig.querySelector("img"); if (!img) return;
+      const cap = fig.querySelector("figcaption");
+      fig.addEventListener("click", () => {
+        if (!img.complete || img.naturalWidth === 0) {
+          showToast("Картинка не загружена. Проверь путь.");
+          return;
+        }
+        open(img.src, cap ? cap.textContent.replace(/\s+/g, " ").trim() : img.alt);
+      });
+    });
+    lbClose.addEventListener("click", close);
+    lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lb.classList.contains("active")) close();
+    });
+  })();
+</script>
+</body>
+</html>

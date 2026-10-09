@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Как правильно проводить вакцинацию — База знаний EMS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 42px; --width: 200px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px;
+    display: flex; align-items: center;
+    gap: 10px; padding: 0 12px 0 14px;
+    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 10px 10px 0;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab-left:active { transform: translateY(1px); }
+  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 42px; --width: 180px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 48px; display: flex; align-items: center;
+    gap: 10px; padding: 0 14px 0 12px;
+    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 10px 0 0 10px; font-family: inherit;
+    font-size: 14px; font-weight: 500; cursor: pointer; text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(28, 35, 48, 0.98);
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+  }
+  .tab:active { transform: translateY(1px); }
+  .tab.tab-active {
+    background: linear-gradient(135deg, rgba(26, 39, 68, 0.9), rgba(22, 33, 62, 0.9));
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-dim);
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .breadcrumbs a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
+  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
+  .breadcrumbs .current { color: var(--text); }
+
+  .rules-section {
+    background: var(--bg-alt); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px; margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+  }
+  .rules-title {
+    font-size: 14px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .rules-title .icon { font-size: 18px; }
+  .rules-text { font-size: 14.5px; color: var(--text); line-height: 1.7; margin-bottom: 10px; }
+  .rules-text strong { color: var(--accent); }
+
+  .step-line {
+    display: inline-block; padding: 4px 10px; margin: 2px 0;
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border); border-radius: 6px;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 13px; color: var(--text);
+  }
+  .step-line .key { color: var(--accent); font-weight: 700; }
+  .step-line .sep { color: var(--text-dim); margin: 0 6px; }
+
+  .duties { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .duties li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 14px; background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px; color: var(--text); line-height: 1.55;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .duties li:hover { border-color: var(--accent); background: rgba(28, 35, 48, 0.75); }
+  .duties .check { flex-shrink: 0; color: var(--success); font-weight: 700; font-size: 16px; line-height: 1.4; }
+  .duties .cross { flex-shrink: 0; color: var(--danger); font-weight: 700; font-size: 16px; line-height: 1.4; }
+
+  .meds { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 12px; }
+  .med {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 16px;
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px;
+  }
+  .med-name { color: var(--text); }
+  .med-count {
+    color: var(--gold); font-weight: 700; font-size: 15px;
+    background: rgba(210, 153, 34, 0.12);
+    border: 1px solid rgba(210, 153, 34, 0.28);
+    padding: 3px 10px; border-radius: 6px; white-space: nowrap;
+  }
+
+  .priority {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; margin: 6px 4px 6px 0;
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.30);
+    border-radius: 8px; font-size: 14px; color: var(--text);
+  }
+  .priority .arrow { color: var(--accent); font-weight: 700; }
+
+  .single-image { margin: 16px 0; text-align: center; }
+  .single-image img {
+    display: block; max-width: 100%; height: auto; max-height: 520px;
+    margin: 0 auto; border-radius: 10px; border: 1px solid var(--border);
+    background: rgba(13, 17, 23, 0.55);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+    cursor: zoom-in;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .single-image img:hover {
+    transform: translateY(-3px); border-color: var(--accent);
+    box-shadow: 0 10px 28px rgba(88, 166, 255, 0.18);
+  }
+  .single-image figcaption { margin-top: 10px; font-size: 12.5px; color: var(--text-dim); font-style: italic; }
+
+  .lightbox {
+    position: fixed; inset: 0; z-index: 9999;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(5, 8, 12, 0.94);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 24px; animation: lbFade 0.2s ease;
+  }
+  .lightbox.active { display: flex; }
+  @keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+  .lightbox img {
+    max-width: 96%; max-height: 92vh; border-radius: 10px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+    animation: lbZoom 0.25s ease;
+  }
+  @keyframes lbZoom {
+    from { transform: scale(0.94); opacity: 0.7; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .lightbox-close {
+    position: fixed; top: 16px; right: 20px;
+    width: 44px; height: 44px;
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text); font-size: 22px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .lightbox-close:hover { border-color: var(--danger); color: var(--danger); background: rgba(248, 81, 73, 0.15); }
+  .lightbox-caption {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    font-size: 13.5px; color: var(--text-dim);
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 8px;
+    max-width: 80%; text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
+    .tab-left {
+      --width: 170px; --visible: 42px;
+      height: 42px; font-size: 13px;
+      left: 0; border-radius: 10px;
+      border-left: 1px solid var(--border);
+      padding: 0 10px;
+    }
+    .side-tabs { top: auto; bottom: 12px; right: 12px; transform: none; }
+    .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; border-radius: 10px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+    .rules-section { padding: 16px; }
+    .rules-text { font-size: 13.5px; }
+    .single-image img { max-height: 340px; }
+    .meds { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Главная EMS</span>
+  </a>
+  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Главное меню калькулятора</span>
+  </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
+  </a>
+  <a class="tab" href="departments.html">
+    <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
+  </a>
+  <a class="tab" href="intro.html">
+    <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
+  </a>
+  <a class="tab" href="lecture-pills.html">
+    <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
+  </a>
+  <a class="tab tab-active" href="lecture-vaccines.html">
+    <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
+  </a>
+</nav>
+
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<div class="container page-content">
+
+  <header>
+    <h1>Как правильно проводить вакцинацию</h1>
+    <p>Пошаговая инструкция для сотрудников EMS</p>
+  </header>
+
+  <div class="breadcrumbs">
+    <a href="main.html">База знаний EMS</a>
+    <span class="sep">›</span>
+    <a href="intro.html">Обучение и правила</a>
+    <span class="sep">›</span>
+    <span class="current">Как правильно проводить вакцинацию</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">💉</div>
+    <h2 class="hero-title">Вакцинация</h2>
+    <p class="hero-subtitle">
+      Правила взятия препаратов, список кабинетов, приоритет мест и порядок вакцинации пациента.
+    </p>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">📦</span> Что взять со склада</div>
+    <p class="rules-text">
+      Для выдачи вакцин необходимо взять со склада <strong>азитромицин</strong> и
+      <strong>активированный уголь</strong>.
+    </p>
+    <div class="meds">
+      <div class="med">
+        <span class="med-name">💊 Азитромицин</span>
+        <span class="med-count">24 шт</span>
+      </div>
+      <div class="med">
+        <span class="med-name">⚫ Активированный уголь</span>
+        <span class="med-count">24 шт</span>
+      </div>
+    </div>
+    <figure class="single-image" data-lightbox>
+      <img src="images/vax-meds.jpg" alt="Препараты для вакцинации" loading="lazy">
+      <figcaption>Азитромицин и активированный уголь</figcaption>
+    </figure>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">🦠</span> От каких заболеваний применяются</div>
+    <ul class="duties">
+      <li><span class="check">✔</span><strong>Активированный уголь</strong> — применяется при <b>отравлении</b> и <b>диарее</b>.</li>
+      <li><span class="check">✔</span><strong>Азитромицин</strong> — применяется при <b>гриппе</b> и <b>простуде</b>.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">🏥</span> Кабинеты для вакцинации</div>
+    <p class="rules-text">
+      <strong>Главная больница (ELSH):</strong> кабинеты для вакцинации и операций
+      на <b>первом этаже</b>, а также кабинеты <b>W2, W4, W6</b> на <b>втором этаже</b>.
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/vax-cabinets.jpg" alt="Кабинеты для вакцинации в ELSH" loading="lazy">
+      <figcaption>Кабинеты для вакцинации и операций</figcaption>
+    </figure>
+
+    <p class="rules-text" style="margin-top: 14px;">
+      <strong>Больница Палето-Бэй:</strong> Операционная (слева от входа).
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/vax-paleto.jpg" alt="Операционная Палето-Бэй" loading="lazy">
+      <figcaption>Операционная Палето-Бэй</figcaption>
+    </figure>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">📍</span> Приоритет мест для вакцинации</div>
+    <p class="rules-text">
+      Операционная — основное место вакцинации. Если в операционной выдают справку,
+      можно провести вакцинацию во <b>второй палате</b> (та, что ближе к складу),
+      при условии, что в палате не более 2-х человек. Во всех других случаях
+      вакцина выдаётся на <b>втором этаже, напротив лестницы</b>.
+    </p>
+    <div>
+      <span class="priority">Операционная</span>
+      <span class="arrow" style="color: var(--accent); font-weight: 700; margin: 0 4px;">›</span>
+      <span class="priority">Палата №2</span>
+      <span class="arrow" style="color: var(--accent); font-weight: 700; margin: 0 4px;">›</span>
+      <span class="priority">Второй этаж</span>
+    </div>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">👨‍⚕️</span> Как вакцинировать человека</div>
+    <p class="rules-text">
+      После просьбы пациента о вакцинации, его необходимо <strong>провести в кабинет</strong>.
+      Ваши дальнейшие действия:
+    </p>
+    <ul class="duties">
+      <li><span class="check">1</span> Попросить снять верхнюю одежду.</li>
+      <li><span class="check">2</span> <span class="step-line"><span class="key">G</span><span class="sep">›</span>Фракционное<span class="sep">›</span>Диагностировать</span></li>
+      <li><span class="check">3</span> Сообщить пациенту, чем он болен, и попросить <b>4.000$</b> у гражданского и у гос. сотрудника.</li>
+      <li><span class="check">4</span> После передачи денег приступить к вакцинации: <span class="step-line"><span class="key">G</span><span class="sep">›</span>Фракционное<span class="sep">›</span>Вакцинировать</span></li>
+    </ul>
+
+    <figure class="single-image" data-lightbox>
+      <img src="images/vax-menu.jpg" alt="Меню G — Фракционное — Вакцинировать" loading="lazy">
+      <figcaption>Шаги в меню: Диагностировать → Вакцинировать</figcaption>
+    </figure>
+
+    <p class="rules-text" style="margin-top: 14px;">
+      После нажатия кнопки <strong>«Вакцинировать»</strong> появляется мини-игра, в которой
+      ваша задача — уничтожить вирусы разных цветов. Для этого необходимо
+      <b>перетаскивать колбы на бактерии соответствующего цвета</b> и держать,
+      пока не исчезнут.
+    </p>
+    <figure class="single-image" data-lightbox>
+      <img src="images/vax-minigame.jpg" alt="Мини-игра вакцинации" loading="lazy">
+      <figcaption>Мини-игра: перетаскивайте колбы на бактерии соответствующего цвета</figcaption>
+    </figure>
+  </div>
+
+  <footer>
+    База знаний EMS · <span id="year"></span> · Как правильно проводить вакцинацию
+  </footer>
+
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="common.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+  (function() {
+    const lb = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightbox-img");
+    const lbCap = document.getElementById("lightbox-caption");
+    const lbClose = document.getElementById("lightbox-close");
+    function open(src, caption) {
+      lbImg.src = src; lbImg.alt = caption || "";
+      lbCap.textContent = caption || "";
+      lb.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      lb.classList.remove("active");
+      lbImg.src = ""; document.body.style.overflow = "";
+    }
+    document.querySelectorAll("[data-lightbox]").forEach(fig => {
+      const img = fig.querySelector("img"); if (!img) return;
+      const cap = fig.querySelector("figcaption");
+      fig.addEventListener("click", () => {
+        if (!img.complete || img.naturalWidth === 0) {
+          showToast("Картинка не загружена. Проверь путь.");
+          return;
+        }
+        open(img.src, cap ? cap.textContent.replace(/\s+/g, " ").trim() : img.alt);
+      });
+    });
+    lbClose.addEventListener("click", close);
+    lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lb.classList.contains("active")) close();
+    });
+  })();
+</script>
+</body>
+</html>
