@@ -4,103 +4,204 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Калькулятор баллов — Главное меню</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 <style>
-  /* Панель слева — переход на главную EMS */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
-    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
     pointer-events: none;
   }
   .tab-left {
-    --visible: 42px; --width: 180px;
+    --visible: 48px; --width: 220px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 48px;
+    width: var(--width); height: 54px;
     display: flex; align-items: center;
-    gap: 10px; padding: 0 12px 0 14px;
-    background: rgba(22, 27, 34, 0.92);
-    color: var(--text);
+    gap: 12px; padding: 0 16px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-left: none;
-    border-radius: 0 10px 10px 0;
-    font-family: inherit; font-size: 14px; font-weight: 500;
-    cursor: pointer; text-align: left;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    border-radius: 0 12px 12px 0;
+    font-size: 15px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
-    pointer-events: auto;
-    text-decoration: none;
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
   }
   .tab-left:hover {
-    left: 0; background: rgba(28, 35, 48, 0.98);
-    color: var(--accent); border-color: var(--accent);
-    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+    left: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab-left:active { transform: translateY(1px); }
-  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 48px; --width: 210px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 54px; display: flex; align-items: center;
+    gap: 12px; padding: 0 16px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 12px 0 0 12px;
+    font-size: 15px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab.tab-active {
+    background: rgba(26, 39, 68, 0.92);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .hero {
+    text-align: center; padding: 48px 28px 40px;
+    background: rgba(26, 39, 68, 0.4);
+    border: 1px solid var(--border); border-radius: 12px;
+    margin-bottom: 24px; box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  }
+  .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
+  .hero-title {
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    font-size: 16px; color: var(--text-dim);
+    max-width: 640px; margin: 0 auto; line-height: 1.7;
+  }
+
+  .section {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 26px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  }
+  .section-title {
+    font-size: 18px; font-weight: 600; color: var(--text);
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-title .icon { font-size: 22px; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 22px;
+    background: rgba(13, 17, 23, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.18s, background 0.18s;
+    position: relative;
+  }
+  .card::after {
+    content: "→";
+    margin-left: auto;
+    color: var(--text-dim);
+    font-size: 20px;
+    transition: transform 0.18s, color 0.18s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    background: rgba(28, 35, 48, 0.7);
+  }
+  .card:hover::after { color: var(--accent); transform: translateX(4px); }
+  .card-icon {
+    flex-shrink: 0;
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.18);
+    border-radius: 12px;
+    font-size: 24px;
+  }
+  .card-body { flex: 1; min-width: 0; }
+  .card-title {
+    font-size: 16.5px; font-weight: 600; color: var(--text);
+    margin-bottom: 4px; line-height: 1.35;
+  }
+  .card-desc {
+    font-size: 13.5px; color: var(--text-dim);
+    line-height: 1.5;
+  }
+
   @media (max-width: 640px) {
-    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
-    .tab-left {
-      --width: 160px; --visible: 42px;
-      height: 42px; font-size: 13px;
-      left: 0; border-radius: 10px;
-      border-left: 1px solid var(--border);
-      padding: 0 10px;
-    }
-    .tab-left:hover { left: 0; }
+    body { padding: 20px 12px 60px; }
+    .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
+    .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs { top: auto; bottom: 14px; transform: none; }
+    .tab { --width: 160px; --visible: 46px; height: 46px; font-size: 14px; padding: 0 12px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+    .section { padding: 20px; }
+    .cards { grid-template-columns: 1fr; gap: 12px; }
+    .card { padding: 16px; }
+    .hero { padding: 34px 20px 28px; }
+    .hero-title { font-size: 22px; }
+    .hero-subtitle { font-size: 14.5px; }
+    .hero-icon { font-size: 52px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ============================================================
-     ПАНЕЛЬ СЛЕВА — ПЕРЕХОД НА ГЛАВНУЮ EMS
-     ============================================================ -->
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
+  <a class="tab-left" href="../main.html" title="Вернуться в базу знаний EMS">
     <span class="tab-icon">🏠</span>
     <span class="tab-label">Главная EMS</span>
   </a>
 </nav>
 
-<!-- ============================================================
-     ПАНЕЛЬ ВКЛАДОК СПРАВА
-     ============================================================ -->
-<nav class="side-tabs" aria-label="Разделы">
+<nav class="side-tabs" aria-label="Отделы">
   <a class="tab tab-active" href="index.html">
-    <span class="tab-icon">🏠</span>
-    <span class="tab-label">Главное меню</span>
-  </a>
-  <a class="tab" href="pm.html">
-    <span class="tab-icon">📋</span>
-    <span class="tab-label">PM</span>
-  </a>
-  <a class="tab" href="di.html">
-    <span class="tab-icon">📊</span>
-    <span class="tab-label">DI</span>
+    <span class="tab-icon">🧮</span><span class="tab-label">Главное меню</span>
   </a>
   <a class="tab" href="psid.html">
-    <span class="tab-icon">🏥</span>
-    <span class="tab-label">PSID</span>
+    <span class="tab-icon">🏥</span><span class="tab-label">PSID</span>
+  </a>
+  <a class="tab" href="pm.html">
+    <span class="tab-icon">📋</span><span class="tab-label">PM</span>
+  </a>
+  <a class="tab" href="di.html">
+    <span class="tab-icon">📊</span><span class="tab-label">DI</span>
   </a>
   <a class="tab" href="had.html">
-    <span class="tab-icon">💉</span>
-    <span class="tab-label">HAD</span>
+    <span class="tab-icon">💉</span><span class="tab-label">HAD</span>
   </a>
 </nav>
 
-<!-- ============================================================
-     КНОПКА ФОНА
-     ============================================================ -->
 <div class="bg-controls">
   <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
   <div class="bg-menu" id="bg-menu" hidden>
     <div class="bg-section-label">Пресеты</div>
     <div class="bg-presets" id="bg-presets"></div>
-
     <div class="bg-section-label">Свои</div>
     <label class="bg-menu-item">
       📁 Загрузить картинку
@@ -116,9 +217,6 @@
   </div>
 </div>
 
-<!-- ============================================================
-     ОСНОВНОЙ КОНТЕНТ
-     ============================================================ -->
 <div class="container page-content">
 
   <header>
@@ -137,7 +235,7 @@
   </div>
 
   <div class="section">
-    <div class="section-title">Выберите отдел</div>
+    <div class="section-title"><span class="icon">🏥</span> Выберите отдел</div>
     <div class="cards">
       <a class="card" href="psid.html">
         <div class="card-icon">🏥</div>
@@ -178,6 +276,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="common.js"></script>
+<script src="../common.js"></script>
 </body>
 </html>
