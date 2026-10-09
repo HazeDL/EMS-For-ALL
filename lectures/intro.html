@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Вступительная лекция — База знаний EMS</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 <style>
-  /* --------- Левая панель --------- */
+  /* Левая панель */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 8px;
@@ -22,7 +22,7 @@
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-left: none;
     border-radius: 0 12px 12px 0;
-    font-family: inherit; font-size: 15px; font-weight: 500;
+    font-size: 15px; font-weight: 500;
     cursor: pointer; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
@@ -38,7 +38,7 @@
   .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Правая панель --------- */
+  /* Правая панель */
   .side-tabs {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 8px;
@@ -51,8 +51,8 @@
     gap: 12px; padding: 0 16px;
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-right: none;
-    border-radius: 12px 0 0 12px; font-family: inherit;
-    font-size: 15px; font-weight: 500; cursor: pointer; text-align: left;
+    border-radius: 12px 0 0 12px;
+    font-size: 15px; font-weight: 500; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -63,7 +63,6 @@
     right: 0; background: rgba(30, 38, 52, 0.95);
     color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab:active { transform: translateY(1px); }
   .tab.tab-active {
     background: rgba(26, 39, 68, 0.92);
     border-color: var(--accent); color: var(--accent);
@@ -75,7 +74,7 @@
   .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Хлебные крошки --------- */
+  /* Хлебные крошки */
   .breadcrumbs {
     display: flex; align-items: center; gap: 10px;
     font-size: 14px; color: var(--text-dim);
@@ -86,7 +85,7 @@
   .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
   .breadcrumbs .current { color: var(--text); }
 
-  /* --------- Секции --------- */
+  /* Секции */
   .rules-section {
     background: var(--bg-alt);
     border: 1px solid var(--border);
@@ -111,7 +110,7 @@
   }
   .rules-text strong { color: var(--text); font-weight: 600; }
 
-  /* --------- Иерархия --------- */
+  /* Иерархия */
   .hierarchy { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 8px 0; }
   .rank {
     display: inline-block; padding: 8px 14px;
@@ -124,7 +123,7 @@
   .rank:hover { border-color: var(--accent); }
   .rank-arrow { color: var(--text-dim); font-size: 15px; }
 
-  /* --------- Обязанности --------- */
+  /* Обязанности */
   .duties { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
   .duties li {
     display: flex; align-items: flex-start; gap: 14px;
@@ -137,7 +136,7 @@
   .duties li:hover { border-color: var(--text-dim); background: rgba(13, 17, 23, 0.55); }
   .duties .check { flex-shrink: 0; color: var(--success); font-weight: 700; font-size: 18px; line-height: 1.5; }
 
-  /* --------- Медикаменты --------- */
+  /* Медикаменты */
   .meds { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
   .med {
     display: flex; align-items: center; justify-content: space-between;
@@ -156,7 +155,7 @@
   }
   .med-note { color: var(--text-dim); font-size: 13px; display: block; margin-left: 2px; }
 
-  /* --------- Hero --------- */
+  /* Hero */
   .hero {
     text-align: center;
     padding: 48px 28px 40px;
@@ -171,14 +170,14 @@
   .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
   .hero-title {
     font-size: 26px; font-weight: 700; color: var(--text);
-    margin-bottom: 12px; letter-spacing: 0.2px;
+    margin-bottom: 12px;
   }
   .hero-subtitle {
     font-size: 16px; color: var(--text-dim);
     max-width: 640px; margin: 0 auto; line-height: 1.7;
   }
 
-  /* --------- Мобильный --------- */
+  /* Мобильный */
   @media (max-width: 640px) {
     .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
     .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
@@ -201,36 +200,33 @@
 <body>
 
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
+  <a class="tab-left" href="../main.html" title="Перейти на главную EMS">
     <span class="tab-icon">🏠</span>
     <span class="tab-label">Главная EMS</span>
   </a>
-  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
+  <a class="tab-left" href="../calculators/index.html" title="Перейти к списку калькуляторов">
     <span class="tab-icon">🧮</span>
-    <span class="tab-label">Главное меню калькулятора</span>
+    <span class="tab-label">Калькулятор баллов</span>
   </a>
 </nav>
 
 <nav class="side-tabs" aria-label="Разделы">
-  <a class="tab" href="index.html">
-    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
-  </a>
   <a class="tab" href="departments.html">
     <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
   </a>
   <a class="tab tab-active" href="intro.html">
     <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
   </a>
-  <a class="tab" href="lecture-pills.html">
+  <a class="tab" href="pills.html">
     <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
   </a>
-  <a class="tab" href="lecture-vaccines.html">
+  <a class="tab" href="vaccines.html">
     <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
   </a>
-  <a class="tab" href="lecture-medcert.html">
+  <a class="tab" href="medcert.html">
     <span class="tab-icon">🧾</span><span class="tab-label">Справки</span>
   </a>
-  <a class="tab" href="lecture-pmp.html">
+  <a class="tab" href="pmp.html">
     <span class="tab-icon">🚑</span><span class="tab-label">ПМП</span>
   </a>
 </nav>
@@ -263,7 +259,7 @@
   </header>
 
   <div class="breadcrumbs">
-    <a href="main.html">База знаний EMS</a>
+    <a href="../main.html">База знаний EMS</a>
     <span class="sep">›</span>
     <span class="current">Вступительная лекция и правила гос. организаций</span>
   </div>
@@ -356,9 +352,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="common.js"></script>
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+<script src="../common.js"></script>
 </body>
 </html>
