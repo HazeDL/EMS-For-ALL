@@ -4,81 +4,102 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PM — Калькулятор баллов</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 <style>
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
-    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
     pointer-events: none;
   }
   .tab-left {
-    --visible: 42px; --width: 200px;
+    --visible: 48px; --width: 220px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 48px;
+    width: var(--width); height: 54px;
     display: flex; align-items: center;
-    gap: 10px; padding: 0 12px 0 14px;
-    background: rgba(22, 27, 34, 0.92);
-    color: var(--text);
+    gap: 12px; padding: 0 16px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-left: none;
-    border-radius: 0 10px 10px 0;
-    font-family: inherit; font-size: 14px; font-weight: 500;
-    cursor: pointer; text-align: left;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    border-radius: 0 12px 12px 0;
+    font-size: 15px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
-    pointer-events: auto;
-    text-decoration: none;
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
   }
   .tab-left:hover {
-    left: 0; background: rgba(28, 35, 48, 0.98);
-    color: var(--accent); border-color: var(--accent);
-    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+    left: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab-left:active { transform: translateY(1px); }
-  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tab-left.tab-active {
-    background: linear-gradient(135deg, rgba(26, 39, 68, 0.95), rgba(22, 33, 62, 0.95));
+
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 48px; --width: 210px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 54px; display: flex; align-items: center;
+    gap: 12px; padding: 0 16px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 12px 0 0 12px;
+    font-size: 15px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab.tab-active {
+    background: rgba(26, 39, 68, 0.92);
     border-color: var(--accent); color: var(--accent);
   }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   @media (max-width: 640px) {
-    .side-tabs-left { top: auto; bottom: 60px; left: 12px; transform: none; }
-    .tab-left {
-      --width: 170px; --visible: 42px;
-      height: 42px; font-size: 13px;
-      left: 0; border-radius: 10px;
-      border-left: 1px solid var(--border);
-      padding: 0 10px;
-    }
-    .tab-left:hover { left: 0; }
+    .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
+    .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs { top: auto; bottom: 14px; transform: none; }
+    .tab { --width: 160px; --visible: 46px; height: 46px; font-size: 14px; padding: 0 12px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
   }
 </style>
 </head>
 <body>
 
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="main.html" title="Перейти на главную EMS">
+  <a class="tab-left" href="../main.html" title="Вернуться в базу знаний EMS">
     <span class="tab-icon">🏠</span>
     <span class="tab-label">Главная EMS</span>
-  </a>
-  <a class="tab-left" href="index.html" title="Перейти к списку калькуляторов">
-    <span class="tab-icon">🧮</span>
-    <span class="tab-label">Главное меню калькулятора</span>
   </a>
 </nav>
 
 <nav class="side-tabs" aria-label="Отделы">
+  <a class="tab" href="index.html">
+    <span class="tab-icon">🧮</span><span class="tab-label">Главное меню</span>
+  </a>
+  <a class="tab" href="psid.html">
+    <span class="tab-icon">🏥</span><span class="tab-label">PSID</span>
+  </a>
   <a class="tab tab-active" href="pm.html">
     <span class="tab-icon">📋</span><span class="tab-label">PM</span>
   </a>
   <a class="tab" href="di.html">
     <span class="tab-icon">📊</span><span class="tab-label">DI</span>
-  </a>
-  <a class="tab" href="psid.html">
-    <span class="tab-icon">🏥</span><span class="tab-label">PSID</span>
   </a>
   <a class="tab" href="had.html">
     <span class="tab-icon">💉</span><span class="tab-label">HAD</span>
@@ -135,8 +156,10 @@
       <div class="section">
         <div class="section-title">Основная система PM</div>
         <div class="row header-row">
-          <div class="cell">Действие</div><div class="cell">Кол-во</div>
-          <div class="cell">Балл</div><div class="cell">Итог</div>
+          <div class="cell">Действие</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
         </div>
         <div id="pm-main-items"></div>
       </div>
@@ -144,8 +167,10 @@
       <div class="section">
         <div class="section-title">Дополнительно PM</div>
         <div class="row header-row">
-          <div class="cell">Действие</div><div class="cell">Кол-во</div>
-          <div class="cell">Балл</div><div class="cell">Итог</div>
+          <div class="cell">Действие</div>
+          <div class="cell">Кол-во</div>
+          <div class="cell">Балл</div>
+          <div class="cell">Итог</div>
         </div>
         <div id="pm-extra-items"></div>
       </div>
@@ -182,7 +207,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="common.js"></script>
+<script src="../common.js"></script>
 <script>
 const PM_ITEMS = [
   {key:"pm_pmp_day",      name:"ПМП днём",                              pts:3,   lim:0, sect:1},
