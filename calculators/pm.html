@@ -12,16 +12,16 @@
     pointer-events: none;
   }
   .tab-left {
-    --visible: 48px; --width: 220px;
+    --visible: 56px; --width: 260px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 54px;
+    width: var(--width); height: 62px;
     display: flex; align-items: center;
-    gap: 12px; padding: 0 16px;
+    gap: 14px; padding: 0 18px;
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-left: none;
-    border-radius: 0 12px 12px 0;
-    font-size: 15px; font-weight: 500; text-align: left;
+    border-radius: 0 14px 14px 0;
+    font-size: 17px; font-weight: 500; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -32,7 +32,7 @@
     left: 0; background: rgba(30, 38, 52, 0.95);
     color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+  .tab-left .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .side-tabs {
@@ -41,14 +41,14 @@
     pointer-events: none;
   }
   .tab {
-    --visible: 48px; --width: 210px;
+    --visible: 52px; --width: 240px;
     position: relative; right: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 54px; display: flex; align-items: center;
-    gap: 12px; padding: 0 16px;
+    width: var(--width); height: 62px; display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-right: none;
-    border-radius: 12px 0 0 12px;
-    font-size: 15px; font-weight: 500; text-align: left;
+    border-radius: 14px 0 0 14px;
+    font-size: 17px; font-weight: 500; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -64,17 +64,17 @@
     border-color: var(--accent); color: var(--accent);
   }
   .tab.tab-active::before {
-    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
+    content: ""; position: absolute; left: 0; top: 12px; bottom: 12px;
     width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
   }
-  .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+  .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   @media (max-width: 640px) {
-    .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
-    .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
+    .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
     .side-tabs { top: auto; bottom: 14px; transform: none; }
-    .tab { --width: 160px; --visible: 46px; height: 46px; font-size: 14px; padding: 0 12px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
     .tab:hover { right: 0; }
   }
 </style>
@@ -82,15 +82,18 @@
 <body>
 
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="../main.html" title="Вернуться в базу знаний EMS">
-    <span class="tab-icon">🏠</span>
-    <span class="tab-label">Главная EMS</span>
+  <a class="tab-left" href="../main.html" title="База знаний">
+    <span class="tab-icon">📚</span>
+    <span class="tab-label">База знаний</span>
   </a>
 </nav>
 
-<nav class="side-tabs" aria-label="Отделы">
-  <a class="tab" href="index.html">
-    <span class="tab-icon">🧮</span><span class="tab-label">Главное меню</span>
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="../main.html">
+    <span class="tab-icon">📚</span><span class="tab-label">База знаний</span>
+  </a>
+  <a class="tab tab-active" href="index.html">
+    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
   </a>
   <a class="tab" href="psid.html">
     <span class="tab-icon">🏥</span><span class="tab-label">PSID</span>
@@ -129,6 +132,7 @@
 <div class="container page-content">
 
   <header>
+    <img src="../images/ems-logo.png" alt="EMS" class="ems-logo">
     <h1>Калькулятор PM</h1>
     <p>Введите количество — итог и шкала обновятся автоматически</p>
   </header>
