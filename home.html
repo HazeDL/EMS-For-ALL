@@ -6,21 +6,20 @@
 <title>EMS — Главная</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Правая панель */
   .side-tabs {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 8px;
     pointer-events: none;
   }
   .tab {
-    --visible: 48px; --width: 210px;
+    --visible: 52px; --width: 240px;
     position: relative; right: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 54px; display: flex; align-items: center;
-    gap: 12px; padding: 0 16px;
+    width: var(--width); height: 62px; display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-right: none;
-    border-radius: 12px 0 0 12px;
-    font-size: 15px; font-weight: 500; text-align: left;
+    border-radius: 14px 0 0 14px;
+    font-size: 17px; font-weight: 500; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -31,32 +30,23 @@
     right: 0; background: rgba(30, 38, 52, 0.95);
     color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab.tab-active {
-    background: rgba(26, 39, 68, 0.92);
-    border-color: var(--accent); color: var(--accent);
-  }
-  .tab.tab-active::before {
-    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
-    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
-  }
-  .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+  .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* Два больших направления */
   .directions {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 22px;
     margin-bottom: 28px;
   }
   .direction {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 32px 28px;
+    gap: 18px;
+    padding: 36px 32px;
     background: rgba(26, 39, 68, 0.45);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 18px;
     text-decoration: none;
     color: var(--text);
     transition: border-color 0.2s, background 0.2s, transform 0.2s;
@@ -69,53 +59,52 @@
     transform: translateY(-3px);
   }
   .direction-icon {
-    width: 72px; height: 72px;
+    width: 84px; height: 84px;
     display: flex; align-items: center; justify-content: center;
     background: rgba(88, 166, 255, 0.10);
     border: 1px solid rgba(88, 166, 255, 0.25);
-    border-radius: 16px;
-    font-size: 38px;
+    border-radius: 18px;
+    font-size: 44px;
     margin-bottom: 6px;
   }
   .direction-title {
-    font-size: 24px; font-weight: 700; color: var(--text);
+    font-size: 26px; font-weight: 700; color: var(--text);
     line-height: 1.3;
   }
   .direction-desc {
-    font-size: 15px; color: var(--text-dim); line-height: 1.6;
+    font-size: 16px; color: var(--text-dim); line-height: 1.6;
     flex: 1;
   }
   .direction-cta {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 15px;
+    gap: 10px;
+    font-size: 17px;
     font-weight: 600;
     color: var(--accent);
-    margin-top: 8px;
+    margin-top: 10px;
     transition: gap 0.2s;
   }
-  .direction:hover .direction-cta { gap: 12px; }
+  .direction:hover .direction-cta { gap: 14px; }
   .direction-cta::after {
     content: "→";
-    font-size: 18px;
+    font-size: 20px;
   }
 
-  /* Плашки будущих разделов */
   .soon-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
   }
   .soon-item {
-    padding: 20px 22px;
+    padding: 22px 24px;
     background: rgba(13, 17, 23, 0.4);
     border: 1px dashed var(--border);
-    border-radius: 12px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
-    gap: 14px;
-    opacity: 0.7;
+    gap: 16px;
+    opacity: 0.75;
     transition: opacity 0.2s, border-color 0.2s;
   }
   .soon-item:hover {
@@ -123,31 +112,31 @@
     border-color: var(--text-dim);
   }
   .soon-icon {
-    width: 44px; height: 44px;
+    width: 50px; height: 50px;
     display: flex; align-items: center; justify-content: center;
     background: rgba(88, 166, 255, 0.06);
     border: 1px solid rgba(88, 166, 255, 0.15);
-    border-radius: 10px;
-    font-size: 22px;
+    border-radius: 12px;
+    font-size: 26px;
     flex-shrink: 0;
   }
   .soon-body { flex: 1; min-width: 0; }
   .soon-title {
-    font-size: 15px; font-weight: 600; color: var(--text);
-    margin-bottom: 3px;
+    font-size: 16px; font-weight: 600; color: var(--text);
+    margin-bottom: 4px;
   }
   .soon-desc {
-    font-size: 12.5px; color: var(--text-dim);
-    line-height: 1.4;
+    font-size: 13.5px; color: var(--text-dim);
+    line-height: 1.5;
   }
   .soon-badge {
     display: inline-block;
-    font-size: 10.5px;
+    font-size: 11px;
     color: var(--gold);
     background: rgba(210, 153, 34, 0.10);
     border: 1px solid rgba(210, 153, 34, 0.25);
-    padding: 3px 8px;
-    border-radius: 5px;
+    padding: 4px 10px;
+    border-radius: 6px;
     font-weight: 700;
     letter-spacing: 0.5px;
     margin-left: auto;
@@ -156,26 +145,25 @@
 
   @media (max-width: 640px) {
     .side-tabs { top: auto; bottom: 14px; transform: none; }
-    .tab { --width: 160px; --visible: 46px; height: 46px; font-size: 14px; padding: 0 12px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
     .tab:hover { right: 0; }
+    .tab-icon { font-size: 20px; width: 24px; }
 
-    .directions { grid-template-columns: 1fr; gap: 14px; }
-    .direction { padding: 24px 20px; }
-    .direction-icon { width: 60px; height: 60px; font-size: 32px; }
-    .direction-title { font-size: 20px; }
-    .direction-desc { font-size: 14px; }
+    .directions { grid-template-columns: 1fr; gap: 16px; }
+    .direction { padding: 26px 22px; gap: 14px; }
+    .direction-icon { width: 68px; height: 68px; font-size: 36px; }
+    .direction-title { font-size: 22px; }
+    .direction-desc { font-size: 15px; }
+    .direction-cta { font-size: 16px; }
 
-    .soon-grid { grid-template-columns: 1fr; gap: 10px; }
-    .soon-item { padding: 16px 18px; }
+    .soon-grid { grid-template-columns: 1fr; gap: 12px; }
+    .soon-item { padding: 18px 20px; }
   }
 </style>
 </head>
 <body>
 
 <nav class="side-tabs" aria-label="Разделы">
-  <a class="tab tab-active" href="home.html">
-    <span class="tab-icon">🏠</span><span class="tab-label">Главная</span>
-  </a>
   <a class="tab" href="main.html">
     <span class="tab-icon">📚</span><span class="tab-label">База знаний</span>
   </a>
@@ -216,7 +204,7 @@
     <div class="hero-icon">🚑</div>
     <h2 class="hero-title">Добро пожаловать</h2>
     <p class="hero-subtitle">
-      Выберите нужный раздел. База знаний — это правила, протоколы и лекции для сотрудников.
+      Выберите нужный раздел. База знаний — правила, протоколы и лекции для сотрудников.
       Калькулятор — расчёт баллов по отделам PSID, PM, DI и HAD.
     </p>
   </div>
