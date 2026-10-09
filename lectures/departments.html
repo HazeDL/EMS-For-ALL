@@ -4,240 +4,242 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Информация об отделах — База знаний EMS</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 <style>
-  /* Левая панель — возврат на главную EMS */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
-    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
     pointer-events: none;
   }
   .tab-left {
-    --visible: 42px; --width: 180px;
+    --visible: 48px; --width: 220px;
     position: relative;
     left: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 48px;
+    width: var(--width); height: 54px;
     display: flex; align-items: center;
-    gap: 10px; padding: 0 12px 0 14px;
-    background: rgba(22, 27, 34, 0.92);
-    color: var(--text);
+    gap: 12px; padding: 0 16px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-left: none;
-    border-radius: 0 10px 10px 0;
-    font-family: inherit; font-size: 14px; font-weight: 500;
+    border-radius: 0 12px 12px 0;
+    font-size: 15px; font-weight: 500;
     cursor: pointer; text-align: left;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
-    pointer-events: auto;
-    text-decoration: none;
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
   }
   .tab-left:hover {
-    left: 0; background: rgba(28, 35, 48, 0.98);
-    color: var(--accent); border-color: var(--accent);
-    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+    left: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
   }
   .tab-left:active { transform: translateY(1px); }
-  .tab-left .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-left .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* Правая панель — быстрые ссылки внутри базы знаний */
   .side-tabs {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
-    z-index: 90; display: flex; flex-direction: column; gap: 6px;
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
     pointer-events: none;
   }
   .tab {
-    --visible: 42px; --width: 180px;
+    --visible: 48px; --width: 210px;
     position: relative; right: calc(-1 * (var(--width) - var(--visible)));
-    width: var(--width); height: 48px; display: flex; align-items: center;
-    gap: 10px; padding: 0 14px 0 12px;
-    background: rgba(22, 27, 34, 0.92); color: var(--text);
+    width: var(--width); height: 54px; display: flex; align-items: center;
+    gap: 12px; padding: 0 16px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-right: none;
-    border-radius: 10px 0 0 10px; font-family: inherit;
-    font-size: 14px; font-weight: 500; cursor: pointer; text-align: left;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    border-radius: 12px 0 0 12px;
+    font-size: 15px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
-    pointer-events: auto;
-    text-decoration: none;
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
   }
   .tab:hover {
-    right: 0; background: rgba(28, 35, 48, 0.98);
-    color: var(--accent); border-color: var(--accent);
-    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.18);
+    right: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
   }
-  .tab:active { transform: translateY(1px); }
   .tab.tab-active {
-    background: linear-gradient(135deg, rgba(26, 39, 68, 0.9), rgba(22, 33, 62, 0.9));
+    background: rgba(26, 39, 68, 0.92);
     border-color: var(--accent); color: var(--accent);
   }
   .tab.tab-active::before {
-    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
     width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
   }
-  .tab-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+  .tab-icon { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Карточки отделов --------- */
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--text-dim);
+    margin-bottom: 22px; flex-wrap: wrap;
+  }
+  .breadcrumbs a { color: var(--accent); text-decoration: none; }
+  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
+  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
+  .breadcrumbs .current { color: var(--text); }
+
+  /* Сетка карточек отделов */
   .dept-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
   }
   .dept {
-    background: rgba(13, 17, 23, 0.55);
+    background: rgba(13, 17, 23, 0.5);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 22px;
-    transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+    border-radius: 14px;
+    padding: 26px;
+    transition: border-color 0.18s;
     position: relative;
     overflow: hidden;
   }
   .dept:hover {
     border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(88, 166, 255, 0.12);
-  }
-  .dept::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), transparent);
-    opacity: 0.6;
   }
   .dept-header {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 14px;
+    gap: 16px;
+    margin-bottom: 16px;
   }
   .dept-icon {
     flex-shrink: 0;
-    width: 54px; height: 54px;
+    width: 62px; height: 62px;
     display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(88, 166, 255, 0.22), rgba(88, 166, 255, 0.06));
-    border: 1px solid rgba(88, 166, 255, 0.30);
-    border-radius: 12px;
-    font-size: 26px;
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.22);
+    border-radius: 14px;
+    font-size: 30px;
   }
   .dept-titles { flex: 1; min-width: 0; }
   .dept-titles h2 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 3px;
+    color: var(--text);
+    margin-bottom: 4px;
     letter-spacing: 0.2px;
   }
   .dept-titles .dept-full {
-    font-size: 12.5px;
+    font-size: 13.5px;
     color: var(--text-dim);
     font-style: italic;
   }
   .dept-body {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text);
-    line-height: 1.65;
-    margin-bottom: 14px;
+    line-height: 1.7;
+    margin-bottom: 16px;
   }
-  .dept-body strong { color: var(--accent); font-weight: 600; }
+  .dept-body strong { color: var(--text); font-weight: 600; }
 
   .dept-meta {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    padding-top: 14px;
+    padding-top: 16px;
     border-top: 1px solid var(--border);
   }
   .dept-meta-item {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12.5px;
-    padding: 5px 10px;
-    background: rgba(88, 166, 255, 0.08);
-    border: 1px solid rgba(88, 166, 255, 0.22);
-    border-radius: 6px;
+    gap: 8px;
+    font-size: 13.5px;
+    padding: 7px 14px;
+    background: rgba(88, 166, 255, 0.06);
+    border: 1px solid rgba(88, 166, 255, 0.18);
+    border-radius: 8px;
     color: var(--text-dim);
   }
   .dept-meta-item b { color: var(--text); }
-  .dept-meta-item.limited { background: rgba(210, 153, 34, 0.10); border-color: rgba(210, 153, 34, 0.30); }
-  .dept-meta-item.unlimited { background: rgba(63, 185, 80, 0.10); border-color: rgba(63, 185, 80, 0.30); }
+  .dept-meta-item.limited {
+    background: rgba(210, 153, 34, 0.08);
+    border-color: rgba(210, 153, 34, 0.25);
+  }
+  .dept-meta-item.unlimited {
+    background: rgba(63, 185, 80, 0.08);
+    border-color: rgba(63, 185, 80, 0.25);
+  }
 
-  /* --------- Хлебные крошки --------- */
-  .breadcrumbs {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-bottom: 18px;
-    flex-wrap: wrap;
+  .hero {
+    text-align: center;
+    padding: 48px 28px 40px;
+    background: rgba(26, 39, 68, 0.4);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
   }
-  .breadcrumbs a {
-    color: var(--accent);
-    text-decoration: none;
-    transition: color 0.15s;
+  .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
+  .hero-title {
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin-bottom: 12px;
   }
-  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
-  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
-  .breadcrumbs .current { color: var(--text); }
+  .hero-subtitle {
+    font-size: 16px; color: var(--text-dim);
+    max-width: 640px; margin: 0 auto; line-height: 1.7;
+  }
 
   @media (max-width: 640px) {
-    .side-tabs-left { top: auto; bottom: 12px; left: 12px; transform: none; }
-    .tab-left {
-      --width: 160px; --visible: 42px;
-      height: 42px; font-size: 13px;
-      left: 0; border-radius: 10px;
-      border-left: 1px solid var(--border);
-      padding: 0 10px;
-    }
-    .side-tabs { top: auto; bottom: 12px; right: 12px; transform: none; }
-    .tab { --width: 140px; --visible: 40px; height: 42px; font-size: 13px; padding: 0 10px; border-radius: 10px; border-right: 1px solid var(--border); right: 0; }
+    .side-tabs-left { top: auto; bottom: 70px; left: 12px; transform: none; }
+    .tab-left { --width: 200px; --visible: 48px; height: 46px; font-size: 14px; padding: 0 12px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs { top: auto; bottom: 14px; transform: none; }
+    .tab { --width: 160px; --visible: 46px; height: 46px; font-size: 14px; padding: 0 12px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
     .tab:hover { right: 0; }
 
-    .dept { padding: 16px; }
-    .dept-header { gap: 10px; }
-    .dept-icon { width: 44px; height: 44px; font-size: 22px; }
-    .dept-titles h2 { font-size: 16px; }
-    .dept-titles .dept-full { font-size: 11.5px; }
-    .dept-body { font-size: 13px; line-height: 1.6; }
-    .dept-meta { gap: 8px; }
-    .dept-meta-item { font-size: 11.5px; padding: 4px 8px; }
+    .dept { padding: 20px; }
+    .dept-header { gap: 12px; }
+    .dept-icon { width: 52px; height: 52px; font-size: 26px; }
+    .dept-titles h2 { font-size: 18px; }
+    .dept-titles .dept-full { font-size: 12.5px; }
+    .dept-body { font-size: 14px; }
+    .dept-meta-item { font-size: 12.5px; padding: 6px 12px; }
+    .hero { padding: 34px 20px 28px; }
+    .hero-title { font-size: 22px; }
+    .hero-subtitle { font-size: 14.5px; }
+    .hero-icon { font-size: 52px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ============================================================
-     ПАНЕЛЬ СЛЕВА — ВОЗВРАТ НА ГЛАВНУЮ EMS
-     ============================================================ -->
 <nav class="side-tabs-left" aria-label="Навигация">
-  <a class="tab-left" href="main.html" title="Вернуться на главную EMS">
+  <a class="tab-left" href="../main.html" title="Перейти на главную EMS">
     <span class="tab-icon">🏠</span>
     <span class="tab-label">Главная EMS</span>
   </a>
-</nav>
-
-<!-- ============================================================
-     ПАНЕЛЬ СПРАВА — БЫСТРЫЕ ССЫЛКИ
-     ============================================================ -->
-<nav class="side-tabs" aria-label="Разделы">
-  <a class="tab" href="index.html">
+  <a class="tab-left" href="../calculators/index.html" title="Перейти к списку калькуляторов">
     <span class="tab-icon">🧮</span>
-    <span class="tab-label">Калькулятор</span>
-  </a>
-  <a class="tab tab-active" href="departments.html">
-    <span class="tab-icon">🏥</span>
-    <span class="tab-label">Отделы</span>
+    <span class="tab-label">Калькулятор баллов</span>
   </a>
 </nav>
 
-<!-- ============================================================
-     КНОПКА ФОНА
-     ============================================================ -->
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab tab-active" href="departments.html">
+    <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
+  </a>
+  <a class="tab" href="intro.html">
+    <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
+  </a>
+  <a class="tab" href="pills.html">
+    <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
+  </a>
+  <a class="tab" href="vaccines.html">
+    <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
+  </a>
+  <a class="tab" href="medcert.html">
+    <span class="tab-icon">🧾</span><span class="tab-label">Справки</span>
+  </a>
+  <a class="tab" href="pmp.html">
+    <span class="tab-icon">🚑</span><span class="tab-label">ПМП</span>
+  </a>
+</nav>
+
 <div class="bg-controls">
   <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
   <div class="bg-menu" id="bg-menu" hidden>
@@ -258,9 +260,6 @@
   </div>
 </div>
 
-<!-- ============================================================
-     ОСНОВНОЙ КОНТЕНТ
-     ============================================================ -->
 <div class="container page-content">
 
   <header>
@@ -269,14 +268,21 @@
   </header>
 
   <div class="breadcrumbs">
-    <a href="main.html">База знаний EMS</a>
+    <a href="../main.html">База знаний EMS</a>
     <span class="sep">›</span>
     <span class="current">Информация об отделах</span>
   </div>
 
+  <div class="hero">
+    <div class="hero-icon">🏥</div>
+    <h2 class="hero-title">Отделы больницы EMS</h2>
+    <p class="hero-subtitle">
+      Четыре ключевых отдела: PM, PSID, DI, HAD. Назначение, условие перевода и лимиты мест.
+    </p>
+  </div>
+
   <div class="dept-grid">
 
-    <!-- ==================== PM ==================== -->
     <div class="dept">
       <div class="dept-header">
         <div class="dept-icon">🚑</div>
@@ -295,7 +301,7 @@
       </div>
       <div class="dept-meta">
         <div class="dept-meta-item unlimited">
-          ✅ <b>Неограниченное</b> количество сотрудников основного состава
+          ✅ <b>Неограниченное</b> количество сотрудников
         </div>
         <div class="dept-meta-item">
           📈 Перевод: <b>3 разряд</b> (автоматически)
@@ -303,7 +309,6 @@
       </div>
     </div>
 
-    <!-- ==================== PSID ==================== -->
     <div class="dept">
       <div class="dept-header">
         <div class="dept-icon">📝</div>
@@ -331,7 +336,6 @@
       </div>
     </div>
 
-    <!-- ==================== DI ==================== -->
     <div class="dept">
       <div class="dept-header">
         <div class="dept-icon">🎓</div>
@@ -357,7 +361,6 @@
       </div>
     </div>
 
-    <!-- ==================== HAD ==================== -->
     <div class="dept">
       <div class="dept-header">
         <div class="dept-icon">⚖️</div>
@@ -384,16 +387,13 @@
   </div>
 
   <footer>
-    База знаний EMS · <span id="year"></span> · Раздел «Информация об отделах»
+    База знаний EMS · <span id="year"></span> · Информация об отделах
   </footer>
 
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script src="common.js"></script>
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+<script src="../common.js"></script>
 </body>
 </html>
