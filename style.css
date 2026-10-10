@@ -1,5 +1,5 @@
 /* ============================================================
-   ОБЩИЕ СТИЛИ — КАЛЬКУЛЯТОРЫ И ЛЕКЦИИ
+   ОБЩИЕ СТИЛИ — КАЛЬКУЛЯТОРЫ, ЛЕКЦИИ, НАСТРОЙКИ
    ============================================================ */
 
 :root {
@@ -93,7 +93,6 @@ header {
   padding-bottom: 24px;
   border-bottom: 1px solid var(--border);
 }
-
 header .ems-logo {
   display: block;
   max-width: 480px;
@@ -102,7 +101,6 @@ header .ems-logo {
   margin: 0 auto 18px;
   filter: drop-shadow(0 4px 16px rgba(248, 81, 73, 0.25));
 }
-
 header h1 {
   font-size: 34px;
   font-weight: 700;
@@ -112,54 +110,7 @@ header h1 {
 }
 header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 auto; }
 
-/* --------- Кнопка фона --------- */
-.bg-controls { position: fixed; top: 20px; right: 20px; z-index: 100; }
-.bg-btn {
-  background: var(--bg-alt); color: var(--text);
-  border: 1px solid var(--border); border-radius: 10px;
-  padding: 10px 16px; font-size: 14px; font-family: inherit; font-weight: 500;
-  cursor: pointer; box-shadow: var(--shadow); transition: all 0.15s;
-  backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
-}
-.bg-btn:hover { border-color: var(--accent); color: var(--accent); }
-.bg-menu {
-  position: absolute; top: calc(100% + 8px); right: 0; width: 340px;
-  background: rgba(22, 27, 34, 0.96); border: 1px solid var(--border);
-  border-radius: 12px; padding: 10px; box-shadow: var(--shadow-strong);
-  backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
-}
-.bg-menu[hidden] { display: none; }
-.bg-section-label {
-  font-size: 12px; color: var(--text-dim); text-transform: uppercase;
-  letter-spacing: 1px; padding: 10px 8px 8px; font-weight: 600;
-}
-.bg-presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 4px 10px; }
-.bg-preset {
-  height: 52px; border-radius: 8px; border: 1px solid var(--border);
-  cursor: pointer; background-size: cover; background-position: center;
-  transition: border-color 0.15s; position: relative; overflow: hidden;
-}
-.bg-preset:hover { border-color: var(--accent); }
-.bg-preset .bg-preset-title {
-  position: absolute; bottom: 0; left: 0; right: 0; font-size: 11px;
-  text-align: center; padding: 4px 2px; background: rgba(0,0,0,0.55);
-  color: #fff; font-weight: 500;
-}
-.bg-menu-item {
-  background: transparent; color: var(--text); border: none;
-  border-radius: 8px; padding: 12px 14px; font-size: 14px;
-  font-family: inherit; text-align: left; cursor: pointer;
-  display: block; width: 100%; transition: background 0.12s, color 0.12s;
-}
-.bg-menu-item:hover { background: var(--bg-hover); color: var(--accent); }
-.bg-menu-item.danger:hover { background: rgba(248, 81, 73, 0.1); color: var(--danger); }
-.bg-menu-item input[type="color"] {
-  width: 100%; height: 32px; margin-top: 8px;
-  background: transparent; border: 1px solid var(--border);
-  border-radius: 6px; cursor: pointer;
-}
-
-/* --------- Вкладки справа (увеличены) --------- */
+/* --------- Вкладки справа --------- */
 .side-tabs {
   position: fixed; top: 50%; right: 0; transform: translateY(-50%);
   z-index: 90; display: flex; flex-direction: column; gap: 8px;
@@ -196,7 +147,7 @@ header p { color: var(--text-dim); font-size: 15px; max-width: 620px; margin: 0 
 .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
 .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* --------- Левая панель (увеличена) --------- */
+/* --------- Левая панель --------- */
 .side-tabs-left {
   position: fixed; top: 50%; left: 0; transform: translateY(-50%);
   z-index: 90; display: flex; flex-direction: column; gap: 8px;
@@ -401,7 +352,6 @@ input[type="number"].over-limit {
   100% { transform: scale(1); }
 }
 
-/* --------- Кнопки (увеличены) --------- */
 .buttons {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px; margin-bottom: 24px;
@@ -449,7 +399,6 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
 .rules-list .arrow { color: var(--accent); font-weight: 700; flex-shrink: 0; }
 .rules-list b { color: var(--text); }
 
-/* --------- Hero --------- */
 .hero {
   text-align: center; padding: 48px 28px 40px;
   background: rgba(26, 39, 68, 0.4);
@@ -468,7 +417,6 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
   max-width: 640px; margin: 0 auto; line-height: 1.7;
 }
 
-/* --------- Карточки (увеличены) --------- */
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -516,6 +464,222 @@ button.danger:hover { border-color: var(--danger); color: var(--danger); backgro
   font-size: 14.5px; color: var(--text-dim);
   line-height: 1.5;
 }
+
+/* ============================================================
+   СТРАНИЦА НАСТРОЕК
+   ============================================================ */
+
+/* Панель опций */
+.opt-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.opt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 18px;
+  background: rgba(13, 17, 23, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.15s;
+}
+.opt-row:hover { border-color: var(--text-dim); }
+.opt-label {
+  font-size: 15.5px;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.opt-label small {
+  font-size: 13px;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+/* Тумблер (переключатель) */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(48, 56, 72, 0.8);
+  border-radius: 16px;
+  transition: background 0.2s;
+}
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  background: #b8c0ca;
+  border-radius: 50%;
+  transition: left 0.2s, background 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.toggle input:checked + .toggle-track {
+  background: var(--accent);
+}
+.toggle input:checked + .toggle-track + .toggle-thumb {
+  left: 31px;
+  background: #fff;
+}
+
+/* Ползунок громкости */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  max-width: 400px;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 6px;
+  background: rgba(48, 56, 72, 0.9);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(88, 166, 255, 0.4);
+  transition: transform 0.15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  background: var(--accent-hover);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(88, 166, 255, 0.4);
+}
+.slider-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 50px;
+  text-align: right;
+}
+
+/* Звуковые темы */
+.theme-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 6px;
+}
+.theme-option {
+  padding: 14px 16px;
+  background: rgba(13, 17, 23, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: 14.5px;
+  color: var(--text);
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.theme-option:hover {
+  border-color: var(--accent);
+  background: rgba(28, 35, 48, 0.6);
+}
+.theme-option.active {
+  border-color: var(--accent);
+  background: rgba(88, 166, 255, 0.10);
+  color: var(--accent);
+}
+.theme-option b {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.theme-option.active b { color: var(--accent); }
+.theme-option small {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* Пресеты фона */
+.bg-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 6px;
+}
+.bg-preset-card {
+  aspect-ratio: 16 / 10;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.bg-preset-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.bg-preset-card.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3);
+}
+.bg-preset-card .bg-preset-title {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  font-size: 12px;
+  text-align: center;
+  padding: 6px 4px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Опасная зона */
+.danger-zone {
+  border-color: rgba(248, 81, 73, 0.4);
+}
+.danger-zone .section-title {
+  color: var(--danger);
+  border-bottom-color: rgba(248, 81, 73, 0.3);
+}
+.danger-zone .section-title .icon { color: var(--danger); }
 
 footer {
   text-align: center;
@@ -578,7 +742,11 @@ footer {
   .hero-icon { font-size: 52px; }
 
   .rules-list { grid-template-columns: 1fr; }
-  .bg-presets { grid-template-columns: repeat(2, 1fr); }
+  .bg-presets-grid { grid-template-columns: 1fr 1fr; }
+  .theme-options { grid-template-columns: 1fr; }
+  .opt-row { flex-direction: column; align-items: stretch; gap: 12px; }
+  .toggle { align-self: flex-start; }
+  .slider-row { max-width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
