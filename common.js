@@ -1,7 +1,15 @@
 /* ============================================================
-   ОБЩИЙ СКРИПТ — подключается со всех страниц
+   ОБЩИЙ СКРИПТ
+   - движок звуков (Web Audio API)
+   - хранилище настроек (фон, звук)
+   - шкала прогресса
+   - toast
+   - утилиты
    ============================================================ */
 
+/* ============================================================
+   ПРЕСЕТЫ ФОНОВ
+   ============================================================ */
 const BG_PRESETS = [
   { id: "med-blue", title: "Медицина", css: "linear-gradient(135deg, #0a1f3d 0%, #0d2f4a 40%, #0a1f3d 100%)" },
   { id: "med-soft", title: "Soft", css: "linear-gradient(160deg, #1a2a3a 0%, #0f1e2e 50%, #05111c 100%)" },
@@ -20,65 +28,259 @@ const BG_PRESETS = [
          "linear-gradient(160deg, #05111c, #0d1117)" },
 ];
 
-(function() {
-  const KEY = "ems_bg_v1";
-  const body = document.body;
-  const btnMenu    = document.getElementById("bg-menu-btn");
-  const menu       = document.getElementById("bg-menu");
-  const presetsEl  = document.getElementById("bg-presets");
-  const inputFile  = document.getElementById("bg-file");
-  const inputColor = document.getElementById("bg-color");
-  const btnGrad    = document.getElementById("bg-gradient");
-  const btnReset   = document.getElementById("bg-reset");
-  if (!btnMenu || !menu) return;
+/* ============================================================
+   ДВИЖОК ЗВУКОВ
+   ============================================================ */
+const Sound = (function() {
+  let audioCtx = null;
+  const STORAGE_KEY = "ems_sound_v1";
 
-  if (presetsEl) {
-    BG_PRESETS.forEach(p => {
-      const el = document.createElement("div");
-      el.className = "bg-preset"; el.title = p.title;
-      el.style.background = p.css;
-      el.innerHTML = `<div class="bg-preset-title">${p.title}</div>`;
-      el.addEventListener("click", () => { applyBackground({type: "preset", id: p.id, css: p.css}); menu.hidden = true; });
-      presetsEl.appendChild(el);
+  // Настройки по умолчанию
+  const defaults = {
+    enabled: false,
+    volume: 0.5,
+    theme: "medical",
+  };
+
+  let state = { ...defaults };
+
+  // Загрузить из localStorage
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      state = { ...defaults, ...parsed };
+    }
+  } catch (e) {}
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function initCtx() {
+    if (audioCtx) return audioCtx;
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) { return null; }
+    return audioCtx;
+  }
+
+  /**
+   * Играть тон
+   * @param {number} freq — частота в Гц
+   * @param {number} duration — длительность в сек
+   * @param {string} type — sine, square, triangle, sawtooth
+   * @param {number} volMul — множитель громкости (0..1)
+   */
+  function playTone(freq, duration = 0.1, type = "sine", volMul = 1) {
+    if (!state.enabled) return;
+    const ctx = initCtx();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume();
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+
+    const vol = state.volume * volMul;
+    const now = ctx.currentTime;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(vol, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration + 0.02);
+  }
+
+  // Проигрыш последовательности тонов
+  function playSeq(notes) {
+    if (!state.enabled) return;
+    const ctx = initCtx();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume();
+
+    let delay = 0;
+    const now = ctx.currentTime;
+    notes.forEach(n => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = n.type || "sine";
+      osc.frequency.value = n.freq;
+
+      const vol = state.volume * (n.volMul || 1);
+      const start = now + delay;
+      const dur = n.dur || 0.1;
+
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(vol, start + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + dur + 0.02);
+
+      delay += (n.gap != null ? n.gap : dur);
     });
   }
-  btnMenu.addEventListener("click", (e) => { e.stopPropagation(); menu.hidden = !menu.hidden; });
-  document.addEventListener("click", (e) => {
-    if (!menu.hidden && !menu.contains(e.target) && e.target !== btnMenu) menu.hidden = true;
-  });
 
-  function applyBackground(cfg, persist = true) {
-    body.classList.remove("has-custom-bg");
-    body.style.backgroundColor = "";
-    body.style.backgroundImage = "";
-    body.style.animation = "";
-    if (!cfg || cfg.type === "gradient") { if (persist) save({type: "gradient"}); return; }
-    if (cfg.type === "color") { body.style.backgroundImage = "none"; body.style.backgroundColor = cfg.value; body.style.animation = "none"; if (persist) save(cfg); return; }
-    if (cfg.type === "preset") { body.classList.add("has-custom-bg"); body.style.backgroundImage = cfg.css; if (persist) save(cfg); return; }
-    if (cfg.type === "image")  { body.classList.add("has-custom-bg"); body.style.backgroundImage = `url("${cfg.value}")`; if (persist) save(cfg); }
+  // Готовые звуки в зависимости от темы
+  const sounds = {
+    medical: {
+      click:   () => playTone(880, 0.05, "sine", 0.4),
+      hover:   () => playTone(1200, 0.03, "sine", 0.2),
+      success: () => playSeq([
+        { freq: 880,  dur: 0.08, type: "sine", volMul: 0.6 },
+        { freq: 1320, dur: 0.12, type: "sine", volMul: 0.6 },
+      ]),
+      error:   () => playSeq([
+        { freq: 400, dur: 0.1, type: "square", volMul: 0.5 },
+        { freq: 300, dur: 0.15, type: "square", volMul: 0.5 },
+      ]),
+      notify:  () => playSeq([
+        { freq: 1000, dur: 0.08, type: "sine", volMul: 0.5 },
+        { freq: 1400, dur: 0.1,  type: "sine", volMul: 0.5 },
+      ]),
+      tick:    () => playTone(1500, 0.025, "square", 0.3),
+    },
+    soft: {
+      click:   () => playTone(600, 0.06, "sine", 0.3),
+      hover:   () => playTone(800, 0.04, "sine", 0.15),
+      success: () => playSeq([
+        { freq: 660, dur: 0.1, type: "sine", volMul: 0.4 },
+        { freq: 880, dur: 0.14, type: "sine", volMul: 0.4 },
+      ]),
+      error:   () => playSeq([
+        { freq: 340, dur: 0.12, type: "sine", volMul: 0.4 },
+        { freq: 280, dur: 0.16, type: "sine", volMul: 0.4 },
+      ]),
+      notify:  () => playSeq([
+        { freq: 700, dur: 0.09, type: "sine", volMul: 0.35 },
+        { freq: 900, dur: 0.11, type: "sine", volMul: 0.35 },
+      ]),
+      tick:    () => playTone(900, 0.03, "sine", 0.2),
+    },
+    classic: {
+      click:   () => playTone(800, 0.05, "triangle", 0.35),
+      hover:   () => playTone(1000, 0.03, "triangle", 0.15),
+      success: () => playSeq([
+        { freq: 800,  dur: 0.1, type: "triangle", volMul: 0.5 },
+        { freq: 1000, dur: 0.1, type: "triangle", volMul: 0.5 },
+        { freq: 1200, dur: 0.15, type: "triangle", volMul: 0.5 },
+      ]),
+      error:   () => playSeq([
+        { freq: 350, dur: 0.12, type: "triangle", volMul: 0.5 },
+        { freq: 250, dur: 0.18, type: "triangle", volMul: 0.5 },
+      ]),
+      notify:  () => playSeq([
+        { freq: 900,  dur: 0.08, type: "triangle", volMul: 0.45 },
+        { freq: 1100, dur: 0.12, type: "triangle", volMul: 0.45 },
+      ]),
+      tick:    () => playTone(1200, 0.02, "triangle", 0.25),
+    },
+  };
+
+  function play(name) {
+    if (!state.enabled) return;
+    const set = sounds[state.theme] || sounds.medical;
+    const fn = set[name];
+    if (fn) fn();
   }
+
+  return {
+    get enabled() { return state.enabled; },
+    get volume() { return state.volume; },
+    get theme() { return state.theme; },
+
+    setEnabled(v) {
+      state.enabled = !!v;
+      save();
+      if (state.enabled) play("click");
+    },
+    setVolume(v) {
+      state.volume = Math.max(0, Math.min(1, v));
+      save();
+    },
+    setTheme(t) {
+      if (sounds[t]) {
+        state.theme = t;
+        save();
+        play("notify");
+      }
+    },
+    play,
+  };
+})();
+
+/* ============================================================
+   УПРАВЛЕНИЕ ФОНОМ
+   ============================================================ */
+const Background = (function() {
+  const KEY = "ems_bg_v1";
+  const body = document.body;
+
   function save(cfg) {
     try { localStorage.setItem(KEY, JSON.stringify(cfg)); }
     catch (e) { showToast("Фон не сохранён (файл слишком большой)"); }
   }
-  function load() { try { const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } }
 
-  inputFile.addEventListener("change", (e) => {
-    const file = e.target.files && e.target.files[0]; if (!file) return;
-    if (file.size > 4 * 1024 * 1024) showToast("Файл > 4 МБ. Может не поместиться.");
-    const reader = new FileReader();
-    reader.onload = () => { applyBackground({type: "image", value: reader.result}); menu.hidden = true; };
-    reader.onerror = () => showToast("Не удалось прочитать файл");
-    reader.readAsDataURL(file);
-  });
-  inputColor.addEventListener("input", (e) => applyBackground({type: "color", value: e.target.value}));
-  btnGrad.addEventListener("click", () => { applyBackground({type: "gradient"}); menu.hidden = true; });
-  btnReset.addEventListener("click", () => { applyBackground({type: "color", value: "#0d1117"}); menu.hidden = true; });
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
+  function apply(cfg, persist = true) {
+    body.classList.remove("has-custom-bg");
+    body.style.backgroundColor = "";
+    body.style.backgroundImage = "";
+    body.style.animation = "";
+
+    if (!cfg || cfg.type === "gradient") {
+      if (persist) save({type: "gradient"});
+      return;
+    }
+    if (cfg.type === "color") {
+      body.style.backgroundImage = "none";
+      body.style.backgroundColor = cfg.value;
+      body.style.animation = "none";
+      if (persist) save(cfg);
+      return;
+    }
+    if (cfg.type === "preset") {
+      body.classList.add("has-custom-bg");
+      body.style.backgroundImage = cfg.css;
+      if (persist) save(cfg);
+      return;
+    }
+    if (cfg.type === "image") {
+      body.classList.add("has-custom-bg");
+      body.style.backgroundImage = `url("${cfg.value}")`;
+      if (persist) save(cfg);
+    }
+  }
+
+  function getCurrent() { return load() || {type: "gradient"}; }
+
+  function reset() {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    apply({type: "gradient"}, false);
+  }
+
+  // Применить сохранённый при загрузке
   const saved = load();
-  if (saved) applyBackground(saved, false);
+  if (saved) apply(saved, false);
+
+  return { apply, reset, getCurrent };
 })();
 
-/* --------- Toast --------- */
+/* ============================================================
+   TOAST
+   ============================================================ */
 function showToast(msg) {
   let t = document.getElementById("toast");
   if (!t) {
@@ -89,11 +291,14 @@ function showToast(msg) {
   }
   t.textContent = msg;
   t.classList.add("show");
+  Sound.play("notify");
   clearTimeout(showToast._t);
   showToast._t = setTimeout(() => t.classList.remove("show"), 2200);
 }
 
-/* --------- Утилиты --------- */
+/* ============================================================
+   УТИЛИТЫ
+   ============================================================ */
 function popIfChanged(el, oldText, newText) {
   if (!el) return;
   if (oldText !== newText) {
@@ -110,7 +315,9 @@ function pulseEl(el) {
   el.classList.add("pulse");
 }
 
-/* --------- Шкала --------- */
+/* ============================================================
+   ШКАЛА ПРОГРЕССА
+   ============================================================ */
 const RAIL_SEGMENTS = [
   { from: 0,    to: 100,  posFrom: 0,      posTo: 6.66  },
   { from: 100,  to: 250,  posFrom: 6.66,   posTo: 16.66 },
@@ -188,13 +395,33 @@ function updateRail(sectionId, total) {
   }
 }
 
-/* --------- Год в подвале --------- */
+/* ============================================================
+   ПОДКЛЮЧЕНИЕ ЗВУКОВ К СТРАНИЦЕ
+   ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
+  // Год в подвале
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // Клик по ссылкам навигации
+  document.querySelectorAll(".tab, .tab-left, .card").forEach(el => {
+    el.addEventListener("click", () => Sound.play("click"));
+  });
+
+  // Hover по вкладкам — тихий tick
+  document.querySelectorAll(".tab, .tab-left").forEach(el => {
+    el.addEventListener("mouseenter", () => Sound.play("hover"));
+  });
+
+  // Кнопки — клик
+  document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => Sound.play("click"));
+  });
 });
 
-/* --------- Отлов ошибок --------- */
+/* ============================================================
+   ОТЛОВ ОШИБОК
+   ============================================================ */
 window.addEventListener("error", (e) => {
-  console.error("[Calc error]", e.message, e.filename, e.lineno);
+  console.error("[EMS error]", e.message, e.filename, e.lineno);
 });
