@@ -22,6 +22,7 @@
     border: 1px solid var(--border); border-left: none;
     border-radius: 0 14px 14px 0;
     font-size: 17px; font-weight: 500; text-align: left;
+    cursor: pointer;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -49,6 +50,7 @@
     border: 1px solid var(--border); border-right: none;
     border-radius: 14px 0 0 14px;
     font-size: 17px; font-weight: 500; text-align: left;
+    cursor: pointer;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -175,10 +177,27 @@
   <a class="tab" href="calculators/index.html">
     <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
   </a>
-  <a class="tab" href="settings.html">
-    <span class="tab-icon">⚙️</span><span class="tab-label">Настройки</span>
-  </a>
 </nav>
+
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
 
 <div class="container page-content" id="top">
 
@@ -198,6 +217,7 @@
 
   <div id="content">
 
+    <!-- ==================== ИНФОРМАЦИЯ ОБ ОТДЕЛАХ ==================== -->
     <div class="section">
       <div class="section-title"><span class="icon">🏥</span> Информация об отделах</div>
       <div class="cards">
@@ -211,6 +231,7 @@
       </div>
     </div>
 
+    <!-- ==================== ОБУЧЕНИЕ И ПРАВИЛА ==================== -->
     <div class="section">
       <div class="section-title"><span class="icon">📖</span> Обучение и правила</div>
       <div class="cards">
@@ -218,8 +239,32 @@
         <a class="card" href="lectures/intro.html">
           <div class="card-icon">💓</div>
           <div class="card-body">
-            <div class="card-title">Вступительная лекция и правила гос. организаций</div>
-            <div class="card-desc">Руководство, иерархия, обязанности сотрудника, лимиты медикаментов</div>
+            <div class="card-title">Вступительная лекция</div>
+            <div class="card-desc">Руководство, иерархия, обязанности, лимиты медикаментов</div>
+          </div>
+        </a>
+
+        <a class="card" href="lectures/briefing.html">
+          <div class="card-icon">📢</div>
+          <div class="card-body">
+            <div class="card-title">Регламент поведения на брифинге</div>
+            <div class="card-desc">Правила для среднего и старшего состава, ответственность и наказания</div>
+          </div>
+        </a>
+
+        <a class="card" href="lectures/pgo.html">
+          <div class="card-icon">⚖️</div>
+          <div class="card-body">
+            <div class="card-title">Правила государственных организаций (ПГО)</div>
+            <div class="card-desc">Дресс-код, госимущество, хранение, порядок после увольнения</div>
+          </div>
+        </a>
+
+        <a class="card" href="lectures/interview.html">
+          <div class="card-icon">🤝</div>
+          <div class="card-body">
+            <div class="card-title">Памятка по проведению собеседований</div>
+            <div class="card-desc">10 шагов, проверка документов, RP-ситуации, кадровый аудит</div>
           </div>
         </a>
 
@@ -258,6 +303,7 @@
       </div>
     </div>
 
+    <!-- ==================== СЕРВЕР SEATTLE ==================== -->
     <div class="section">
       <div class="section-title"><span class="icon">🖥️</span> Сервер Seattle</div>
 
