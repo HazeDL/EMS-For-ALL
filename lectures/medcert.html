@@ -21,7 +21,8 @@
     background: rgba(22, 27, 34, 0.86); color: var(--text);
     border: 1px solid var(--border); border-left: none;
     border-radius: 0 14px 14px 0;
-    font-size: 17px; font-weight: 500; text-align: left;
+    font-size: 17px; font-weight: 500;
+    cursor: pointer; text-align: left;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
     transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
@@ -260,6 +261,27 @@
     max-width: 80%; text-align: center;
   }
 
+  .hero {
+    text-align: center;
+    padding: 48px 28px 40px;
+    background: rgba(26, 39, 68, 0.4);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  }
+  .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
+  .hero-title {
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    font-size: 16px; color: var(--text-dim);
+    max-width: 640px; margin: 0 auto; line-height: 1.7;
+  }
+
   @media (max-width: 640px) {
     .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
     .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
@@ -275,6 +297,10 @@
     .price-box { font-size: 15px; padding: 12px 16px; }
     .price-box .price { font-size: 16px; }
     .rp-box { font-size: 13px; padding: 14px; }
+    .hero { padding: 34px 20px 28px; }
+    .hero-title { font-size: 22px; }
+    .hero-subtitle { font-size: 14.5px; }
+    .hero-icon { font-size: 52px; }
   }
 </style>
 </head>
@@ -292,14 +318,20 @@
 </nav>
 
 <nav class="side-tabs" aria-label="Разделы">
-  <a class="tab" href="../main.html">
-    <span class="tab-icon">📚</span><span class="tab-label">База знаний</span>
-  </a>
-  <a class="tab" href="../calculators/index.html">
-    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
+  <a class="tab" href="departments.html">
+    <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
   </a>
   <a class="tab" href="intro.html">
     <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
+  </a>
+  <a class="tab" href="briefing.html">
+    <span class="tab-icon">📢</span><span class="tab-label">Брифинг</span>
+  </a>
+  <a class="tab" href="pgo.html">
+    <span class="tab-icon">⚖️</span><span class="tab-label">ПГО</span>
+  </a>
+  <a class="tab" href="interview.html">
+    <span class="tab-icon">🤝</span><span class="tab-label">Собеседование</span>
   </a>
   <a class="tab" href="pills.html">
     <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
@@ -313,10 +345,27 @@
   <a class="tab" href="pmp.html">
     <span class="tab-icon">🚑</span><span class="tab-label">ПМП</span>
   </a>
-  <a class="tab" href="../settings.html">
-    <span class="tab-icon">⚙️</span><span class="tab-label">Настройки</span>
-  </a>
 </nav>
+
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
 
 <div class="container page-content">
 
