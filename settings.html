@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Настройки — EMS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 56px; --width: 260px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 62px;
+    display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 14px 14px 0;
+    font-size: 17px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab-left .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 52px; --width: 240px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 62px; display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 14px 0 0 14px;
+    font-size: 17px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab.tab-active {
+    background: rgba(26, 39, 68, 0.92);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 12px; bottom: 12px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: rgba(13, 17, 23, 0.4);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  .info-row .label { color: var(--text-dim); }
+  .info-row .value { color: var(--text); font-weight: 600; }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
+    .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs { top: auto; bottom: 14px; transform: none; }
+    .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+    .info-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="main.html" title="База знаний">
+    <span class="tab-icon">📚</span>
+    <span class="tab-label">База знаний</span>
+  </a>
+  <a class="tab-left" href="calculators/index.html" title="Калькулятор">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Калькулятор</span>
+  </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="main.html">
+    <span class="tab-icon">📚</span><span class="tab-label">База знаний</span>
+  </a>
+  <a class="tab" href="calculators/index.html">
+    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
+  </a>
+  <a class="tab tab-active" href="settings.html">
+    <span class="tab-icon">⚙️</span><span class="tab-label">Настройки</span>
+  </a>
+</nav>
+
+<div class="container page-content">
+
+  <header>
+    <img src="images/ems-logo.png" alt="EMS" class="ems-logo">
+    <h1>Настройки</h1>
+    <p>Фон сайта, звуки и управление данными</p>
+  </header>
+
+  <!-- ==================== ФОН ==================== -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🎨</span> Настройка фона</div>
+
+    <p class="rules-text" style="margin-bottom: 14px; color: var(--text-dim);">
+      Выберите готовый пресет, загрузите свою картинку или поставьте сплошной цвет.
+      Фон сохраняется в браузере и применится на всех страницах сайта.
+    </p>
+
+    <div class="bg-presets-grid" id="bgPresetsGrid"></div>
+
+    <div class="opt-group" style="margin-top: 20px;">
+      <div class="opt-row">
+        <div class="opt-label">
+          📁 Своя картинка
+          <small>PNG, JPG, GIF, WEBP, SVG. До 4 МБ.</small>
+        </div>
+        <label for="bgFileInput" class="btn-upload">
+          <button type="button" onclick="document.getElementById('bgFileInput').click()">
+            Загрузить картинку
+          </button>
+        </label>
+        <input type="file" id="bgFileInput" accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+      </div>
+
+      <div class="opt-row">
+        <div class="opt-label">
+          🌈 Сплошной цвет
+          <small>Однотонный фон страницы</small>
+        </div>
+        <input type="color" id="bgColorInput" value="#0d1117" style="width: 80px; height: 40px; background: transparent; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
+      </div>
+
+      <div class="opt-row">
+        <div class="opt-label">
+          ✨ Градиент (по умолчанию)
+          <small>Стандартный анимированный фон</small>
+        </div>
+        <button type="button" id="bgGradientBtn">Применить</button>
+      </div>
+
+      <div class="opt-row">
+        <div class="opt-label">
+          🗑 Сбросить настройки фона
+          <small>Вернуть стандартный градиент</small>
+        </div>
+        <button type="button" id="bgResetBtn" class="danger">Сбросить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ЗВУКИ ==================== -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔊</span> Звуки сайта</div>
+
+    <p class="rules-text" style="margin-bottom: 14px; color: var(--text-dim);">
+      Включите звуки и настройте громкость. Звуки синтезируются прямо в браузере —
+      не требуют загрузки и работают офлайн.
+    </p>
+
+    <div class="opt-group">
+
+      <!-- Вкл/выкл -->
+      <div class="opt-row">
+        <div class="opt-label">
+          Включить звуки
+          <small>Звуки кликов, уведомлений и ошибок</small>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="soundToggle">
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+
+      <!-- Громкость -->
+      <div class="opt-row">
+        <div class="opt-label" style="flex: 1;">
+          Громкость
+          <small>Регулировка от 0 до 100%</small>
+        </div>
+        <div class="slider-row">
+          <input type="range" id="volumeSlider" min="0" max="100" value="50">
+          <span class="slider-value" id="volumeValue">50%</span>
+        </div>
+      </div>
+
+      <!-- Кнопка проверки -->
+      <div class="opt-row">
+        <div class="opt-label">
+          🔔 Проверить звук
+          <small>Проиграть тестовый клик</small>
+        </div>
+        <button type="button" id="testSoundBtn">Проверить</button>
+      </div>
+
+      <!-- Тема -->
+      <div style="padding: 14px 18px; background: rgba(13, 17, 23, 0.4); border: 1px solid var(--border); border-radius: 12px;">
+        <div class="opt-label" style="margin-bottom: 12px;">
+          Звуковая тема
+          <small>Выберите набор звуков для кликов и уведомлений</small>
+        </div>
+        <div class="theme-options">
+          <button class="theme-option" data-theme="medical" type="button">
+            <b>🩺 Медицинская</b>
+            <small>Писк кардиомонитора, звуки приборов</small>
+          </button>
+          <button class="theme-option" data-theme="soft" type="button">
+            <b>🌙 Мягкая</b>
+            <small>Приглушённые тона без резкости</small>
+          </button>
+          <button class="theme-option" data-theme="classic" type="button">
+            <b>🔔 Классическая</b>
+            <small>Стандартные клики и уведомления</small>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== ДАННЫЕ ==================== -->
+  <div class="section">
+    <div class="section-title"><span class="icon">💾</span> Данные калькулятора</div>
+
+    <p class="rules-text" style="margin-bottom: 14px; color: var(--text-dim);">
+      Управление сохранёнными баллами и настройками калькуляторов.
+    </p>
+
+    <div class="opt-group">
+      <div class="opt-row">
+        <div class="opt-label">
+          🔄 Сбросить баллы PSID
+          <small>Вернуть баллы PSID к значениям по умолчанию</small>
+        </div>
+        <button type="button" id="resetPsidBtn">Сбросить PSID</button>
+      </div>
+
+      <div class="opt-row">
+        <div class="opt-label">
+          🗑 Сбросить все данные калькуляторов
+          <small>Очистка всех баллов PSID, PM, DI, HAD</small>
+        </div>
+        <button type="button" class="danger" id="resetAllCalcBtn">Очистить всё</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ИНФО ==================== -->
+  <div class="section">
+    <div class="section-title"><span class="icon">ℹ️</span> Информация</div>
+
+    <div class="info-row">
+      <span class="label">Версия сайта</span>
+      <span class="value">2.0</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Последнее обновление</span>
+      <span class="value" id="lastUpdate">—</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Активный фон</span>
+      <span class="value" id="currentBgInfo">Градиент</span>
+    </div>
+
+    <div class="buttons" style="margin-top: 16px;">
+      <button type="button" id="copyReportBtn">📋 Скопировать отчёт о состоянии</button>
+    </div>
+  </div>
+
+  <!-- ==================== ОПАСНАЯ ЗОНА ==================== -->
+  <div class="section danger-zone">
+    <div class="section-title"><span class="icon">⚠️</span> Опасная зона</div>
+
+    <p class="rules-text" style="margin-bottom: 14px; color: var(--text-dim);">
+      Полный сброс всех данных сайта. Это удалит фон, звуки, все введённые баллы
+      и вернёт сайт в первоначальное состояние.
+    </p>
+
+    <div class="opt-row">
+      <div class="opt-label">
+        🚨 Полный сброс сайта
+        <small>Удалить все данные из браузера</small>
+      </div>
+      <button type="button" class="danger" id="fullResetBtn">Полный сброс</button>
+    </div>
+  </div>
+
+  <footer>
+    EMS · Центр управления · <span id="year"></span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="common.js"></script>
+<script>
+/* ============================================================
+   НАСТРОЙКИ — специфичный код для этой страницы
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ---------------- ФОН ---------------- */
+  const presetsGrid = document.getElementById("bgPresetsGrid");
+  const fileInput   = document.getElementById("bgFileInput");
+  const colorInput  = document.getElementById("bgColorInput");
+  const gradientBtn = document.getElementById("bgGradientBtn");
+  const resetBtn    = document.getElementById("bgResetBtn");
+  const bgInfo      = document.getElementById("currentBgInfo");
+
+  // Отрисовка пресетов
+  BG_PRESETS.forEach(p => {
+    const el = document.createElement("div");
+    el.className = "bg-preset-card";
+    el.dataset.presetId = p.id;
+    el.style.background = p.css;
+    el.innerHTML = `<div class="bg-preset-title">${p.title}</div>`;
+    el.addEventListener("click", () => {
+      Background.apply({ type: "preset", id: p.id, css: p.css });
+      markActivePreset(p.id);
+      showToast("Фон: " + p.title);
+      updateBgInfo();
+    });
+    presetsGrid.appendChild(el);
+  });
+
+  function markActivePreset(id) {
+    document.querySelectorAll(".bg-preset-card").forEach(el => {
+      el.classList.toggle("active", el.dataset.presetId === id);
+    });
+  }
+
+  // Подсветить текущий пресет, если он активен
+  const current = Background.getCurrent();
+  if (current.type === "preset") markActivePreset(current.id);
+
+  // Своя картинка
+  fileInput.addEventListener("change", (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) showToast("Файл > 4 МБ — может не сохраниться");
+    const reader = new FileReader();
+    reader.onload = () => {
+      Background.apply({ type: "image", value: reader.result });
+      markActivePreset(null);
+      showToast("Картинка установлена как фон");
+      updateBgInfo();
+    };
+    reader.onerror = () => showToast("Не удалось прочитать файл");
+    reader.readAsDataURL(file);
+  });
+
+  // Сплошной цвет
+  colorInput.addEventListener("input", (e) => {
+    Background.apply({ type: "color", value: e.target.value });
+    markActivePreset(null);
+    updateBgInfo();
+  });
+
+  // Градиент
+  gradientBtn.addEventListener("click", () => {
+    Background.apply({ type: "gradient" });
+    markActivePreset(null);
+    showToast("Стандартный градиент");
+    updateBgInfo();
+  });
+
+  // Сброс фона
+  resetBtn.addEventListener("click", () => {
+    Background.reset();
+    markActivePreset(null);
+    showToast("Настройки фона сброшены");
+    updateBgInfo();
+  });
+
+  function updateBgInfo() {
+    const cfg = Background.getCurrent();
+    let text = "Градиент";
+    if (cfg.type === "color") text = "Сплошной цвет " + cfg.value;
+    else if (cfg.type === "preset") {
+      const p = BG_PRESETS.find(x => x.id === cfg.id);
+      text = p ? "Пресет «" + p.title + "»" : "Пресет";
+    }
+    else if (cfg.type === "image") text = "Своя картинка";
+    if (bgInfo) bgInfo.textContent = text;
+  }
+
+  /* ---------------- ЗВУКИ ---------------- */
+  const soundToggle   = document.getElementById("soundToggle");
+  const volumeSlider  = document.getElementById("volumeSlider");
+  const volumeValue   = document.getElementById("volumeValue");
+  const testSoundBtn  = document.getElementById("testSoundBtn");
+  const themeOptions  = document.querySelectorAll(".theme-option");
+
+  // Инициализация значений
+  soundToggle.checked = Sound.enabled;
+  volumeSlider.value = Math.round(Sound.volume * 100);
+  volumeValue.textContent = volumeSlider.value + "%";
+
+  function updateThemeActive() {
+    themeOptions.forEach(el => {
+      el.classList.toggle("active", el.dataset.theme === Sound.theme);
+    });
+  }
+  updateThemeActive();
+
+  // Вкл/выкл
+  soundToggle.addEventListener("change", () => {
+    Sound.setEnabled(soundToggle.checked);
+    showToast(soundToggle.checked ? "Звуки включены" : "Звуки выключены");
+  });
+
+  // Громкость
+  volumeSlider.addEventListener("input", () => {
+    const v = parseInt(volumeSlider.value, 10);
+    volumeValue.textContent = v + "%";
+    Sound.setVolume(v / 100);
+  });
+  volumeSlider.addEventListener("change", () => {
+    Sound.play("click");
+  });
+
+  // Тест звука
+  testSoundBtn.addEventListener("click", () => {
+    if (!Sound.enabled) {
+      showToast("Сначала включите звуки");
+      return;
+    }
+    Sound.play("success");
+    showToast("Проверка звука");
+  });
+
+  // Темы
+  themeOptions.forEach(btn => {
+    btn.addEventListener("click", () => {
+      Sound.setTheme(btn.dataset.theme);
+      updateThemeActive();
+      const names = { medical: "Медицинская", soft: "Мягкая", classic: "Классическая" };
+      showToast("Тема: " + names[btn.dataset.theme]);
+    });
+  });
+
+  /* ---------------- ДАННЫЕ ---------------- */
+  const resetPsidBtn    = document.getElementById("resetPsidBtn");
+  const resetAllCalcBtn = document.getElementById("resetAllCalcBtn");
+
+  // Сброс баллов PSID
+  resetPsidBtn.addEventListener("click", () => {
+    try { localStorage.removeItem("psid_calc_defaults_v1"); } catch (e) {}
+    showToast("Баллы PSID сброшены");
+  });
+
+  // Сброс всех баллов калькуляторов
+  resetAllCalcBtn.addEventListener("click", () => {
+    if (!confirm("Сбросить все баллы калькуляторов? Это действие нельзя отменить.")) return;
+    const keys = [
+      "psid_calc_state_v1", "psid_calc_defaults_v1",
+      "pm_calc_state_v1", "di_calc_state_v1", "had_calc_state_v1",
+    ];
+    keys.forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+    showToast("Данные калькуляторов очищены");
+  });
+
+  /* ---------------- ИНФО ---------------- */
+  const lastUpdateEl = document.getElementById("lastUpdate");
+  if (lastUpdateEl) {
+    lastUpdateEl.textContent = new Date().toLocaleDateString("ru-RU", {
+      year: "numeric", month: "long", day: "numeric"
+    });
+  }
+  updateBgInfo();
+
+  // Копировать отчёт
+  const copyReportBtn = document.getElementById("copyReportBtn");
+  copyReportBtn.addEventListener("click", () => {
+    const cfg = Background.getCurrent();
+    const lines = [
+      "=== EMS · Отчёт о состоянии ===",
+      "Версия: 2.0",
+      "Дата: " + new Date().toLocaleString("ru-RU"),
+      "",
+      "Фон: " + (cfg.type || "gradient"),
+      "Звуки: " + (Sound.enabled ? "включены" : "выключены"),
+      "Громкость: " + Math.round(Sound.volume * 100) + "%",
+      "Звуковая тема: " + Sound.theme,
+      "",
+      "Данные в localStorage:",
+      "  psid_state: " + (localStorage.getItem("psid_calc_state_v1") ? "есть" : "нет"),
+      "  psid_defaults: " + (localStorage.getItem("psid_calc_defaults_v1") ? "есть" : "нет"),
+      "  pm_state: " + (localStorage.getItem("pm_calc_state_v1") ? "есть" : "нет"),
+      "  di_state: " + (localStorage.getItem("di_calc_state_v1") ? "есть" : "нет"),
+      "  had_state: " + (localStorage.getItem("had_calc_state_v1") ? "есть" : "нет"),
+    ].join("\n");
+    navigator.clipboard.writeText(lines)
+      .then(() => { Sound.play("success"); showToast("Отчёт скопирован"); })
+      .catch(() => showToast("Не удалось скопировать"));
+  });
+
+  /* ---------------- ОПАСНАЯ ЗОНА ---------------- */
+  const fullResetBtn = document.getElementById("fullResetBtn");
+  fullResetBtn.addEventListener("click", () => {
+    if (!confirm("Полный сброс сайта. Все данные будут удалены. Продолжить?")) return;
+    if (!confirm("Точно? Это действие необратимо.")) return;
+    try { localStorage.clear(); } catch (e) {}
+    Sound.setEnabled(false);
+    Sound.play("error");
+    setTimeout(() => location.reload(), 500);
+  });
+
+});
+</script>
+</body>
+</html>
