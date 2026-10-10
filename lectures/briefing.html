@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регламент поведения на брифинге — База знаний EMS</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 56px; --width: 260px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 62px;
+    display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 14px 14px 0;
+    font-size: 17px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab-left .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 52px; --width: 240px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 62px; display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 14px 0 0 14px;
+    font-size: 17px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab.tab-active {
+    background: rgba(26, 39, 68, 0.92);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 12px; bottom: 12px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--text-dim);
+    margin-bottom: 22px; flex-wrap: wrap;
+  }
+  .breadcrumbs a { color: var(--accent); text-decoration: none; }
+  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
+  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
+  .breadcrumbs .current { color: var(--text); }
+
+  .rules-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 26px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+  }
+  .rules-title {
+    font-size: 18px; font-weight: 600; color: var(--text);
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .rules-title .icon { font-size: 22px; }
+
+  .rules-text {
+    font-size: 16px; color: var(--text);
+    line-height: 1.7; margin-bottom: 12px;
+  }
+  .rules-text strong { color: var(--text); font-weight: 600; }
+
+  .duties { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .duties li {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 16px;
+    background: rgba(13, 17, 23, 0.45);
+    border: 1px solid var(--border); border-radius: 10px;
+    font-size: 15px; color: var(--text); line-height: 1.6;
+    transition: border-color 0.15s;
+  }
+  .duties li:hover { border-color: var(--text-dim); background: rgba(13, 17, 23, 0.55); }
+  .duties .check { flex-shrink: 0; color: var(--success); font-weight: 700; font-size: 18px; line-height: 1.5; }
+  .duties .cross { flex-shrink: 0; color: var(--danger); font-weight: 700; font-size: 18px; line-height: 1.5; }
+  .duties .num {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0d1117;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+
+  .warning {
+    padding: 16px 18px;
+    margin: 14px 0;
+    background: rgba(248, 81, 73, 0.06);
+    border: 1px solid rgba(248, 81, 73, 0.22);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .warning strong { color: var(--danger); }
+
+  .info-note {
+    padding: 16px 18px;
+    margin: 14px 0;
+    background: rgba(88, 166, 255, 0.06);
+    border: 1px solid rgba(88, 166, 255, 0.22);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .info-note strong { color: var(--accent); }
+
+  .hero {
+    text-align: center;
+    padding: 48px 28px 40px;
+    background: rgba(26, 39, 68, 0.4);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  }
+  .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
+  .hero-title {
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    font-size: 16px; color: var(--text-dim);
+    max-width: 640px; margin: 0 auto; line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
+    .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs { top: auto; bottom: 14px; transform: none; }
+    .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+
+    .rules-section { padding: 20px; margin-bottom: 20px; }
+    .rules-title { font-size: 17px; }
+    .rules-text { font-size: 15px; }
+    .duties li { font-size: 14.5px; padding: 12px 14px; }
+    .hero { padding: 34px 20px 28px; }
+    .hero-title { font-size: 22px; }
+    .hero-subtitle { font-size: 14.5px; }
+    .hero-icon { font-size: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="../main.html" title="База знаний">
+    <span class="tab-icon">📚</span>
+    <span class="tab-label">База знаний</span>
+  </a>
+  <a class="tab-left" href="../calculators/index.html" title="Калькулятор">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Калькулятор</span>
+  </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="departments.html">
+    <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
+  </a>
+  <a class="tab" href="intro.html">
+    <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
+  </a>
+  <a class="tab tab-active" href="briefing.html">
+    <span class="tab-icon">📢</span><span class="tab-label">Брифинг</span>
+  </a>
+  <a class="tab" href="pgo.html">
+    <span class="tab-icon">⚖️</span><span class="tab-label">ПГО</span>
+  </a>
+  <a class="tab" href="interview.html">
+    <span class="tab-icon">🤝</span><span class="tab-label">Собеседование</span>
+  </a>
+  <a class="tab" href="pills.html">
+    <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
+  </a>
+  <a class="tab" href="vaccines.html">
+    <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
+  </a>
+  <a class="tab" href="medcert.html">
+    <span class="tab-icon">🧾</span><span class="tab-label">Справки</span>
+  </a>
+  <a class="tab" href="pmp.html">
+    <span class="tab-icon">🚑</span><span class="tab-label">ПМП</span>
+  </a>
+</nav>
+
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<div class="container page-content">
+
+  <header>
+    <img src="../images/ems-logo.png" alt="EMS" class="ems-logo">
+    <h1>Регламент поведения на брифинге</h1>
+    <p>Правила для среднего и старшего состава EMS</p>
+  </header>
+
+  <div class="breadcrumbs">
+    <a href="../main.html">База знаний EMS</a>
+    <span class="sep">›</span>
+    <a href="intro.html">Обучение и правила</a>
+    <span class="sep">›</span>
+    <span class="current">Регламент поведения на брифинге</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">📢</div>
+    <h2 class="hero-title">Брифинг EMS</h2>
+    <p class="hero-subtitle">
+      Официальное мероприятие для донесения информации, постановки задач и проверки дисциплины.
+      Обязательно к соблюдению всеми сотрудниками.
+    </p>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">1️⃣</span> Общие положения</div>
+    <ul class="duties">
+      <li><span class="check">✔</span>Брифинг является <b>официальным мероприятием EMS</b> и проводится для донесения информации, постановки задач и проверки дисциплины.</li>
+      <li><span class="check">✔</span>Все сотрудники обязаны являться на брифинг <b>в установленное время</b> и в полном соответствии с требованиями к внешнему виду.</li>
+      <li><span class="check">✔</span>Нарушения дисциплины во время брифинга фиксируются отделом <b>HAD</b>.</li>
+      <li><span class="check">✔</span>Сотрудники отдела HAD вправе определить, был ли <b>объём выполненной работы адекватным</b> за указанный период времени.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">2️⃣</span> Правила для среднего состава</div>
+    <ul class="duties">
+      <li><span class="num">1</span>Прибыть к месту проведения <b>за 5–10 минут</b> до начала.</li>
+      <li><span class="num">2</span>Построение осуществляется строго по указанию старшего состава.</li>
+      <li><span class="num">3</span>Во время брифинга:
+        <br>— запрещено использовать любые анимации, кроме поз, указанных в списке разрешённых;
+        <br>— сохранять тишину и внимание;
+        <br>— телефоны и рации перевести в беззвучный режим;
+        <br>— не перебивать докладчика и не вступать в споры.
+      </li>
+      <li><span class="num">4</span>Вопросы и уточнения задаются только <b>после разрешения старшего состава</b> или по окончании брифинга.</li>
+      <li><span class="num">5</span>Запрещено покидать строй без разрешения.</li>
+      <li><span class="num">6</span>При обращении старшего состава — отвечать <b>кратко и по существу</b>.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">3️⃣</span> Правила для старшего состава</div>
+    <ul class="duties">
+      <li><span class="num">1</span>Обеспечить организацию и дисциплину: построение, проверку присутствия и порядок во время брифинга.</li>
+      <li><span class="num">2</span>Начинать брифинг <b>вовремя</b>, исключая задержки.</li>
+      <li><span class="num">3</span>Основные обязанности на брифинге:
+        <br>— доведение актуальной информации до среднего состава;
+        <br>— распределение задач и обязанностей;
+        <br>— разъяснение правил и регламентов;
+        <br>— подведение итогов прошедшей смены / недели.
+      </li>
+      <li><span class="num">4</span>В общении соблюдать <b>деловой и уважительный тон</b>, избегать унижений и оскорблений.</li>
+      <li><span class="num">5</span>В случае вопросов — отвечать по существу или перенести обсуждение на <b>индивидуальный разбор</b>.</li>
+      <li><span class="num">6</span>Контролировать, чтобы весь состав покинул брифинг <b>организованно</b>.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">4️⃣</span> Ответственность</div>
+    <ul class="duties">
+      <li><span class="check">✔</span>За несоблюдение регламента сотрудники несут <b>дисциплинарную ответственность</b> в соответствии с уставом EMS.</li>
+      <li><span class="check">✔</span><b>Старший состав</b> несёт персональную ответственность за организацию и проведение брифинга.</li>
+      <li><span class="check">✔</span><b>Средний состав</b> несёт ответственность за дисциплину, внешний вид и соблюдение порядка во время мероприятия.</li>
+      <li><span class="check">✔</span>Ответственность за <b>контроль дисциплины</b> несёт отдел HAD.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title"><span class="icon">5️⃣</span> Меры наказания</div>
+
+    <div class="warning">
+      <strong>5.1</strong> За нарушение регламента поведения на брифинге меры наказания <b>ужесточены</b>
+      (разрешено выдавать <b>2/3 выговоров</b>).
+    </div>
+
+    <div class="warning">
+      <strong>5.2</strong> Любое неформальное поведение и общение, мат, оскорбления в строю в чью-либо
+      сторону караются <b>увольнением</b>.
+    </div>
+
+    <div class="warning">
+      <strong>5.3</strong> Все выговоры, выданные на основании этого регламента, <b>не подлежат денежной
+      отработке и обжалованию</b> по причине: «Я так больше не буду», «У меня вырвалось», «Я случайно»,
+      «Так получилось» и т.п.
+    </div>
+  </div>
+
+  <div class="info-note">
+    Данный регламент будет размещён в <b>новостях спец. связи EMS</b>.
+    Незнание этого регламента <b>не освобождает от ответственности</b>.
+    <br><br>
+    Регламент признан официальным для отделов <b>PM, DI, HAD, PSID, IN</b>.
+  </div>
+
+  <footer>
+    База знаний EMS · <span id="year"></span> · Регламент поведения на брифинге
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../common.js"></script>
+</body>
+</html>

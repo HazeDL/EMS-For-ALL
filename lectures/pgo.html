@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Правила государственных организаций — База знаний EMS</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 56px; --width: 260px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 62px;
+    display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 14px 14px 0;
+    font-size: 17px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab-left .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 52px; --width: 240px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 62px; display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 14px 0 0 14px;
+    font-size: 17px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab.tab-active {
+    background: rgba(26, 39, 68, 0.92);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 12px; bottom: 12px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--text-dim);
+    margin-bottom: 22px; flex-wrap: wrap;
+  }
+  .breadcrumbs a { color: var(--accent); text-decoration: none; }
+  .breadcrumbs a:hover { color: var(--accent-hover); text-decoration: underline; }
+  .breadcrumbs .sep { color: var(--text-dim); opacity: 0.6; }
+  .breadcrumbs .current { color: var(--text); }
+
+  .rules-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 26px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+  }
+  .rules-title {
+    font-size: 18px; font-weight: 600; color: var(--text);
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .rules-title .icon { font-size: 22px; }
+  .rules-title .tag {
+    font-size: 12px; font-weight: 700;
+    padding: 3px 10px; border-radius: 6px;
+    background: rgba(248, 81, 73, 0.10);
+    border: 1px solid rgba(248, 81, 73, 0.28);
+    color: var(--danger);
+    margin-left: auto;
+    letter-spacing: 0.5px;
+  }
+
+  .rules-text {
+    font-size: 16px; color: var(--text);
+    line-height: 1.7; margin-bottom: 12px;
+  }
+  .rules-text strong { color: var(--text); font-weight: 600; }
+
+  .duties { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .duties li {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 16px;
+    background: rgba(13, 17, 23, 0.45);
+    border: 1px solid var(--border); border-radius: 10px;
+    font-size: 15px; color: var(--text); line-height: 1.6;
+    transition: border-color 0.15s;
+  }
+  .duties li:hover { border-color: var(--text-dim); background: rgba(13, 17, 23, 0.55); }
+  .duties .check { flex-shrink: 0; color: var(--success); font-weight: 700; font-size: 18px; line-height: 1.5; }
+  .duties .cross { flex-shrink: 0; color: var(--danger); font-weight: 700; font-size: 18px; line-height: 1.5; }
+  .duties .warn  { flex-shrink: 0; color: var(--gold); font-weight: 700; font-size: 18px; line-height: 1.5; }
+
+  .warning {
+    padding: 16px 18px;
+    margin: 14px 0;
+    background: rgba(248, 81, 73, 0.06);
+    border: 1px solid rgba(248, 81, 73, 0.22);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .warning strong { color: var(--danger); }
+
+  .info-note {
+    padding: 16px 18px;
+    margin: 14px 0;
+    background: rgba(88, 166, 255, 0.06);
+    border: 1px solid rgba(88, 166, 255, 0.22);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .info-note strong { color: var(--accent); }
+
+  .success-note {
+    padding: 16px 18px;
+    margin: 14px 0;
+    background: rgba(63, 185, 80, 0.06);
+    border: 1px solid rgba(63, 185, 80, 0.22);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .success-note strong { color: var(--success); }
+
+  .hero {
+    text-align: center;
+    padding: 48px 28px 40px;
+    background: rgba(26, 39, 68, 0.4);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  }
+  .hero-icon { font-size: 64px; line-height: 1; margin-bottom: 16px; display: block; }
+  .hero-title {
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    font-size: 16px; color: var(--text-dim);
+    max-width: 640px; margin: 0 auto; line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
+    .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs { top: auto; bottom: 14px; transform: none; }
+    .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+
+    .rules-section { padding: 20px; margin-bottom: 20px; }
+    .rules-title { font-size: 17px; flex-wrap: wrap; }
+    .rules-title .tag { margin-left: 0; }
+    .rules-text { font-size: 15px; }
+    .duties li { font-size: 14.5px; padding: 12px 14px; }
+    .hero { padding: 34px 20px 28px; }
+    .hero-title { font-size: 22px; }
+    .hero-subtitle { font-size: 14.5px; }
+    .hero-icon { font-size: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="../main.html" title="База знаний">
+    <span class="tab-icon">📚</span>
+    <span class="tab-label">База знаний</span>
+  </a>
+  <a class="tab-left" href="../calculators/index.html" title="Калькулятор">
+    <span class="tab-icon">🧮</span>
+    <span class="tab-label">Калькулятор</span>
+  </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="departments.html">
+    <span class="tab-icon">🏥</span><span class="tab-label">Отделы</span>
+  </a>
+  <a class="tab" href="intro.html">
+    <span class="tab-icon">📖</span><span class="tab-label">Лекция</span>
+  </a>
+  <a class="tab" href="briefing.html">
+    <span class="tab-icon">📢</span><span class="tab-label">Брифинг</span>
+  </a>
+  <a class="tab tab-active" href="pgo.html">
+    <span class="tab-icon">⚖️</span><span class="tab-label">ПГО</span>
+  </a>
+  <a class="tab" href="interview.html">
+    <span class="tab-icon">🤝</span><span class="tab-label">Собеседование</span>
+  </a>
+  <a class="tab" href="pills.html">
+    <span class="tab-icon">💊</span><span class="tab-label">Таблетки</span>
+  </a>
+  <a class="tab" href="vaccines.html">
+    <span class="tab-icon">💉</span><span class="tab-label">Вакцины</span>
+  </a>
+  <a class="tab" href="medcert.html">
+    <span class="tab-icon">🧾</span><span class="tab-label">Справки</span>
+  </a>
+  <a class="tab" href="pmp.html">
+    <span class="tab-icon">🚑</span><span class="tab-label">ПМП</span>
+  </a>
+</nav>
+
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<div class="container page-content">
+
+  <header>
+    <img src="../images/ems-logo.png" alt="EMS" class="ems-logo">
+    <h1>Правила государственных организаций</h1>
+    <p>ПГО · ключевые запреты для сотрудников госструктур</p>
+  </header>
+
+  <div class="breadcrumbs">
+    <a href="../main.html">База знаний EMS</a>
+    <span class="sep">›</span>
+    <a href="intro.html">Обучение и правила</a>
+    <span class="sep">›</span>
+    <span class="current">Правила государственных организаций</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">⚖️</div>
+    <h2 class="hero-title">ПГО — что важно знать</h2>
+    <p class="hero-subtitle">
+      Основные запреты для сотрудников государственных структур: дресс-код, обращение с госимуществом,
+      хранение предметов и порядок после увольнения.
+    </p>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title">
+      <span class="icon">👔</span> 1.18 ПГО — Дресс-код
+      <span class="tag">ЗАПРЕЩЕНО</span>
+    </div>
+    <p class="rules-text">
+      Игрокам государственных структур <strong>запрещено использование вещей, не входящих
+      во фракционный гардероб</strong>, а также нарушение общего дресс-кода государственного игрока.
+    </p>
+    <div class="warning">
+      <strong>Примеры нарушений:</strong>
+      <ul class="duties" style="margin-top: 10px;">
+        <li><span class="cross">✖</span>Неестественный цвет волос</li>
+        <li><span class="cross">✖</span>Неформальные причёски</li>
+        <li><span class="cross">✖</span>Татуировки в районе лица / шеи, на кистях рук</li>
+        <li><span class="cross">✖</span>Грим / макияж и линзы неестественного цвета</li>
+        <li><span class="cross">✖</span>Ушки / рога / совы / хвосты / светящиеся маски / шляпы</li>
+        <li><span class="cross">✖</span>Яркие скины на бронежилеты и т.д.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title">
+      <span class="icon">📦</span> 1.2.1 ПГО — Слив / продажа госимущества
+      <span class="tag">ЗАПРЕЩЕНО</span>
+    </div>
+    <p class="rules-text">
+      <strong>Запрещено выбрасывать на землю или передавать другим лицам:</strong>
+    </p>
+    <ul class="duties">
+      <li><span class="cross">✖</span>Бронежилеты (даже если нет места в инвентаре)</li>
+      <li><span class="cross">✖</span>Оружие и патроны</li>
+      <li><span class="cross">✖</span>Наручники и спецсредства</li>
+      <li><span class="cross">✖</span>Любой предмет, который вы получили со склада!</li>
+    </ul>
+
+    <div class="success-note" style="margin-top: 18px;">
+      <strong>❓ Что делать с ненужными предметами?</strong>
+      <ul class="duties" style="margin-top: 10px;">
+        <li><span class="check">✔</span>Использовать до конца</li>
+        <li><span class="check">✔</span>Сложить на склад фракции</li>
+        <li><span class="check">✔</span>Положить в багажник фракционного авто (проверяйте, чтобы оно было закрыто)</li>
+      </ul>
+    </div>
+
+    <div class="warning" style="margin-top: 18px;">
+      <strong>❗ Важно:</strong>
+      <ul class="duties" style="margin-top: 10px;">
+        <li><span class="warn">⚠</span>Если вы уволились и продали служебное имущество — это нарушение <b>1.2.1 ПГО</b>.</li>
+        <li><span class="warn">⚠</span>Если вы складируете гос. имущество в личный / семейный дом или авто — это нарушение <b>1.2.1 ПГО</b>.</li>
+        <li><span class="warn">⚠</span>Выбросили на пол, а другой игрок подобрал? — <b>1.2.1 ПГО</b>.</li>
+        <li><span class="warn">⚠</span>Даже если предмет передали коллеги из другой гос. фракции — используйте, сложите на склад или утилизируйте!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title">
+      <span class="icon">🔫</span> 1.2.2 ПГО — Предметы с криминальных событий
+      <span class="tag">ЗАПРЕЩЕНО</span>
+    </div>
+    <p class="rules-text">
+      <strong>Запрещено продавать или оставлять предметы</strong>, полученные после криминальных событий.
+    </p>
+    <div class="info-note">
+      📌 Всё, что получено в ходе <b>перестрелки, операции или задержания</b>, должно быть сдано:
+      <br><b>✔ На склад фракции</b>.
+    </div>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title">
+      <span class="icon">🏠</span> 1.3 ПГО — Хранение в личном доме / транспорте
+      <span class="tag">ЗАПРЕЩЕНО</span>
+    </div>
+    <ul class="duties">
+      <li><span class="cross">✖</span>Оружие, патроны, бронежилеты и спецсредства можно хранить <b>только на складе фракции</b>.</li>
+      <li><span class="check">✔</span>Если случайно положили и <b>сразу забрали</b> — это не нарушение.</li>
+      <li><span class="cross">✖</span>Но если оставили для использования или из-за нехватки места — это <b>нарушение</b>!</li>
+    </ul>
+  </div>
+
+  <div class="rules-section">
+    <div class="rules-title">
+      <span class="icon">🚪</span> 1.4 ПГО — После увольнения / перевода / WARN / BAN
+      <span class="tag">ЗАПРЕЩЕНО</span>
+    </div>
+    <p class="rules-text">
+      <strong>Запрещено оставлять себе</strong> оружие / спецсредства после увольнения, перевода,
+      WARN'а или BAN'а.
+    </p>
+    <div class="warning">
+      <ul class="duties">
+        <li><span class="warn">⚠</span>Если вас уволили или наказали — вы должны сдать <b>все вещи</b> через <b>F2-Обращения</b> или <b>/report</b>.</li>
+        <li><span class="warn">⚠</span>В противном случае вас ждёт <b>наказание</b>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-note">
+    <strong>Источник:</strong> вся информация взята из официального источника — Правила государственных организаций (ПГО).
+    Незнание правил <b>не освобождает от ответственности</b>.
+  </div>
+
+  <footer>
+    База знаний EMS · <span id="year"></span> · Правила государственных организаций
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../common.js"></script>
+</body>
+</html>
