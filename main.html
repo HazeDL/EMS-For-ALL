@@ -72,92 +72,12 @@
   .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .server-card {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    padding: 28px;
-    background: rgba(26, 39, 68, 0.5);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    transition: border-color 0.2s;
-  }
-  .server-card:hover { border-color: var(--accent); }
-  .server-icon {
-    flex-shrink: 0;
-    width: 88px; height: 88px;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(88, 166, 255, 0.10);
-    border: 1px solid rgba(88, 166, 255, 0.25);
-    border-radius: 18px;
-    font-size: 42px;
-  }
-  .server-info { flex: 1; min-width: 0; }
-  .server-name {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-  .server-sub {
-    font-size: 14.5px;
-    color: var(--text-dim);
-    margin-bottom: 12px;
-  }
-  .server-desc {
-    font-size: 15.5px;
-    color: var(--text);
-    line-height: 1.7;
-    margin-bottom: 16px;
-  }
-  .server-badges { display: flex; flex-wrap: wrap; gap: 10px; }
-  .server-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    white-space: nowrap;
-  }
-  .server-badge.online {
-    background: rgba(63, 185, 80, 0.10);
-    border: 1px solid rgba(63, 185, 80, 0.30);
-    color: var(--success);
-  }
-  .server-badge.online .dot {
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    background: var(--success);
-    animation: pulseDot 1.8s ease-in-out infinite;
-  }
-  @keyframes pulseDot {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.4; }
-  }
-  .server-badge.newbie {
-    background: rgba(88, 166, 255, 0.10);
-    border: 1px solid rgba(88, 166, 255, 0.28);
-    color: var(--accent);
-  }
-  .server-badge.opened {
-    background: rgba(210, 153, 34, 0.10);
-    border: 1px solid rgba(210, 153, 34, 0.28);
-    color: var(--gold);
-  }
-
   @media (max-width: 640px) {
     .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
     .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
     .side-tabs { top: auto; bottom: 14px; transform: none; }
     .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
     .tab:hover { right: 0; }
-
-    .server-card { flex-direction: column; align-items: flex-start; gap: 18px; padding: 22px; }
-    .server-icon { width: 72px; height: 72px; font-size: 34px; }
-    .server-name { font-size: 22px; }
-    .server-desc { font-size: 14px; }
   }
 </style>
 </head>
@@ -321,33 +241,6 @@
           </div>
         </a>
 
-      </div>
-    </div>
-
-    <!-- ==================== СЕРВЕР SEATTLE ==================== -->
-    <div class="section">
-      <div class="section-title"><span class="icon">🖥️</span> Сервер Seattle</div>
-
-      <div class="server-card">
-        <div class="server-icon">🖥️</div>
-        <div class="server-info">
-          <div class="server-name">Seattle</div>
-          <div class="server-sub">Majestic RP · сервер ru14</div>
-          <div class="server-desc">
-            Четырнадцатый сервер проекта Majestic RP. Открыт 31 января 2025 года.
-            Относится к категории «Для новичков» — рекомендуется новым игрокам
-            для спокойного старта и постепенного освоения механик проекта.
-            Сервер активно развивается, на нём регулярно проходят наборы в государственные
-            структуры, включая EMS.
-          </div>
-          <div class="server-badges">
-            <span class="server-badge online">
-              <span class="dot"></span> Онлайн
-            </span>
-            <span class="server-badge newbie">🌱 Для новичков</span>
-            <span class="server-badge opened">📅 Открыт 31.01.2025</span>
-          </div>
-        </div>
       </div>
     </div>
 
