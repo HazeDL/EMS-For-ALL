@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор баллов — EMS</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  /* --------- Левая панель --------- */
+  .side-tabs-left {
+    position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab-left {
+    --visible: 56px; --width: 260px;
+    position: relative;
+    left: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 62px;
+    display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-left: none;
+    border-radius: 0 14px 14px 0;
+    font-size: 17px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab-left:hover {
+    left: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab-left .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
+  .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* --------- Правая панель --------- */
+  .side-tabs {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .tab {
+    --visible: 52px; --width: 240px;
+    position: relative; right: calc(-1 * (var(--width) - var(--visible)));
+    width: var(--width); height: 62px; display: flex; align-items: center;
+    gap: 14px; padding: 0 18px;
+    background: rgba(22, 27, 34, 0.86); color: var(--text);
+    border: 1px solid var(--border); border-right: none;
+    border-radius: 14px 0 0 14px;
+    font-size: 17px; font-weight: 500; text-align: left;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s, color 0.15s, border-color 0.15s;
+    pointer-events: auto; text-decoration: none;
+  }
+  .tab:hover {
+    right: 0; background: rgba(30, 38, 52, 0.95);
+    color: var(--accent-hover); border-color: var(--accent);
+  }
+  .tab.tab-active {
+    background: rgba(26, 39, 68, 0.92);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .tab.tab-active::before {
+    content: ""; position: absolute; left: 0; top: 12px; bottom: 12px;
+    width: 3px; border-radius: 0 2px 2px 0; background: var(--accent);
+  }
+  .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
+  .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* --------- Панель профиля --------- */
+  .profile-bar {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    min-width: 200px;
+  }
+  .profile-field label {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .profile-field select,
+  .profile-field input {
+    background: rgba(13, 17, 23, 0.7);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 16px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .profile-field select:focus,
+  .profile-field input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .profile-actions {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .dept-switch {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 4px 0;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin-top: 4px;
+  }
+  .dept-switch-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+  .dept-btn {
+    background: rgba(13, 17, 23, 0.6);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dept-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .dept-btn.active {
+    background: rgba(88, 166, 255, 0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .btn-icon {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: var(--bg-alt);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .btn-icon:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-icon.danger:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(248, 81, 73, 0.06);
+  }
+
+  /* --------- Модалка --------- */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5, 8, 12, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 24px;
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    animation: modalIn 0.25s ease;
+  }
+  @keyframes modalIn {
+    from { transform: scale(0.96); opacity: 0.8; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-close {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.15s;
+  }
+  .modal-close:hover { color: var(--danger); background: rgba(248, 81, 73, 0.1); }
+
+  /* --------- Сводка --------- */
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  .summary-table th {
+    text-align: left;
+    padding: 12px 14px;
+    color: var(--text-dim);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+  .summary-table td {
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .summary-table tr:hover td { background: rgba(88, 166, 255, 0.05); }
+  .summary-table .num {
+    text-align: right;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .summary-table .status {
+    font-weight: 600;
+  }
+  .status-ok   { color: var(--success); }
+  .status-low  { color: var(--gold); }
+  .status-bad  { color: var(--danger); }
+
+  /* --------- Секции калькулятора --------- */
+  .section {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 26px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  }
+  .section-title {
+    font-size: 18px; font-weight: 600; color: var(--text);
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 26px;
+    align-items: start;
+  }
+
+  /* --------- Адаптив --------- */
+  @media (max-width: 900px) {
+    .content-layout { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .side-tabs-left { top: auto; bottom: 76px; left: 12px; transform: none; }
+    .tab-left { --width: 220px; --visible: 52px; height: 54px; font-size: 16px; padding: 0 14px; left: 0; border-radius: 12px; border-left: 1px solid var(--border); }
+    .side-tabs { top: auto; bottom: 14px; transform: none; }
+    .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
+    .tab:hover { right: 0; }
+
+    .profile-bar { padding: 14px 16px; gap: 10px; }
+    .profile-field { min-width: 100%; }
+    .profile-actions { width: 100%; justify-content: flex-start; }
+    .dept-btn { flex: 1; justify-content: center; padding: 9px 12px; font-size: 14px; }
+    .dept-switch-label { width: 100%; margin: 0 0 6px 0; }
+    .modal { padding: 20px; }
+    .summary-table { font-size: 14px; }
+    .summary-table th, .summary-table td { padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="side-tabs-left" aria-label="Навигация">
+  <a class="tab-left" href="../main.html" title="База знаний">
+    <span class="tab-icon">📚</span>
+    <span class="tab-label">База знаний</span>
+  </a>
+</nav>
+
+<nav class="side-tabs" aria-label="Разделы">
+  <a class="tab" href="../main.html">
+    <span class="tab-icon">📚</span><span class="tab-label">База знаний</span>
+  </a>
+  <a class="tab tab-active" href="index.html">
+    <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
+  </a>
+</nav>
+
+<div class="bg-controls">
+  <button class="bg-btn" id="bg-menu-btn" type="button">🎨 Фон</button>
+  <div class="bg-menu" id="bg-menu" hidden>
+    <div class="bg-section-label">Пресеты</div>
+    <div class="bg-presets" id="bg-presets"></div>
+    <div class="bg-section-label">Свои</div>
+    <label class="bg-menu-item">
+      📁 Загрузить картинку
+      <input type="file" id="bg-file"
+             accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+    </label>
+    <label class="bg-menu-item">
+      🌈 Сплошной цвет
+      <input type="color" id="bg-color" value="#0d1117">
+    </label>
+    <button class="bg-menu-item" id="bg-gradient" type="button">✨ Градиент (по умолчанию)</button>
+    <button class="bg-menu-item danger" id="bg-reset" type="button">🗑 Убрать фон</button>
+  </div>
+</div>
+
+<div class="container page-content">
+
+  <header>
+    <img src="../images/ems-logo.png" alt="EMS" class="ems-logo">
+    <h1>Калькулятор баллов</h1>
+    <p>PSID · PM · DI · HAD — единый калькулятор с профилями</p>
+  </header>
+
+  <!-- ==================== ПАНЕЛЬ ПРОФИЛЯ ==================== -->
+  <div class="profile-bar">
+
+    <div class="profile-field">
+      <label for="profile-select">👤 Профиль</label>
+      <select id="profile-select"></select>
+    </div>
+
+    <div class="profile-actions">
+      <button class="btn-icon" id="btn-add-profile" title="Добавить профиль" type="button">＋</button>
+      <button class="btn-icon" id="btn-rename-profile" title="Переименовать" type="button">✎</button>
+      <button class="btn-icon danger" id="btn-delete-profile" title="Удалить профиль" type="button">🗑</button>
+      <button class="btn-icon" id="btn-summary" title="Сводка по всем профилям" type="button">📊</button>
+    </div>
+
+    <div class="dept-switch">
+      <span class="dept-switch-label">🏥 Отдел:</span>
+      <button class="dept-btn" data-dept="psid" type="button">🏥 PSID</button>
+      <button class="dept-btn" data-dept="pm" type="button">📋 PM</button>
+      <button class="dept-btn" data-dept="di" type="button">📊 DI</button>
+      <button class="dept-btn" data-dept="had" type="button">💉 HAD</button>
+    </div>
+
+  </div>
+
+  <!-- ==================== КАЛЬКУЛЯТОР ==================== -->
+  <div class="content-layout" id="calc-area">
+
+    <aside class="progress-rail" data-rail="main">
+      <div class="progress-rail-title" id="rail-title">PSID</div>
+      <div class="progress-rail-value" data-rail-value>0</div>
+      <div class="progress-rail-scale">
+        <div class="progress-rail-fill" data-rail-fill></div>
+        <div class="progress-rail-ticks">
+          <div class="progress-rail-tick" style="bottom: 100%;"><span class="progress-rail-tick-label">1500</span></div>
+          <div class="progress-rail-tick" style="bottom: 66.66%;"><span class="progress-rail-tick-label">1000</span></div>
+          <div class="progress-rail-tick" style="bottom: 33.33%;"><span class="progress-rail-tick-label">500</span></div>
+          <div class="progress-rail-tick" style="bottom: 16.66%;"><span class="progress-rail-tick-label">250</span></div>
+          <div class="progress-rail-tick" style="bottom: 6.66%;"><span class="progress-rail-tick-label">100</span></div>
+        </div>
+      </div>
+      <div class="progress-rail-status" data-rail-status>Начало</div>
+    </aside>
+
+    <div id="dept-body"></div>
+
+  </div>
+
+  <footer>
+    Калькулятор баллов EMS · <span id="year"></span> · Профили и отделы
+  </footer>
+
+</div>
+
+<!-- ==================== МОДАЛКА СВОДКИ ==================== -->
+<div class="modal-overlay" id="modal-summary">
+  <div class="modal">
+    <div class="modal-title">
+      📊 Сводка по всем профилям
+      <button class="modal-close" id="close-summary" type="button">✕</button>
+    </div>
+    <div id="summary-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../common.js"></script>
+<script>
+/* ============================================================
+   ОПИСАНИЕ ОТДЕЛОВ
+   ============================================================ */
+const DEPTS = {
+  psid: {
+    title: "PSID",
+    icon: "🏥",
+    sections: [
+      {
+        title: "Основная система баллов",
+        items: [
+          {key:"pill_day",       name:"Выдача таблетки днём",                   pts:2,  lim:100},
+          {key:"pill_night",     name:"Выдача таблетки ночью",                  pts:2,  lim:100},
+          {key:"vax_day",        name:"Выдача вакцины днём",                    pts:3,  lim:0},
+          {key:"vax_night",      name:"Выдача вакцины ночью",                   pts:4,  lim:0},
+          {key:"med_elsh",       name:"Мед. справка в ELSH",                    pts:5,  lim:0},
+          {key:"med_ss_pb",      name:"Мед. справка в СШ / Палето-Бей",         pts:6,  lim:0},
+          {key:"donor_day",      name:"Присутствие на Дне Донора",              pts:40, lim:0},
+          {key:"gov_check",      name:"Проверка гос. организации",              pts:50, lim:0},
+          {key:"psy_video",      name:"Псих. помощь с видео-откатом",           pts:50, lim:0},
+          {key:"pmp_day",        name:"Оказание ПМП днём",                      pts:3,  lim:3},
+          {key:"pmp_night",      name:"Оказание ПМП ночью",                     pts:4,  lim:0},
+          {key:"supply",         name:"Участие в поставках",                    pts:30, lim:0},
+          {key:"kpz_bank",       name:"Выезд. обследование (КПЗ/Банк/Похитка)", pts:45, lim:0},
+          {key:"rp_video",       name:"РП операция с видео-откатом",            pts:50, lim:0},
+          {key:"recruit",        name:"Принятие во фракцию (Рекрутер)",         pts:30, lim:0},
+          {key:"therapist_qual", name:"Принятие квал-ции Терапевта",            pts:20, lim:0},
+          {key:"duty_ss_pb",     name:"Дежурство 30 мин в СШ/ПБ",               pts:20, lim:0},
+          {key:"duty_elsh",      name:"Дежурство 30 мин в ELSH",                pts:10, lim:0}
+        ]
+      },
+      {
+        title: "Доп. система — Инструкторы PSID",
+        items: [
+          {key:"instr_weekly",   name:"Проверка недельного отчёта",             pts:20, lim:0},
+          {key:"instr_theory",   name:"Принятие внутр. теор. экзамена",         pts:20, lim:0},
+          {key:"instr_practice", name:"Внутр. практ. экзамен интерну",          pts:30, lim:0},
+          {key:"instr_therapist",name:"Экзамен на квал-цию терапевта",          pts:15, lim:0},
+          {key:"instr_psy_rep",  name:"Проверка отчёта о псих. помощи",         pts:30, lim:0},
+          {key:"instr_psy_help", name:"Помощь в псих. помощи",                  pts:20, lim:0},
+          {key:"instr_gov",      name:"Доп. проверка гос. структур",            pts:20, lim:0}
+        ]
+      }
+    ]
+  },
+
+  pm: {
+    title: "PM",
+    icon: "📋",
+    sections: [
+      {
+        title: "Основная система PM",
+        items: [
+          {key:"pm_pmp_day",      name:"ПМП днём",                              pts:3,   lim:0},
+          {key:"pm_pmp_night",    name:"ПМП ночью",                             pts:5,   lim:0},
+          {key:"pm_pmp_hospital", name:"ПМП в любой больнице и палатах",        pts:1,   lim:0},
+          {key:"pm_pmp_rejected", name:"Отклонённый вызов",                     pts:1,   lim:0},
+          {key:"pm_vax_elsh",     name:"Вакцина в ELSH",                        pts:3,   lim:0},
+          {key:"pm_vax_ss",       name:"Вакцина в Sandy-Shores",                pts:4,   lim:0},
+          {key:"pm_vax_pb",       name:"Вакцина в Paleto-Bay",                  pts:4,   lim:0},
+          {key:"pm_pill_elsh",    name:"Таблетка в ELSH",                       pts:1,   lim:0},
+          {key:"pm_pill_ss",      name:"Таблетка в Sandy-Shores",               pts:2,   lim:0},
+          {key:"pm_pill_pb",      name:"Таблетка в Paleto-Bay",                 pts:2,   lim:0},
+          {key:"pm_med_elsh",     name:"Справка в ELSH (каждая)",               pts:3,   lim:0},
+          {key:"pm_med_ss",       name:"Справка в Sandy-Shores (каждая)",       pts:4,   lim:0},
+          {key:"pm_med_pb",       name:"Справка в Paleto-Bay (каждая)",         pts:4,   lim:0}
+        ]
+      },
+      {
+        title: "Дополнительно PM",
+        items: [
+          {key:"pm_q_therapist",  name:"Получение квалификации «Терапевт»",     pts:50,  lim:0},
+          {key:"pm_q_surgeon",    name:"Получение квалификации «Хирург»",       pts:50,  lim:0},
+          {key:"pm_q_vet",        name:"Получение квалификации «Ветеринар»",    pts:50,  lim:0},
+          {key:"pm_q_recruiter",  name:"Получение квалификации «Рекрутер»",     pts:50,  lim:0},
+          {key:"pm_lecture",      name:"Прослушивание лекции",                  pts:10,  lim:0},
+          {key:"pm_exam",         name:"Прохождение экзамена",                  pts:10,  lim:0},
+          {key:"pm_rp_op",        name:"Проведение 1 РП операции",              pts:100, lim:0},
+          {key:"pm_recruit",      name:"Принятие 1 человека во фракцию",        pts:100, lim:0},
+          {key:"pm_animal_check", name:"Проведение 1 осмотра животных",         pts:100, lim:0},
+          {key:"pm_duty_elsh",    name:"Дежурство ELSH (30 минут)",             pts:10,  lim:0},
+          {key:"pm_duty_ss",      name:"Дежурство Sandy-Shores (30 минут)",     pts:15,  lim:0},
+          {key:"pm_duty_pb",      name:"Дежурство Paleto-Bay (30 минут)",       pts:15,  lim:0}
+        ]
+      }
+    ]
+  },
+
+  di: {
+    title: "DI",
+    icon: "📊",
+    instrNorm: 20,
+    sections: [
+      {
+        title: "Для сотрудников DI",
+        items: [
+          {key:"di_interview",        name:"Собеседование / восстановление / перевод", pts:25, lim:0},
+          {key:"di_briefing_intro",   name:"Вводный инструктаж",                        pts:35, lim:0},
+          {key:"di_interview_fail",   name:"Неудачное собеседование",                   pts:5,  lim:0},
+          {key:"di_application",      name:"Принятие электронного заявления",           pts:25, lim:0},
+          {key:"di_gov_wave",         name:"Гос. волна (1 скрин)",                      pts:15, lim:0},
+          {key:"di_intern_report",    name:"Отчёт на повышение интерна",               pts:8,  lim:0},
+          {key:"di_recruiter_qual",   name:"Квалификация Рекрутер",                     pts:20, lim:0},
+          {key:"di_duty_30",          name:"30 минут дежурства",                        pts:12, lim:0},
+          {key:"di_fire_safety_join", name:"Участие в пожарной проверке",               pts:40, lim:0},
+          {key:"di_fire_check",       name:"Пожарная проверка",                         pts:60, lim:0},
+          {key:"di_hospital_duty",    name:"Дежурство в больницах",                     pts:10, lim:0}
+        ]
+      },
+      {
+        title: "Для инструкторов DI (1 действие)",
+        actionMode: true,
+        items: [
+          {key:"di_instr_activity", name:"Любая деятельность по отделу",   pts:1, lim:0},
+          {key:"di_instr_report",   name:"Отчёт на повышение",             pts:1, lim:0},
+          {key:"di_instr_audit",    name:"Кадровый аудит",                 pts:1, lim:0},
+          {key:"di_instr_craft",    name:"Участие в крафте",               pts:1, lim:0},
+          {key:"di_instr_other",    name:"Прочие активности",              pts:1, lim:0}
+        ]
+      },
+      {
+        title: "Дополнительная активность",
+        items: [
+          {key:"di_x_pill",       name:"Таблетка",                        pts:1,  lim:0},
+          {key:"di_x_vax",        name:"Вакцинация",                      pts:2,  lim:0},
+          {key:"di_x_med",        name:"Оформление справок",              pts:3,  lim:0},
+          {key:"di_x_pmp_day",    name:"Дневные ПМП",                     pts:3,  lim:0},
+          {key:"di_x_pmp_night",  name:"Ночные ПМП",                      pts:4,  lim:0},
+          {key:"di_x_qual",       name:"Получение квалификации",          pts:50, lim:0},
+          {key:"di_x_specialist", name:"Хирург / ветеринар / MCC",        pts:50, lim:0}
+        ]
+      }
+    ]
+  },
+
+  had: {
+    title: "HAD",
+    icon: "💉",
+    sections: [
+      {
+        title: "Основные действия",
+        items: [
+          {key:"had_reprimand",    name:"Выдача выговоров",            pts:5,  lim:0},
+          {key:"had_walk_check",   name:"Проверка на прогул",          pts:5,  lim:0},
+          {key:"had_break_check",  name:"Проверка обедов / отпусков",  pts:3,  lim:0},
+          {key:"had_briefing",     name:"Проведение брифинга",         pts:20, lim:0},
+          {key:"had_briefing_att", name:"Участие в брифинге",          pts:10, lim:0},
+          {key:"had_recert",       name:"Проверка переаттестации",     pts:5,  lim:0},
+          {key:"had_radio_call",   name:"Вызов по рации (10-20)",      pts:3,  lim:0},
+          {key:"had_duty_check",   name:"Проверка дежурств",           pts:15, lim:0},
+          {key:"had_hospital_duty",name:"Дежурство в больнице 30 мин", pts:10, lim:0},
+          {key:"had_duty_accept",  name:"Принятие дежурств",           pts:15, lim:0}
+        ]
+      },
+      {
+        title: "Инструктор HAD",
+        items: [
+          {key:"had_instr_promo",  name:"Проверка отчёта на повышение",pts:20, lim:0},
+          {key:"had_instr_weekly", name:"Проверка недельного отчёта",  pts:25, lim:0}
+        ]
+      },
+      {
+        title: "Недельный отчёт",
+        items: [
+          {key:"had_w_duty",       name:"Дежурство в больнице 30 мин", pts:10, lim:0},
+          {key:"had_w_accept",     name:"Принятие человека",           pts:10, lim:0},
+          {key:"had_w_pmp_day",    name:"ПМП днём",                    pts:2,  lim:100},
+          {key:"had_w_pmp_night",  name:"ПМП ночью",                   pts:4,  lim:100},
+          {key:"had_w_vax",        name:"Вакцины",                     pts:4,  lim:80},
+          {key:"had_w_pills",      name:"Таблетки",                    pts:1,  lim:100},
+          {key:"had_w_med_elsh",   name:"Медсправки в ELSH",           pts:3,  lim:75},
+          {key:"had_w_med_ss_pb",  name:"Медсправки в SH/PB",          pts:4,  lim:60}
+        ]
+      }
+    ]
+  }
+};
+
+const STORAGE_KEY = "ems_calc_profiles_v1";
+const NORMS = { psid: 500, pm: 500, di: 500, had: 500 };
+
+/* ============================================================
+   СОСТОЯНИЕ
+   ============================================================ */
+let state = {
+  profiles: [],
+  activeProfileId: null
+};
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    if (!parsed.profiles || !Array.isArray(parsed.profiles)) return false;
+    state = parsed;
+    return true;
+  } catch (e) { return false; }
+}
+
+function newProfile(name, dept) {
+  return {
+    id: "p" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+    name: name,
+    dept: dept,
+    data: {}
+  };
+}
+
+function getActiveProfile() {
+  return state.profiles.find(p => p.id === state.activeProfileId);
+}
+
+/* ============================================================
+   РАСЧЁТЫ
+   ============================================================ */
+function calcTotal(profile) {
+  if (!profile) return 0;
+  const dept = DEPTS[profile.dept];
+  if (!dept) return 0;
+  let total = 0;
+  dept.sections.forEach(section => {
+    if (section.actionMode) return;
+    section.items.forEach(item => {
+      const d = profile.data[item.key];
+      if (!d) return;
+      let count = d.count || 0;
+      const point = d.point != null ? d.point : item.pts;
+      if (item.lim > 0 && count > item.lim) count = item.lim;
+      total += count * point;
+    });
+  });
+  return total;
+}
+
+function calcInstrActions(profile) {
+  if (!profile || profile.dept !== "di") return 0;
+  const dept = DEPTS.di;
+  const instr = dept.sections.find(s => s.actionMode);
+  if (!instr) return 0;
+  let actions = 0;
+  instr.items.forEach(item => {
+    const d = profile.data[item.key];
+    if (!d) return;
+    actions += d.count || 0;
+  });
+  return actions;
+}
+
+/* ============================================================
+   ОТРИСОВКА ПАНЕЛИ ПРОФИЛЯ
+   ============================================================ */
+function renderProfileBar() {
+  const sel = document.getElementById("profile-select");
+  sel.innerHTML = "";
+  state.profiles.forEach(p => {
+    const opt = document.createElement("option");
+    opt.value = p.id;
+    opt.textContent = p.name + " (" + DEPTS[p.dept].title + ")";
+    if (p.id === state.activeProfileId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  // активная кнопка отдела
+  const active = getActiveProfile();
+  document.querySelectorAll(".dept-btn").forEach(btn => {
+    btn.classList.toggle("active", active && btn.dataset.dept === active.dept);
+  });
+}
+
+/* ============================================================
+   ОТРИСОВКА КАЛЬКУЛЯТОРА
+   ============================================================ */
+function renderCalculator() {
+  const profile = getActiveProfile();
+  const body = document.getElementById("dept-body");
+  const railTitle = document.getElementById("rail-title");
+  body.innerHTML = "";
+
+  if (!profile) {
+    body.innerHTML = "<p style='color: var(--text-dim); text-align:center; padding: 40px 0;'>Нет активного профиля</p>";
+    return;
+  }
+
+  const dept = DEPTS[profile.dept];
+  railTitle.textContent = dept.title;
+
+  dept.sections.forEach(section => {
+    const sec = document.createElement("div");
+    sec.className = "section";
+
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.textContent = section.title;
+    sec.appendChild(title);
+
+    const header = document.createElement("div");
+    header.className = "row header-row";
+    header.innerHTML = `
+      <div class="cell">Действие</div>
+      <div class="cell">Кол-во</div>
+      <div class="cell">Балл</div>
+      <div class="cell">Итог</div>`;
+    sec.appendChild(header);
+
+    section.items.forEach(item => {
+      const d = profile.data[item.key] || {};
+      const count = d.count != null ? d.count : "";
+      const point = d.point != null ? d.point : item.pts;
+
+      const row = document.createElement("div");
+      row.className = "row";
+      row.dataset.key = item.key;
+
+      const badge = item.lim > 0 ? `<span class="limit">макс ${item.lim}</span>` : "";
+      row.innerHTML = `
+        <div class="name">${item.name}${badge}</div>
+        <input type="number" min="0" step="1" value="${count}" data-role="count" data-key="${item.key}">
+        <input type="number" min="0" step="1" value="${point}" data-role="point" data-key="${item.key}">
+        <div class="sum" data-role="sum" data-key="${item.key}">0</div>`;
+      sec.appendChild(row);
+    });
+
+    body.appendChild(sec);
+  });
+
+  // общий итог
+  const totalBox = document.createElement("div");
+  totalBox.className = "total-box";
+  totalBox.innerHTML = `
+    <span class="label">Итого баллов ${dept.title}</span>
+    <span class="value" id="total-value">0</span>`;
+  body.appendChild(totalBox);
+
+  // второй итог для DI — действия
+  if (profile.dept === "di") {
+    const instrBox = document.createElement("div");
+    instrBox.className = "total-box";
+    instrBox.innerHTML = `
+      <span class="label">Действий инструктора</span>
+      <span class="value" id="instr-actions-value">0</span>`;
+    body.appendChild(instrBox);
+  }
+
+  // кнопки
+  const btns = document.createElement("div");
+  btns.className = "buttons";
+  btns.innerHTML = `
+    <button class="primary" id="btn-copy" type="button">📋 Копировать отчёт</button>
+    <button class="danger" id="btn-reset" type="button">↺ Сбросить</button>`;
+  body.appendChild(btns);
+
+  // отчёт
+  const report = document.createElement("div");
+  report.className = "report";
+  report.id = "report";
+  body.appendChild(report);
+
+  // обработчики
+  body.querySelectorAll("input[type=number]").forEach(inp => {
+    inp.addEventListener("input", onInput);
+  });
+  document.getElementById("btn-copy").addEventListener("click", copyReport);
+  document.getElementById("btn-reset").addEventListener("click", resetActive);
+}
+
+/* ============================================================
+   ВВОД И ПЕРЕСЧЁТ
+   ============================================================ */
+function onInput(e) {
+  const el = e.target;
+  const key = el.dataset.key;
+  const role = el.dataset.role;
+  const profile = getActiveProfile();
+  if (!profile) return;
+
+  if (!profile.data[key]) profile.data[key] = {};
+  const v = parseInt(el.value, 10);
+  profile.data[key][role] = isNaN(v) ? 0 : v;
+
+  saveState();
+  recalc();
+}
+
+function recalc() {
+  const profile = getActiveProfile();
+  if (!profile) return;
+  const dept = DEPTS[profile.dept];
+
+  let total = 0;
+  const reportLines = {};
+
+  dept.sections.forEach((section, sIdx) => {
+    reportLines[sIdx] = { title: section.title, lines: [], sum: 0, actionMode: !!section.actionMode };
+    section.items.forEach(item => {
+      const countEl = document.querySelector(`#dept-body input[data-role="count"][data-key="${item.key}"]`);
+      const sumEl   = document.querySelector(`#dept-body div[data-role="sum"][data-key="${item.key}"]`);
+      if (!countEl || !sumEl) return;
+
+      let count = parseInt(countEl.value, 10);
+      if (isNaN(count)) count = 0;
+      const pRaw = parseInt(document.querySelector(`#dept-body input[data-role="point"][data-key="${item.key}"]`).value, 10);
+      const point = isNaN(pRaw) ? 0 : pRaw;
+
+      const over = item.lim > 0 && count > item.lim;
+      if (over) count = item.lim;
+      countEl.classList.toggle("over-limit", over);
+
+      const sum = count * point;
+      sumEl.textContent = sum;
+      sumEl.classList.toggle("positive", sum > 0);
+
+      const row = countEl.closest(".row");
+      row.classList.toggle("active", count > 0);
+
+      if (section.actionMode) {
+        reportLines[sIdx].sum += count;
+        if (count > 0) reportLines[sIdx].lines.push(`  ${item.name}: ${count} действий`);
+      } else {
+        total += sum;
+        reportLines[sIdx].sum += sum;
+        if (count > 0) reportLines[sIdx].lines.push(`  ${item.name}: ${count} × ${point} = ${sum}`);
+      }
+    });
+  });
+
+  const totalEl = document.getElementById("total-value");
+  if (totalEl) totalEl.textContent = total;
+
+  if (profile.dept === "di") {
+    const instrEl = document.getElementById("instr-actions-value");
+    if (instrEl) instrEl.textContent = calcInstrActions(profile);
+  }
+
+  // отчёт
+  const reportEl = document.getElementById("report");
+  if (reportEl) {
+    let text = "";
+    Object.values(reportLines).forEach(sec => {
+      if (!sec.lines.length) return;
+      text += "── " + sec.title + " ──\n";
+      text += sec.lines.join("\n") + "\n";
+      text += "  Подытог: " + sec.sum + (sec.actionMode ? " действий" : "") + "\n\n";
+    });
+    if (total > 0) text += "ИТОГО " + dept.title + ": " + total + " баллов";
+    reportEl.textContent = text;
+  }
+
+  // шкала
+  updateRail("calc-area", total);
+  const railTitle = document.getElementById("rail-title");
+  if (railTitle) railTitle.textContent = dept.title;
+}
+
+/* ============================================================
+   КНОПКИ
+   ============================================================ */
+function copyReport() {
+  const el = document.getElementById("report");
+  if (!el || !el.textContent) { showToast("Сначала введите данные"); return; }
+  const profile = getActiveProfile();
+  const header = `=== ОТЧЁТ ${DEPTS[profile.dept].title} · ${profile.name} ===\n\n`;
+  navigator.clipboard.writeText(header + el.textContent)
+    .then(() => showToast("Отчёт скопирован"))
+    .catch(() => showToast("Не удалось скопировать"));
+}
+
+function resetActive() {
+  const profile = getActiveProfile();
+  if (!profile) return;
+  if (!confirm("Сбросить все данные профиля «" + profile.name + "»?")) return;
+  profile.data = {};
+  saveState();
+  renderCalculator();
+  recalc();
+  showToast("Данные сброшены");
+}
+
+/* ============================================================
+   ПРОФИЛИ
+   ============================================================ */
+function addProfile() {
+  const name = prompt("Имя нового профиля:", "");
+  if (!name || !name.trim()) return;
+
+  const deptList = "psid, pm, di, had";
+  let dept = prompt("Отдел (psid / pm / di / had):", "psid");
+  if (!dept) return;
+  dept = dept.trim().toLowerCase();
+  if (!DEPTS[dept]) {
+    showToast("Неверный отдел");
+    return;
+  }
+
+  const p = newProfile(name.trim(), dept);
+  state.profiles.push(p);
+  state.activeProfileId = p.id;
+  saveState();
+  renderProfileBar();
+  renderCalculator();
+  recalc();
+  showToast("Профиль добавлен");
+}
+
+function renameProfile() {
+  const p = getActiveProfile();
+  if (!p) return;
+  const name = prompt("Новое имя профиля:", p.name);
+  if (!name || !name.trim()) return;
+  p.name = name.trim();
+  saveState();
+  renderProfileBar();
+  showToast("Профиль переименован");
+}
+
+function deleteProfile() {
+  const p = getActiveProfile();
+  if (!p) return;
+  if (state.profiles.length <= 1) {
+    showToast("Нельзя удалить последний профиль");
+    return;
+  }
+  if (!confirm("Удалить профиль «" + p.name + "» вместе со всеми данными?")) return;
+  state.profiles = state.profiles.filter(x => x.id !== p.id);
+  state.activeProfileId = state.profiles[0].id;
+  saveState();
+  renderProfileBar();
+  renderCalculator();
+  recalc();
+  showToast("Профиль удалён");
+}
+
+/* ============================================================
+   СВОДКА
+   ============================================================ */
+function showSummary() {
+  const content = document.getElementById("summary-content");
+  let html = '<table class="summary-table"><thead><tr>' +
+    '<th>Профиль</th><th>Отдел</th><th class="num">Итого</th><th class="num">Норма</th><th>Статус</th>' +
+    '</tr></thead><tbody>';
+
+  state.profiles.forEach(p => {
+    const dept = DEPTS[p.dept];
+    const total = calcTotal(p);
+    const norm = NORMS[p.dept] || 0;
+    let statusClass = "status-bad";
+    let statusText = "Мало";
+    if (p.dept === "di") {
+      const actions = calcInstrActions(p);
+      const instrNorm = dept.instrNorm || 20;
+      if (actions >= instrNorm) { statusClass = "status-ok"; statusText = "✅ Выполнено"; }
+      else if (actions > 0) { statusClass = "status-low"; statusText = "⚠️ " + actions + " / " + instrNorm + " действ."; }
+      else { statusClass = "status-bad"; statusText = "❌ Нет действий"; }
+      html += `<tr>
+        <td>${p.name}</td>
+        <td>${dept.icon} ${dept.title}</td>
+        <td class="num">${total}</td>
+        <td class="num">${instrNorm} действ.</td>
+        <td class="status ${statusClass}">${statusText}</td>
+      </tr>`;
+    } else {
+      if (total >= norm) { statusClass = "status-ok"; statusText = "✅ Выполнено"; }
+      else if (total > 0) { statusClass = "status-low"; statusText = "⚠️ " + Math.round(total / norm * 100) + "%"; }
+      else { statusClass = "status-bad"; statusText = "❌ Нет данных"; }
+      html += `<tr>
+        <td>${p.name}</td>
+        <td>${dept.icon} ${dept.title}</td>
+        <td class="num">${total}</td>
+        <td class="num">${norm}</td>
+        <td class="status ${statusClass}">${statusText}</td>
+      </tr>`;
+    }
+  });
+
+  html += '</tbody></table>';
+  content.innerHTML = html;
+  document.getElementById("modal-summary").classList.add("active");
+}
+
+/* ============================================================
+   ИНИЦИАЛИЗАЦИЯ
+   ============================================================ */
+function init() {
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // загрузка или создание первого профиля
+  if (!loadState() || !state.profiles.length) {
+    const p = newProfile("Основной", "psid");
+    state = { profiles: [p], activeProfileId: p.id };
+    saveState();
+  }
+  if (!state.activeProfileId || !state.profiles.find(p => p.id === state.activeProfileId)) {
+    state.activeProfileId = state.profiles[0].id;
+  }
+
+  renderProfileBar();
+  renderCalculator();
+  recalc();
+
+  // обработчики панели профиля
+  document.getElementById("profile-select").addEventListener("change", (e) => {
+    state.activeProfileId = e.target.value;
+    saveState();
+    renderProfileBar();
+    renderCalculator();
+    recalc();
+  });
+
+  document.getElementById("btn-add-profile").addEventListener("click", addProfile);
+  document.getElementById("btn-rename-profile").addEventListener("click", renameProfile);
+  document.getElementById("btn-delete-profile").addEventListener("click", deleteProfile);
+  document.getElementById("btn-summary").addEventListener("click", showSummary);
+  document.getElementById("close-summary").addEventListener("click", () => {
+    document.getElementById("modal-summary").classList.remove("active");
+  });
+  document.getElementById("modal-summary").addEventListener("click", (e) => {
+    if (e.target.id === "modal-summary") e.currentTarget.classList.remove("active");
+  });
+
+  // переключение отдела у активного профиля
+  document.querySelectorAll(".dept-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const p = getActiveProfile();
+      if (!p) return;
+      const newDept = btn.dataset.dept;
+      if (!DEPTS[newDept]) return;
+      if (p.dept === newDept) return;
+
+      if (confirm("Сменить отдел профиля «" + p.name + "» на " + DEPTS[newDept].title + "?\n\nВнимание: данные текущего отдела сохранятся, но не будут отображаться, пока не вернёшься в этот отдел.")) {
+        p.dept = newDept;
+        saveState();
+        renderProfileBar();
+        renderCalculator();
+        recalc();
+      }
+    });
+  });
+
+  // Ctrl+S
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+      e.preventDefault();
+      copyReport();
+    }
+    if (e.key === "Escape") {
+      document.getElementById("modal-summary").classList.remove("active");
+    }
+  });
+}
+
+window.onCalcResize = function() { recalc(); };
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
