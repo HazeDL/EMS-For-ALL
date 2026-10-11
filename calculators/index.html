@@ -484,7 +484,6 @@
     <div class="top-actions">
       <button class="big-btn primary" id="btn-profiles" type="button">👥 Профили</button>
       <button class="big-btn" id="btn-summary" type="button">📊 Сводка</button>
-      <button class="big-btn" id="btn-export" type="button">💾 Экспорт</button>
     </div>
 
   </div>
@@ -969,8 +968,12 @@ function bindProfileList() {
   list.addEventListener("click", (e) => {
     const card = e.target.closest(".profile-card");
     if (!card) return;
+
+    const actionEl = e.target.closest("[data-action]");
+    if (!actionEl) return;
+
     const id = card.dataset.id;
-    const action = e.target.dataset.action;
+    const action = actionEl.dataset.action;
 
     if (action === "select") {
       switchProfile(id);
@@ -1346,23 +1349,6 @@ function showSummary() {
 }
 
 /* ============================================================
-   ЭКСПОРТ
-   ============================================================ */
-function exportData() {
-  const dataStr = JSON.stringify(state, null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "ems_profiles_" + new Date().toISOString().slice(0,10) + ".json";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast("Экспорт готов");
-}
-
-/* ============================================================
    ИНИЦИАЛИЗАЦИЯ
    ============================================================ */
 function init() {
@@ -1389,7 +1375,6 @@ function init() {
     openModal("modal-profiles");
   });
   document.getElementById("btn-summary").addEventListener("click", showSummary);
-  document.getElementById("btn-export").addEventListener("click", exportData);
 
   /* --------- Форма нового профиля --------- */
   document.getElementById("add-profile-btn").addEventListener("click", openNewProfileForm);
