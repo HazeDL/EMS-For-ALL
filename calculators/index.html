@@ -87,126 +87,68 @@
     align-items: center;
     gap: 14px;
   }
-
   .profile-field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    flex: 1;
-    min-width: 200px;
+    display: flex; flex-direction: column; gap: 5px;
+    flex: 1; min-width: 200px;
   }
   .profile-field label {
-    font-size: 12px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
+    font-size: 12px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
   }
   .profile-field select,
   .profile-field input {
-    background: rgba(13, 17, 23, 0.7);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 16px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: border-color 0.15s;
+    background: rgba(13, 17, 23, 0.7); color: var(--text);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; font-size: 16px; font-family: inherit;
+    cursor: pointer; transition: border-color 0.15s;
   }
   .profile-field select:focus,
   .profile-field input:focus {
-    outline: none;
-    border-color: var(--accent);
+    outline: none; border-color: var(--accent);
   }
-
-  .profile-actions {
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-  }
-
+  .profile-actions { display: flex; gap: 8px; align-items: flex-end; }
   .dept-switch {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 4px 0;
-    width: 100%;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+    padding: 4px 0; width: 100%;
     border-top: 1px solid var(--border);
-    padding-top: 14px;
-    margin-top: 4px;
+    padding-top: 14px; margin-top: 4px;
   }
   .dept-switch-label {
-    font-size: 12px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
-    margin-right: 8px;
+    font-size: 12px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 1px;
+    font-weight: 600; margin-right: 8px;
   }
   .dept-btn {
-    background: rgba(13, 17, 23, 0.6);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    background: rgba(13, 17, 23, 0.6); color: var(--text);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 20px; font-size: 15px; font-weight: 600;
+    font-family: inherit; cursor: pointer; transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
   }
-  .dept-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+  .dept-btn:hover { border-color: var(--accent); color: var(--accent); }
   .dept-btn.active {
     background: rgba(88, 166, 255, 0.12);
-    border-color: var(--accent);
-    color: var(--accent);
+    border-color: var(--accent); color: var(--accent);
   }
-
   .btn-icon {
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    background: var(--bg-alt);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
+    width: 42px; height: 42px; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; background: var(--bg-alt); color: var(--text);
+    border: 1px solid var(--border); border-radius: 10px;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
   }
-  .btn-icon:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+  .btn-icon:hover { border-color: var(--accent); color: var(--accent); }
   .btn-icon.danger:hover {
-    border-color: var(--danger);
-    color: var(--danger);
+    border-color: var(--danger); color: var(--danger);
     background: rgba(248, 81, 73, 0.06);
   }
 
   /* --------- Модалка --------- */
   .modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9998;
-    display: none;
-    align-items: center;
-    justify-content: center;
+    position: fixed; inset: 0; z-index: 9998;
+    display: none; align-items: center; justify-content: center;
     background: rgba(5, 8, 12, 0.85);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
     padding: 24px;
   }
   .modal-overlay.active { display: flex; }
@@ -223,67 +165,47 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     animation: modalIn 0.25s ease;
   }
+  .modal-sm { max-width: 460px; }
   @keyframes modalIn {
     from { transform: scale(0.96); opacity: 0.8; }
     to   { transform: scale(1); opacity: 1; }
   }
   .modal-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    font-size: 22px; font-weight: 700; color: var(--accent);
+    margin-bottom: 18px; display: flex;
+    justify-content: space-between; align-items: center;
   }
   .modal-close {
-    background: transparent;
-    border: none;
-    color: var(--text-dim);
-    font-size: 24px;
-    cursor: pointer;
-    line-height: 1;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    transition: all 0.15s;
+    background: transparent; border: none; color: var(--text-dim);
+    font-size: 24px; cursor: pointer; line-height: 1;
+    padding: 0; width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; transition: all 0.15s;
   }
   .modal-close:hover { color: var(--danger); background: rgba(248, 81, 73, 0.1); }
 
-  /* --------- Сводка --------- */
-  .summary-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 15px;
+  .modal-message {
+    font-size: 16px; color: var(--text); line-height: 1.6;
+    margin-bottom: 22px;
   }
+  .modal-buttons {
+    display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
+  }
+
+  /* --------- Сводка --------- */
+  .summary-table { width: 100%; border-collapse: collapse; font-size: 15px; }
   .summary-table th {
-    text-align: left;
-    padding: 12px 14px;
-    color: var(--text-dim);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 600;
+    text-align: left; padding: 12px 14px; color: var(--text-dim);
+    font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+    border-bottom: 1px solid var(--border); font-weight: 600;
   }
   .summary-table td {
-    padding: 14px;
-    border-bottom: 1px solid var(--border);
+    padding: 14px; border-bottom: 1px solid var(--border);
     color: var(--text);
   }
   .summary-table tr:hover td { background: rgba(88, 166, 255, 0.05); }
-  .summary-table .num {
-    text-align: right;
-    font-weight: 700;
-    color: var(--accent);
-  }
-  .summary-table .status {
-    font-weight: 600;
-  }
+  .summary-table .num { text-align: right; font-weight: 700; color: var(--accent); }
+  .summary-table .status { font-weight: 600; }
   .status-ok   { color: var(--success); }
   .status-low  { color: var(--gold); }
   .status-bad  { color: var(--danger); }
@@ -307,13 +229,43 @@
   }
 
   .content-layout {
-    display: grid;
-    grid-template-columns: 130px 1fr;
-    gap: 26px;
-    align-items: start;
+    display: grid; grid-template-columns: 130px 1fr;
+    gap: 26px; align-items: start;
   }
 
-  /* --------- Адаптив --------- */
+  /* --------- Всплывающий тост при вводе --------- */
+  .profile-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(26, 39, 68, 0.98);
+    color: var(--text);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s;
+    pointer-events: none;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 90vw;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .profile-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  .profile-toast .pt-icon { font-size: 20px; }
+  .profile-toast .pt-name { color: var(--accent); }
+  .profile-toast .pt-total { color: var(--success); margin-left: 6px; }
+
   @media (max-width: 900px) {
     .content-layout { grid-template-columns: 1fr; }
   }
@@ -327,12 +279,14 @@
 
     .profile-bar { padding: 14px 16px; gap: 10px; }
     .profile-field { min-width: 100%; }
-    .profile-actions { width: 100%; justify-content: flex-start; }
+    .profile-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
     .dept-btn { flex: 1; justify-content: center; padding: 9px 12px; font-size: 14px; }
     .dept-switch-label { width: 100%; margin: 0 0 6px 0; }
     .modal { padding: 20px; }
     .summary-table { font-size: 14px; }
     .summary-table th, .summary-table td { padding: 10px 8px; }
+
+    .profile-toast { padding: 12px 18px; font-size: 15px; bottom: 90px; }
   }
 </style>
 </head>
@@ -382,7 +336,6 @@
     <p>PSID · PM · DI · HAD — единый калькулятор с профилями</p>
   </header>
 
-  <!-- ==================== ПАНЕЛЬ ПРОФИЛЯ ==================== -->
   <div class="profile-bar">
 
     <div class="profile-field">
@@ -407,7 +360,6 @@
 
   </div>
 
-  <!-- ==================== КАЛЬКУЛЯТОР ==================== -->
   <div class="content-layout" id="calc-area">
 
     <aside class="progress-rail" data-rail="main">
@@ -441,10 +393,32 @@
   <div class="modal">
     <div class="modal-title">
       📊 Сводка по всем профилям
-      <button class="modal-close" id="close-summary" type="button">✕</button>
+      <button class="modal-close" data-close="modal-summary" type="button">✕</button>
     </div>
     <div id="summary-content"></div>
   </div>
+</div>
+
+<!-- ==================== МОДАЛКА ПОДТВЕРЖДЕНИЯ ==================== -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal modal-sm">
+    <div class="modal-title">
+      ⚠️ Подтверждение
+      <button class="modal-close" data-close="modal-confirm" type="button">✕</button>
+    </div>
+    <div class="modal-message" id="confirm-message">Вы уверены?</div>
+    <div class="modal-buttons">
+      <button class="primary" id="confirm-yes" type="button">Да</button>
+      <button id="confirm-no" type="button">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ТОСТ ПРИ ВВОДЕ ==================== -->
+<div class="profile-toast" id="profile-toast">
+  <span class="pt-icon">👤</span>
+  <span>Считаем для <span class="pt-name" id="pt-name">—</span></span>
+  <span class="pt-total" id="pt-total">0</span>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -669,6 +643,43 @@ function getActiveProfile() {
 }
 
 /* ============================================================
+   МОДАЛКА ПОДТВЕРЖДЕНИЯ (замена confirm)
+   ============================================================ */
+let confirmCallback = null;
+
+function askConfirm(message, onYes, yesLabel) {
+  document.getElementById("confirm-message").textContent = message;
+  document.getElementById("confirm-yes").textContent = yesLabel || "Да";
+  confirmCallback = onYes;
+  document.getElementById("modal-confirm").classList.add("active");
+}
+
+function closeConfirm() {
+  document.getElementById("modal-confirm").classList.remove("active");
+  confirmCallback = null;
+}
+
+/* ============================================================
+   ТОСТ ПРИ ВВОДЕ
+   ============================================================ */
+let profileToastTimer = null;
+
+function showProfileToast() {
+  const profile = getActiveProfile();
+  if (!profile) return;
+  const dept = DEPTS[profile.dept];
+  const total = calcTotal(profile);
+
+  document.getElementById("pt-name").textContent = profile.name + " · " + dept.title;
+  document.getElementById("pt-total").textContent = total + " баллов";
+
+  const el = document.getElementById("profile-toast");
+  el.classList.add("show");
+  clearTimeout(profileToastTimer);
+  profileToastTimer = setTimeout(() => el.classList.remove("show"), 1500);
+}
+
+/* ============================================================
    РАСЧЁТЫ
    ============================================================ */
 function calcTotal(profile) {
@@ -718,7 +729,6 @@ function renderProfileBar() {
     sel.appendChild(opt);
   });
 
-  // активная кнопка отдела
   const active = getActiveProfile();
   document.querySelectorAll(".dept-btn").forEach(btn => {
     btn.classList.toggle("active", active && btn.dataset.dept === active.dept);
@@ -781,7 +791,6 @@ function renderCalculator() {
     body.appendChild(sec);
   });
 
-  // общий итог
   const totalBox = document.createElement("div");
   totalBox.className = "total-box";
   totalBox.innerHTML = `
@@ -789,7 +798,6 @@ function renderCalculator() {
     <span class="value" id="total-value">0</span>`;
   body.appendChild(totalBox);
 
-  // второй итог для DI — действия
   if (profile.dept === "di") {
     const instrBox = document.createElement("div");
     instrBox.className = "total-box";
@@ -799,7 +807,6 @@ function renderCalculator() {
     body.appendChild(instrBox);
   }
 
-  // кнопки
   const btns = document.createElement("div");
   btns.className = "buttons";
   btns.innerHTML = `
@@ -807,13 +814,11 @@ function renderCalculator() {
     <button class="danger" id="btn-reset" type="button">↺ Сбросить</button>`;
   body.appendChild(btns);
 
-  // отчёт
   const report = document.createElement("div");
   report.className = "report";
   report.id = "report";
   body.appendChild(report);
 
-  // обработчики
   body.querySelectorAll("input[type=number]").forEach(inp => {
     inp.addEventListener("input", onInput);
   });
@@ -837,6 +842,7 @@ function onInput(e) {
 
   saveState();
   recalc();
+  showProfileToast();
 }
 
 function recalc() {
@@ -889,7 +895,6 @@ function recalc() {
     if (instrEl) instrEl.textContent = calcInstrActions(profile);
   }
 
-  // отчёт
   const reportEl = document.getElementById("report");
   if (reportEl) {
     let text = "";
@@ -903,7 +908,6 @@ function recalc() {
     reportEl.textContent = text;
   }
 
-  // шкала
   updateRail("calc-area", total);
   const railTitle = document.getElementById("rail-title");
   if (railTitle) railTitle.textContent = dept.title;
@@ -925,12 +929,17 @@ function copyReport() {
 function resetActive() {
   const profile = getActiveProfile();
   if (!profile) return;
-  if (!confirm("Сбросить все данные профиля «" + profile.name + "»?")) return;
-  profile.data = {};
-  saveState();
-  renderCalculator();
-  recalc();
-  showToast("Данные сброшены");
+  askConfirm(
+    'Сбросить все данные профиля «' + profile.name + '»?',
+    () => {
+      profile.data = {};
+      saveState();
+      renderCalculator();
+      recalc();
+      showToast("Данные сброшены");
+    },
+    "Сбросить"
+  );
 }
 
 /* ============================================================
@@ -940,7 +949,6 @@ function addProfile() {
   const name = prompt("Имя нового профиля:", "");
   if (!name || !name.trim()) return;
 
-  const deptList = "psid, pm, di, had";
   let dept = prompt("Отдел (psid / pm / di / had):", "psid");
   if (!dept) return;
   dept = dept.trim().toLowerCase();
@@ -977,14 +985,19 @@ function deleteProfile() {
     showToast("Нельзя удалить последний профиль");
     return;
   }
-  if (!confirm("Удалить профиль «" + p.name + "» вместе со всеми данными?")) return;
-  state.profiles = state.profiles.filter(x => x.id !== p.id);
-  state.activeProfileId = state.profiles[0].id;
-  saveState();
-  renderProfileBar();
-  renderCalculator();
-  recalc();
-  showToast("Профиль удалён");
+  askConfirm(
+    'Удалить профиль «' + p.name + '» вместе со всеми данными?',
+    () => {
+      state.profiles = state.profiles.filter(x => x.id !== p.id);
+      state.activeProfileId = state.profiles[0].id;
+      saveState();
+      renderProfileBar();
+      renderCalculator();
+      recalc();
+      showToast("Профиль удалён");
+    },
+    "Удалить"
+  );
 }
 
 /* ============================================================
@@ -1040,7 +1053,6 @@ function showSummary() {
 function init() {
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  // загрузка или создание первого профиля
   if (!loadState() || !state.profiles.length) {
     const p = newProfile("Основной", "psid");
     state = { profiles: [p], activeProfileId: p.id };
@@ -1054,7 +1066,6 @@ function init() {
   renderCalculator();
   recalc();
 
-  // обработчики панели профиля
   document.getElementById("profile-select").addEventListener("change", (e) => {
     state.activeProfileId = e.target.value;
     saveState();
@@ -1067,14 +1078,31 @@ function init() {
   document.getElementById("btn-rename-profile").addEventListener("click", renameProfile);
   document.getElementById("btn-delete-profile").addEventListener("click", deleteProfile);
   document.getElementById("btn-summary").addEventListener("click", showSummary);
-  document.getElementById("close-summary").addEventListener("click", () => {
-    document.getElementById("modal-summary").classList.remove("active");
+
+  // закрытие модалок
+  document.querySelectorAll("[data-close]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.close;
+      document.getElementById(id).classList.remove("active");
+      if (id === "modal-confirm") confirmCallback = null;
+    });
   });
   document.getElementById("modal-summary").addEventListener("click", (e) => {
     if (e.target.id === "modal-summary") e.currentTarget.classList.remove("active");
   });
+  document.getElementById("modal-confirm").addEventListener("click", (e) => {
+    if (e.target.id === "modal-confirm") closeConfirm();
+  });
 
-  // переключение отдела у активного профиля
+  // кнопки подтверждения
+  document.getElementById("confirm-yes").addEventListener("click", () => {
+    const cb = confirmCallback;
+    closeConfirm();
+    if (cb) cb();
+  });
+  document.getElementById("confirm-no").addEventListener("click", closeConfirm);
+
+  // переключение отдела
   document.querySelectorAll(".dept-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const p = getActiveProfile();
@@ -1083,17 +1111,20 @@ function init() {
       if (!DEPTS[newDept]) return;
       if (p.dept === newDept) return;
 
-      if (confirm("Сменить отдел профиля «" + p.name + "» на " + DEPTS[newDept].title + "?\n\nВнимание: данные текущего отдела сохранятся, но не будут отображаться, пока не вернёшься в этот отдел.")) {
-        p.dept = newDept;
-        saveState();
-        renderProfileBar();
-        renderCalculator();
-        recalc();
-      }
+      askConfirm(
+        'Сменить отдел профиля «' + p.name + '» на ' + DEPTS[newDept].title + '?\n\nДанные текущего отдела сохранятся, но не будут отображаться, пока не вернёшься в этот отдел.',
+        () => {
+          p.dept = newDept;
+          saveState();
+          renderProfileBar();
+          renderCalculator();
+          recalc();
+        },
+        "Сменить"
+      );
     });
   });
 
-  // Ctrl+S
   document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === "s") {
       e.preventDefault();
@@ -1101,6 +1132,7 @@ function init() {
     }
     if (e.key === "Escape") {
       document.getElementById("modal-summary").classList.remove("active");
+      closeConfirm();
     }
   });
 }
