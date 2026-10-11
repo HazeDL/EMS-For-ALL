@@ -6,7 +6,6 @@
 <title>Калькулятор баллов — EMS</title>
 <link rel="stylesheet" href="../style.css">
 <style>
-  /* --------- Левая панель --------- */
   .side-tabs-left {
     position: fixed; top: 50%; left: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 8px;
@@ -36,7 +35,6 @@
   .tab-left .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-left .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Правая панель --------- */
   .side-tabs {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
     z-index: 90; display: flex; flex-direction: column; gap: 8px;
@@ -72,7 +70,6 @@
   .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Панель сверху --------- */
   .top-bar {
     background: var(--bg-alt);
     border: 1px solid var(--border);
@@ -154,7 +151,6 @@
     color: #0d1117;
   }
 
-  /* --------- Модалка --------- */
   .modal-overlay {
     position: fixed; inset: 0; z-index: 9998;
     display: none; align-items: center; justify-content: center;
@@ -206,7 +202,6 @@
     display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
   }
 
-  /* --------- Список профилей в модалке --------- */
   .profile-list {
     display: flex; flex-direction: column; gap: 10px;
     margin-bottom: 20px;
@@ -273,7 +268,6 @@
     background: rgba(248, 81, 73, 0.06);
   }
 
-  /* --------- Форма нового профиля --------- */
   .new-profile-form {
     display: none;
     flex-direction: column;
@@ -312,7 +306,6 @@
     gap: 12px;
   }
 
-  /* --------- Inline редактирование имени --------- */
   .profile-rename-input {
     background: rgba(13, 17, 23, 0.8);
     color: var(--text);
@@ -326,7 +319,6 @@
   }
   .profile-rename-input:focus { outline: none; }
 
-  /* --------- Сводка --------- */
   .summary-table { width: 100%; border-collapse: collapse; font-size: 15px; }
   .summary-table th {
     text-align: left; padding: 12px 14px; color: var(--text-dim);
@@ -344,7 +336,6 @@
   .status-low  { color: var(--gold); }
   .status-bad  { color: var(--danger); }
 
-  /* --------- Секции калькулятора --------- */
   .section {
     background: var(--bg-alt);
     border: 1px solid var(--border);
@@ -367,7 +358,6 @@
     gap: 26px; align-items: start;
   }
 
-  /* --------- Всплывающий тост --------- */
   .profile-toast {
     position: fixed;
     bottom: 28px;
@@ -440,9 +430,10 @@
   <a class="tab tab-active" href="index.html">
     <span class="tab-icon">🧮</span><span class="tab-label">Калькулятор</span>
   </a>
+  <a class="tab" href="../settings.html">
+    <span class="tab-icon">⚙️</span><span class="tab-label">Настройки</span>
+  </a>
 </nav>
-
-<a class="bg-btn" href="../settings.html" title="Настройки">⚙️ Настройки</a>
 
 <div class="container page-content">
 
@@ -452,7 +443,6 @@
     <p>PSID · PM · DI · HAD — единый калькулятор с профилями</p>
   </header>
 
-  <!-- ==================== ПАНЕЛЬ СВЕРХУ ==================== -->
   <div class="top-bar">
 
     <div class="current-profile">
@@ -470,7 +460,6 @@
 
   </div>
 
-  <!-- ==================== КАЛЬКУЛЯТОР ==================== -->
   <div class="content-layout" id="calc-area">
 
     <aside class="progress-rail" data-rail="main">
@@ -499,7 +488,6 @@
 
 </div>
 
-<!-- ==================== МОДАЛКА ПРОФИЛЕЙ ==================== -->
 <div class="modal-overlay" id="modal-profiles">
   <div class="modal">
     <div class="modal-title">
@@ -537,7 +525,6 @@
   </div>
 </div>
 
-<!-- ==================== МОДАЛКА СВОДКИ ==================== -->
 <div class="modal-overlay" id="modal-summary">
   <div class="modal">
     <div class="modal-title">
@@ -548,7 +535,6 @@
   </div>
 </div>
 
-<!-- ==================== МОДАЛКА ПОДТВЕРЖДЕНИЯ ==================== -->
 <div class="modal-overlay" id="modal-confirm">
   <div class="modal modal-sm">
     <div class="modal-title">
@@ -563,7 +549,6 @@
   </div>
 </div>
 
-<!-- ==================== ТОСТ ПРИ ВВОДЕ ==================== -->
 <div class="profile-toast" id="profile-toast">
   <span class="pt-icon">👤</span>
   <span>Считаем для <span class="pt-name" id="pt-name">—</span></span>
@@ -574,9 +559,6 @@
 
 <script src="../common.js"></script>
 <script>
-/* ============================================================
-   ОПИСАНИЕ ОТДЕЛОВ
-   ============================================================ */
 const DEPTS = {
   psid: {
     title: "PSID",
@@ -619,7 +601,6 @@ const DEPTS = {
       }
     ]
   },
-
   pm: {
     title: "PM",
     icon: "📋",
@@ -661,7 +642,6 @@ const DEPTS = {
       }
     ]
   },
-
   di: {
     title: "DI",
     icon: "📊",
@@ -708,7 +688,6 @@ const DEPTS = {
       }
     ]
   },
-
   had: {
     title: "HAD",
     icon: "💉",
@@ -755,18 +734,11 @@ const DEPTS = {
 const STORAGE_KEY = "ems_calc_profiles_v1";
 const NORMS = { psid: 500, pm: 500, di: 500, had: 500 };
 
-/* ============================================================
-   СОСТОЯНИЕ
-   ============================================================ */
-let state = {
-  profiles: [],
-  activeProfileId: null
-};
+let state = { profiles: [], activeProfileId: null };
 
 function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
 }
-
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -777,31 +749,19 @@ function loadState() {
     return true;
   } catch (e) { return false; }
 }
-
 function newProfile(name, dept) {
   return {
     id: "p" + Date.now() + "_" + Math.floor(Math.random() * 1000),
-    name: name,
-    dept: dept,
-    data: {}
+    name: name, dept: dept, data: {}
   };
 }
-
 function getActiveProfile() {
   return state.profiles.find(p => p.id === state.activeProfileId);
 }
 
-/* ============================================================
-   МОДАЛКИ
-   ============================================================ */
-function openModal(id) {
-  document.getElementById(id).classList.add("active");
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove("active");
-}
+function openModal(id) { document.getElementById(id).classList.add("active"); }
+function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
-/* --------- Подтверждение --------- */
 let confirmCallback = null;
 function askConfirm(message, onYes, yesLabel) {
   document.getElementById("confirm-message").textContent = message;
@@ -814,28 +774,20 @@ function closeConfirm() {
   confirmCallback = null;
 }
 
-/* ============================================================
-   ТОСТ ПРИ ВВОДЕ
-   ============================================================ */
 let profileToastTimer = null;
 function showProfileToast() {
   const profile = getActiveProfile();
   if (!profile) return;
   const dept = DEPTS[profile.dept];
   const total = calcTotal(profile);
-
   document.getElementById("pt-name").textContent = profile.name + " · " + dept.title;
   document.getElementById("pt-total").textContent = total + " баллов";
-
   const el = document.getElementById("profile-toast");
   el.classList.add("show");
   clearTimeout(profileToastTimer);
   profileToastTimer = setTimeout(() => el.classList.remove("show"), 1500);
 }
 
-/* ============================================================
-   РАСЧЁТЫ
-   ============================================================ */
 function calcTotal(profile) {
   if (!profile) return 0;
   const dept = DEPTS[profile.dept];
@@ -869,9 +821,6 @@ function calcInstrActions(profile) {
   return actions;
 }
 
-/* ============================================================
-   ПАНЕЛЬ СВЕРХУ
-   ============================================================ */
 function renderTopBar() {
   const p = getActiveProfile();
   if (!p) {
@@ -886,27 +835,20 @@ function renderTopBar() {
   document.getElementById("cur-dept").textContent = dept.title + " · " + calcTotal(p) + " баллов";
 }
 
-/* ============================================================
-   СПИСОК ПРОФИЛЕЙ В МОДАЛКЕ
-   ============================================================ */
 function renderProfileList() {
   const list = document.getElementById("profile-list");
   list.innerHTML = "";
-
   if (!state.profiles.length) {
     list.innerHTML = "<p style='color: var(--text-dim); text-align: center; padding: 20px 0;'>Нет профилей. Добавьте первый.</p>";
     return;
   }
-
   state.profiles.forEach(p => {
     const dept = DEPTS[p.dept];
     const isActive = p.id === state.activeProfileId;
     const total = calcTotal(p);
-
     const card = document.createElement("div");
     card.className = "profile-card" + (isActive ? " active" : "");
     card.dataset.id = p.id;
-
     let metaExtra = "";
     if (p.dept === "di") {
       const actions = calcInstrActions(p);
@@ -916,7 +858,6 @@ function renderProfileList() {
       const norm = NORMS[p.dept] || 0;
       metaExtra = `<span>🎯 норма ${norm}</span>`;
     }
-
     card.innerHTML = `
       <div class="profile-card-icon">${dept.icon}</div>
       <div class="profile-card-body" data-action="select">
@@ -938,32 +879,22 @@ function renderProfileList() {
 
 function escapeHtml(str) {
   return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-/* --------- Обработчики списка профилей --------- */
 function bindProfileList() {
   const list = document.getElementById("profile-list");
   list.addEventListener("click", (e) => {
     const card = e.target.closest(".profile-card");
     if (!card) return;
-
     const actionEl = e.target.closest("[data-action]");
     if (!actionEl) return;
-
     const id = card.dataset.id;
     const action = actionEl.dataset.action;
-
-    if (action === "select") {
-      switchProfile(id);
-    } else if (action === "rename") {
-      startRename(id);
-    } else if (action === "delete") {
-      askDeleteProfile(id);
-    }
+    if (action === "select") switchProfile(id);
+    else if (action === "rename") startRename(id);
+    else if (action === "delete") askDeleteProfile(id);
   });
 }
 
@@ -977,20 +908,16 @@ function switchProfile(id) {
   showToast("Профиль переключён");
 }
 
-/* --------- Переименование inline --------- */
 function startRename(id) {
   const card = document.querySelector(`.profile-card[data-id="${id}"]`);
   if (!card) return;
   const body = card.querySelector(".profile-card-body");
   const profile = state.profiles.find(p => p.id === id);
   if (!profile) return;
-
-  const oldHtml = body.innerHTML;
   body.innerHTML = `<input class="profile-rename-input" type="text" value="${escapeHtml(profile.name)}" maxlength="40">`;
   const input = body.querySelector("input");
   input.focus();
   input.select();
-
   const finish = (save) => {
     if (save) {
       const newName = input.value.trim();
@@ -1003,7 +930,6 @@ function startRename(id) {
     }
     renderProfileList();
   };
-
   input.addEventListener("blur", () => finish(true));
   input.addEventListener("keydown", (ev) => {
     if (ev.key === "Enter") { ev.preventDefault(); input.blur(); }
@@ -1011,22 +937,15 @@ function startRename(id) {
   });
 }
 
-/* --------- Удаление профиля --------- */
 function askDeleteProfile(id) {
   const profile = state.profiles.find(p => p.id === id);
   if (!profile) return;
-  if (state.profiles.length <= 1) {
-    showToast("Нельзя удалить последний профиль");
-    return;
-  }
-
+  if (state.profiles.length <= 1) { showToast("Нельзя удалить последний профиль"); return; }
   askConfirm(
     'Удалить профиль «' + profile.name + '» вместе со всеми данными?',
     () => {
       state.profiles = state.profiles.filter(x => x.id !== id);
-      if (state.activeProfileId === id) {
-        state.activeProfileId = state.profiles[0].id;
-      }
+      if (state.activeProfileId === id) state.activeProfileId = state.profiles[0].id;
       saveState();
       renderTopBar();
       renderProfileList();
@@ -1038,7 +957,6 @@ function askDeleteProfile(id) {
   );
 }
 
-/* --------- Форма нового профиля --------- */
 function openNewProfileForm() {
   const form = document.getElementById("new-profile-form");
   document.getElementById("new-name").value = "";
@@ -1052,17 +970,8 @@ function closeNewProfileForm() {
 function createNewProfile() {
   const name = document.getElementById("new-name").value.trim();
   const dept = document.getElementById("new-dept").value;
-
-  if (!name) {
-    showToast("Введите имя профиля");
-    document.getElementById("new-name").focus();
-    return;
-  }
-  if (!DEPTS[dept]) {
-    showToast("Неверный отдел");
-    return;
-  }
-
+  if (!name) { showToast("Введите имя профиля"); document.getElementById("new-name").focus(); return; }
+  if (!DEPTS[dept]) { showToast("Неверный отдел"); return; }
   const p = newProfile(name, dept);
   state.profiles.push(p);
   state.activeProfileId = p.id;
@@ -1075,32 +984,24 @@ function createNewProfile() {
   showToast("Профиль создан");
 }
 
-/* ============================================================
-   ОТРИСОВКА КАЛЬКУЛЯТОРА
-   ============================================================ */
 function renderCalculator() {
   const profile = getActiveProfile();
   const body = document.getElementById("dept-body");
   const railTitle = document.getElementById("rail-title");
   body.innerHTML = "";
-
   if (!profile) {
     body.innerHTML = "<p style='color: var(--text-dim); text-align:center; padding: 40px 0;'>Нет активного профиля</p>";
     return;
   }
-
   const dept = DEPTS[profile.dept];
   railTitle.textContent = dept.title;
-
   dept.sections.forEach(section => {
     const sec = document.createElement("div");
     sec.className = "section";
-
     const title = document.createElement("div");
     title.className = "section-title";
     title.textContent = section.title;
     sec.appendChild(title);
-
     const header = document.createElement("div");
     header.className = "row header-row";
     header.innerHTML = `
@@ -1109,16 +1010,13 @@ function renderCalculator() {
       <div class="cell">Балл</div>
       <div class="cell">Итог</div>`;
     sec.appendChild(header);
-
     section.items.forEach(item => {
       const d = profile.data[item.key] || {};
       const count = d.count != null && d.count > 0 ? d.count : "";
       const point = d.point != null ? d.point : item.pts;
-
       const row = document.createElement("div");
       row.className = "row";
       row.dataset.key = item.key;
-
       const badge = item.lim > 0 ? `<span class="limit">макс ${item.lim}</span>` : "";
       row.innerHTML = `
         <div class="name">${item.name}${badge}</div>
@@ -1127,17 +1025,14 @@ function renderCalculator() {
         <div class="sum" data-role="sum" data-key="${item.key}">0</div>`;
       sec.appendChild(row);
     });
-
     body.appendChild(sec);
   });
-
   const totalBox = document.createElement("div");
   totalBox.className = "total-box";
   totalBox.innerHTML = `
     <span class="label">Итого баллов ${dept.title}</span>
     <span class="value" id="total-value">0</span>`;
   body.appendChild(totalBox);
-
   if (profile.dept === "di") {
     const instrBox = document.createElement("div");
     instrBox.className = "total-box";
@@ -1146,19 +1041,16 @@ function renderCalculator() {
       <span class="value" id="instr-actions-value">0</span>`;
     body.appendChild(instrBox);
   }
-
   const btns = document.createElement("div");
   btns.className = "buttons";
   btns.innerHTML = `
     <button class="primary" id="btn-copy" type="button">📋 Копировать отчёт</button>
     <button class="danger" id="btn-reset" type="button">↺ Сбросить</button>`;
   body.appendChild(btns);
-
   const report = document.createElement("div");
   report.className = "report";
   report.id = "report";
   body.appendChild(report);
-
   body.querySelectorAll("input[type=number]").forEach(inp => {
     inp.addEventListener("input", onInput);
   });
@@ -1166,20 +1058,15 @@ function renderCalculator() {
   document.getElementById("btn-reset").addEventListener("click", resetActive);
 }
 
-/* ============================================================
-   ВВОД И ПЕРЕСЧЁТ
-   ============================================================ */
 function onInput(e) {
   const el = e.target;
   const key = el.dataset.key;
   const role = el.dataset.role;
   const profile = getActiveProfile();
   if (!profile) return;
-
   if (!profile.data[key]) profile.data[key] = {};
   const v = parseInt(el.value, 10);
   profile.data[key][role] = isNaN(v) ? 0 : v;
-
   saveState();
   recalc();
   showProfileToast();
@@ -1190,33 +1077,26 @@ function recalc() {
   const profile = getActiveProfile();
   if (!profile) return;
   const dept = DEPTS[profile.dept];
-
   let total = 0;
   const reportLines = {};
-
   dept.sections.forEach((section, sIdx) => {
     reportLines[sIdx] = { title: section.title, lines: [], sum: 0, actionMode: !!section.actionMode };
     section.items.forEach(item => {
       const countEl = document.querySelector(`#dept-body input[data-role="count"][data-key="${item.key}"]`);
       const sumEl   = document.querySelector(`#dept-body div[data-role="sum"][data-key="${item.key}"]`);
       if (!countEl || !sumEl) return;
-
       let count = parseInt(countEl.value, 10);
       if (isNaN(count)) count = 0;
       const pRaw = parseInt(document.querySelector(`#dept-body input[data-role="point"][data-key="${item.key}"]`).value, 10);
       const point = isNaN(pRaw) ? 0 : pRaw;
-
       const over = item.lim > 0 && count > item.lim;
       if (over) count = item.lim;
       countEl.classList.toggle("over-limit", over);
-
       const sum = count * point;
       sumEl.textContent = sum;
       sumEl.classList.toggle("positive", sum > 0);
-
       const row = countEl.closest(".row");
       row.classList.toggle("active", count > 0);
-
       if (section.actionMode) {
         reportLines[sIdx].sum += count;
         if (count > 0) reportLines[sIdx].lines.push(`  ${item.name}: ${count} действий`);
@@ -1227,15 +1107,12 @@ function recalc() {
       }
     });
   });
-
   const totalEl = document.getElementById("total-value");
   if (totalEl) totalEl.textContent = total;
-
   if (profile.dept === "di") {
     const instrEl = document.getElementById("instr-actions-value");
     if (instrEl) instrEl.textContent = calcInstrActions(profile);
   }
-
   const reportEl = document.getElementById("report");
   if (reportEl) {
     let text = "";
@@ -1248,13 +1125,9 @@ function recalc() {
     if (total > 0) text += "ИТОГО " + dept.title + ": " + total + " баллов";
     reportEl.textContent = text;
   }
-
   updateRail("calc-area", total);
 }
 
-/* ============================================================
-   КНОПКИ КАЛЬКУЛЯТОРА
-   ============================================================ */
 function copyReport() {
   const el = document.getElementById("report");
   if (!el || !el.textContent) { showToast("Сначала введите данные"); return; }
@@ -1282,22 +1155,17 @@ function resetActive() {
   );
 }
 
-/* ============================================================
-   СВОДКА
-   ============================================================ */
 function showSummary() {
   const content = document.getElementById("summary-content");
   let html = '<table class="summary-table"><thead><tr>' +
     '<th>Профиль</th><th>Отдел</th><th class="num">Итого</th><th class="num">Норма</th><th>Статус</th>' +
     '</tr></thead><tbody>';
-
   state.profiles.forEach(p => {
     const dept = DEPTS[p.dept];
     const total = calcTotal(p);
     const norm = NORMS[p.dept] || 0;
     let statusClass = "status-bad";
     let statusText = "Мало";
-
     if (p.dept === "di") {
       const actions = calcInstrActions(p);
       const instrNorm = dept.instrNorm || 20;
@@ -1324,18 +1192,13 @@ function showSummary() {
       </tr>`;
     }
   });
-
   html += '</tbody></table>';
   content.innerHTML = html;
   openModal("modal-summary");
 }
 
-/* ============================================================
-   ИНИЦИАЛИЗАЦИЯ
-   ============================================================ */
 function init() {
   document.getElementById("year").textContent = new Date().getFullYear();
-
   if (!loadState() || !state.profiles.length) {
     const p = newProfile("Основной", "psid");
     state = { profiles: [p], activeProfileId: p.id };
@@ -1344,32 +1207,23 @@ function init() {
   if (!state.activeProfileId || !state.profiles.find(p => p.id === state.activeProfileId)) {
     state.activeProfileId = state.profiles[0].id;
   }
-
   renderTopBar();
   renderProfileList();
   renderCalculator();
   recalc();
-
-  /* --------- Кнопки сверху --------- */
   document.getElementById("btn-profiles").addEventListener("click", () => {
     closeNewProfileForm();
     renderProfileList();
     openModal("modal-profiles");
   });
   document.getElementById("btn-summary").addEventListener("click", showSummary);
-
-  /* --------- Форма нового профиля --------- */
   document.getElementById("add-profile-btn").addEventListener("click", openNewProfileForm);
   document.getElementById("new-cancel").addEventListener("click", closeNewProfileForm);
   document.getElementById("new-create").addEventListener("click", createNewProfile);
   document.getElementById("new-name").addEventListener("keydown", (e) => {
     if (e.key === "Enter") { e.preventDefault(); createNewProfile(); }
   });
-
-  /* --------- Список профилей --------- */
   bindProfileList();
-
-  /* --------- Закрытие модалок --------- */
   document.querySelectorAll("[data-close]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.close;
@@ -1387,21 +1241,14 @@ function init() {
       }
     });
   });
-
-  /* --------- Кнопки подтверждения --------- */
   document.getElementById("confirm-yes").addEventListener("click", () => {
     const cb = confirmCallback;
     closeConfirm();
     if (cb) cb();
   });
   document.getElementById("confirm-no").addEventListener("click", closeConfirm);
-
-  /* --------- Горячие клавиши --------- */
   document.addEventListener("keydown", (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-      e.preventDefault();
-      copyReport();
-    }
+    if ((e.ctrlKey || e.metaKey) && e.key === "s") { e.preventDefault(); copyReport(); }
     if (e.key === "Escape") {
       document.querySelectorAll(".modal-overlay.active").forEach(m => m.classList.remove("active"));
       confirmCallback = null;
