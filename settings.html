@@ -70,6 +70,207 @@
   .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+  /* --------- Пресеты фона --------- */
+  .bg-presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .bg-preset-card {
+    position: relative;
+    height: 90px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.18s, transform 0.15s;
+    background-size: cover;
+    background-position: center;
+    display: flex; align-items: flex-end;
+    padding: 10px 14px;
+  }
+  .bg-preset-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .bg-preset-card.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(88,166,255,0.25);
+  }
+  .bg-preset-card::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55), transparent 60%);
+    pointer-events: none;
+  }
+  .bg-preset-title {
+    position: relative; z-index: 1;
+    font-size: 14px; font-weight: 600; color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+  }
+  .bg-preset-card.active .bg-preset-title::after {
+    content: " ✓"; color: var(--accent);
+  }
+
+  /* --------- Строки опций --------- */
+  .opt-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .opt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 18px;
+    background: rgba(13, 17, 23, 0.45);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .opt-label {
+    font-size: 15.5px;
+    color: var(--text);
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+  }
+  .opt-label small {
+    display: block;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-top: 3px;
+  }
+
+  /* --------- Кнопки --------- */
+  .opt-row button {
+    background: rgba(13, 17, 23, 0.6);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .opt-row button:hover { border-color: var(--accent); color: var(--accent); }
+  .opt-row button.danger:hover {
+    border-color: var(--danger); color: var(--danger);
+    background: rgba(248, 81, 73, 0.06);
+  }
+
+  /* --------- Тумблер --------- */
+  .toggle {
+    position: relative;
+    width: 52px; height: 30px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .toggle input { display: none; }
+  .toggle-track {
+    position: absolute; inset: 0;
+    background: rgba(13, 17, 23, 0.7);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 22px; height: 22px;
+    background: var(--text-dim);
+    border-radius: 50%;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .toggle input:checked + .toggle-track {
+    background: rgba(88, 166, 255, 0.2);
+    border-color: var(--accent);
+  }
+  .toggle input:checked ~ .toggle-thumb {
+    transform: translateX(22px);
+    background: var(--accent);
+  }
+
+  /* --------- Слайдер --------- */
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .slider-row input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 180px;
+    height: 6px;
+    background: rgba(13, 17, 23, 0.7);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    outline: none;
+  }
+  .slider-row input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px; height: 18px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(88,166,255,0.6);
+  }
+  .slider-row input[type=range]::-moz-range-thumb {
+    width: 18px; height: 18px;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .slider-value {
+    font-size: 14px;
+    color: var(--text-dim);
+    font-weight: 600;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  /* --------- Темы --------- */
+  .theme-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .theme-option {
+    text-align: left;
+    padding: 14px 18px;
+    background: rgba(13, 17, 23, 0.6);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .theme-option:hover { border-color: var(--accent); }
+  .theme-option.active {
+    background: rgba(88, 166, 255, 0.10);
+    border-color: var(--accent);
+  }
+  .theme-option b {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .theme-option.active b { color: var(--accent); }
+  .theme-option small {
+    display: block;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  /* --------- Инфо --------- */
   .info-row {
     display: flex;
     align-items: center;
@@ -90,6 +291,10 @@
     .side-tabs { top: auto; bottom: 14px; transform: none; }
     .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
     .tab:hover { right: 0; }
+
+    .section { padding: 20px; }
+    .opt-row { flex-wrap: wrap; gap: 10px; }
+    .slider-row input[type=range] { width: 100%; }
     .info-row { flex-direction: column; align-items: flex-start; gap: 6px; }
   }
 </style>
@@ -131,7 +336,7 @@
   <div class="section">
     <div class="section-title"><span class="icon">🎨</span> Настройка фона</div>
 
-    <p class="rules-text" style="margin-bottom: 14px; color: var(--text-dim);">
+    <p style="margin-bottom: 16px; color: var(--text-dim); font-size: 15px; line-height: 1.6;">
       Выберите готовый пресет, загрузите свою картинку или поставьте сплошной цвет.
       Фон сохраняется в браузере и применится на всех страницах сайта.
     </p>
@@ -139,17 +344,15 @@
     <div class="bg-presets-grid" id="bgPresetsGrid"></div>
 
     <div class="opt-group" style="margin-top: 20px;">
+
       <div class="opt-row">
         <div class="opt-label">
           📁 Своя картинка
-          <small>PNG, JPG, GIF, WEBP, SVG. До 4 МБ.</small>
+          <small>PNG, JPG, GIF, WEBP, SVG</small>
         </div>
-        <label for="bgFileInput" class="btn-upload">
-          <button type="button" onclick="document.getElementById('bgFileInput').click()">
-            Загрузить картинку
-          </button>
-        </label>
-        <input type="file" id="bgFileInput" accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+        <input type="file" id="bgFileInput"
+               accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml" hidden>
+        <button type="button" id="bgFileBtn">Загрузить</button>
       </div>
 
       <div class="opt-row">
@@ -157,24 +360,18 @@
           🌈 Сплошной цвет
           <small>Однотонный фон страницы</small>
         </div>
-        <input type="color" id="bgColorInput" value="#0d1117" style="width: 80px; height: 40px; background: transparent; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
+        <input type="color" id="bgColorInput" value="#0d1117"
+               style="width: 64px; height: 38px; background: transparent; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
       </div>
 
       <div class="opt-row">
         <div class="opt-label">
-          ✨ Градиент (по умолчанию)
-          <small>Стандартный анимированный фон</small>
-        </div>
-        <button type="button" id="bgGradientBtn">Применить</button>
-      </div>
-
-      <div class="opt-row">
-        <div class="opt-label">
-          🗑 Сбросить настройки фона
+          🗑 Сбросить фон
           <small>Вернуть стандартный градиент</small>
         </div>
         <button type="button" id="bgResetBtn" class="danger">Сбросить</button>
       </div>
+
     </div>
   </div>
 
@@ -182,18 +379,16 @@
   <div class="section">
     <div class="section-title"><span class="icon">🔊</span> Звуки сайта</div>
 
-    <p class="rules-text" style="margin-bottom: 14px; color: var(--text-dim);">
-      Включите звуки и настройте громкость. Звуки синтезируются прямо в браузере —
-      не требуют загрузки и работают офлайн.
+    <p style="margin-bottom: 16px; color: var(--text-dim); font-size: 15px; line-height: 1.6;">
+      Звуки синтезируются прямо в браузере — не требуют загрузки и работают офлайн.
     </p>
 
     <div class="opt-group">
 
-      <!-- Вкл/выкл -->
       <div class="opt-row">
         <div class="opt-label">
           Включить звуки
-          <small>Звуки кликов, уведомлений и ошибок</small>
+          <small>Клики, уведомления, ошибки</small>
         </div>
         <label class="toggle">
           <input type="checkbox" id="soundToggle">
@@ -202,11 +397,10 @@
         </label>
       </div>
 
-      <!-- Громкость -->
       <div class="opt-row">
-        <div class="opt-label" style="flex: 1;">
+        <div class="opt-label">
           Громкость
-          <small>Регулировка от 0 до 100%</small>
+          <small>От 0 до 100%</small>
         </div>
         <div class="slider-row">
           <input type="range" id="volumeSlider" min="0" max="100" value="50">
@@ -214,7 +408,6 @@
         </div>
       </div>
 
-      <!-- Кнопка проверки -->
       <div class="opt-row">
         <div class="opt-label">
           🔔 Проверить звук
@@ -223,16 +416,15 @@
         <button type="button" id="testSoundBtn">Проверить</button>
       </div>
 
-      <!-- Тема -->
-      <div style="padding: 14px 18px; background: rgba(13, 17, 23, 0.4); border: 1px solid var(--border); border-radius: 12px;">
+      <div class="opt-row" style="flex-direction: column; align-items: stretch;">
         <div class="opt-label" style="margin-bottom: 12px;">
           Звуковая тема
-          <small>Выберите набор звуков для кликов и уведомлений</small>
+          <small>Набор звуков для кликов и уведомлений</small>
         </div>
         <div class="theme-options">
           <button class="theme-option" data-theme="medical" type="button">
             <b>🩺 Медицинская</b>
-            <small>Писк кардиомонитора, звуки приборов</small>
+            <small>Писк приборов, кардиомонитор</small>
           </button>
           <button class="theme-option" data-theme="soft" type="button">
             <b>🌙 Мягкая</b>
@@ -245,33 +437,6 @@
         </div>
       </div>
 
-    </div>
-  </div>
-
-  <!-- ==================== ДАННЫЕ ==================== -->
-  <div class="section">
-    <div class="section-title"><span class="icon">💾</span> Данные калькулятора</div>
-
-    <p class="rules-text" style="margin-bottom: 14px; color: var(--text-dim);">
-      Управление сохранёнными баллами и настройками калькуляторов.
-    </p>
-
-    <div class="opt-group">
-      <div class="opt-row">
-        <div class="opt-label">
-          🔄 Сбросить баллы PSID
-          <small>Вернуть баллы PSID к значениям по умолчанию</small>
-        </div>
-        <button type="button" id="resetPsidBtn">Сбросить PSID</button>
-      </div>
-
-      <div class="opt-row">
-        <div class="opt-label">
-          🗑 Сбросить все данные калькуляторов
-          <small>Очистка всех баллов PSID, PM, DI, HAD</small>
-        </div>
-        <button type="button" class="danger" id="resetAllCalcBtn">Очистить всё</button>
-      </div>
     </div>
   </div>
 
@@ -291,27 +456,9 @@
       <span class="label">Активный фон</span>
       <span class="value" id="currentBgInfo">Градиент</span>
     </div>
-
-    <div class="buttons" style="margin-top: 16px;">
-      <button type="button" id="copyReportBtn">📋 Скопировать отчёт о состоянии</button>
-    </div>
-  </div>
-
-  <!-- ==================== ОПАСНАЯ ЗОНА ==================== -->
-  <div class="section danger-zone">
-    <div class="section-title"><span class="icon">⚠️</span> Опасная зона</div>
-
-    <p class="rules-text" style="margin-bottom: 14px; color: var(--text-dim);">
-      Полный сброс всех данных сайта. Это удалит фон, звуки, все введённые баллы
-      и вернёт сайт в первоначальное состояние.
-    </p>
-
-    <div class="opt-row">
-      <div class="opt-label">
-        🚨 Полный сброс сайта
-        <small>Удалить все данные из браузера</small>
-      </div>
-      <button type="button" class="danger" id="fullResetBtn">Полный сброс</button>
+    <div class="info-row">
+      <span class="label">Звуки</span>
+      <span class="value" id="currentSndInfo">—</span>
     </div>
   </div>
 
@@ -325,16 +472,15 @@
 
 <script src="common.js"></script>
 <script>
-/* ============================================================
-   НАСТРОЙКИ — специфичный код для этой страницы
-   ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
+
+  document.getElementById("year").textContent = new Date().getFullYear();
 
   /* ---------------- ФОН ---------------- */
   const presetsGrid = document.getElementById("bgPresetsGrid");
   const fileInput   = document.getElementById("bgFileInput");
+  const fileBtn     = document.getElementById("bgFileBtn");
   const colorInput  = document.getElementById("bgColorInput");
-  const gradientBtn = document.getElementById("bgGradientBtn");
   const resetBtn    = document.getElementById("bgResetBtn");
   const bgInfo      = document.getElementById("currentBgInfo");
 
@@ -360,15 +506,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Подсветить текущий пресет, если он активен
   const current = Background.getCurrent();
   if (current.type === "preset") markActivePreset(current.id);
 
   // Своя картинка
+  fileBtn.addEventListener("click", () => fileInput.click());
   fileInput.addEventListener("change", (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    if (file.size > 4 * 1024 * 1024) showToast("Файл > 4 МБ — может не сохраниться");
+    if (file.size > 4 * 1024 * 1024) showToast("Файл больше 4 МБ — может не сохраниться");
     const reader = new FileReader();
     reader.onload = () => {
       Background.apply({ type: "image", value: reader.result });
@@ -380,22 +526,14 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-  // Сплошной цвет
+  // Цвет
   colorInput.addEventListener("input", (e) => {
     Background.apply({ type: "color", value: e.target.value });
     markActivePreset(null);
     updateBgInfo();
   });
 
-  // Градиент
-  gradientBtn.addEventListener("click", () => {
-    Background.apply({ type: "gradient" });
-    markActivePreset(null);
-    showToast("Стандартный градиент");
-    updateBgInfo();
-  });
-
-  // Сброс фона
+  // Сброс
   resetBtn.addEventListener("click", () => {
     Background.reset();
     markActivePreset(null);
@@ -406,7 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateBgInfo() {
     const cfg = Background.getCurrent();
     let text = "Градиент";
-    if (cfg.type === "color") text = "Сплошной цвет " + cfg.value;
+    if (cfg.type === "color") text = "Цвет " + cfg.value;
     else if (cfg.type === "preset") {
       const p = BG_PRESETS.find(x => x.id === cfg.id);
       text = p ? "Пресет «" + p.title + "»" : "Пресет";
@@ -415,16 +553,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (bgInfo) bgInfo.textContent = text;
   }
 
-  /* ---------------- ЗВУКИ ---------------- */
-  const soundToggle   = document.getElementById("soundToggle");
-  const volumeSlider  = document.getElementById("volumeSlider");
-  const volumeValue   = document.getElementById("volumeValue");
-  const testSoundBtn  = document.getElementById("testSoundBtn");
-  const themeOptions  = document.querySelectorAll(".theme-option");
+  /* ---------------- ЗВУК ---------------- */
+  const soundToggle  = document.getElementById("soundToggle");
+  const volumeSlider = document.getElementById("volumeSlider");
+  const volumeValue  = document.getElementById("volumeValue");
+  const testSoundBtn = document.getElementById("testSoundBtn");
+  const themeOptions = document.querySelectorAll(".theme-option");
+  const sndInfo      = document.getElementById("currentSndInfo");
 
-  // Инициализация значений
   soundToggle.checked = Sound.enabled;
-  volumeSlider.value = Math.round(Sound.volume * 100);
+  volumeSlider.value  = Math.round(Sound.volume * 100);
   volumeValue.textContent = volumeSlider.value + "%";
 
   function updateThemeActive() {
@@ -432,63 +570,42 @@ document.addEventListener("DOMContentLoaded", () => {
       el.classList.toggle("active", el.dataset.theme === Sound.theme);
     });
   }
+  function updateSndInfo() {
+    sndInfo.textContent = Sound.enabled
+      ? "вкл · " + Math.round(Sound.volume * 100) + "% · " + Sound.theme
+      : "выкл";
+  }
   updateThemeActive();
+  updateSndInfo();
 
-  // Вкл/выкл
   soundToggle.addEventListener("change", () => {
     Sound.setEnabled(soundToggle.checked);
     showToast(soundToggle.checked ? "Звуки включены" : "Звуки выключены");
+    updateSndInfo();
   });
 
-  // Громкость
   volumeSlider.addEventListener("input", () => {
     const v = parseInt(volumeSlider.value, 10);
     volumeValue.textContent = v + "%";
     Sound.setVolume(v / 100);
+    updateSndInfo();
   });
-  volumeSlider.addEventListener("change", () => {
-    Sound.play("click");
-  });
+  volumeSlider.addEventListener("change", () => Sound.play("click"));
 
-  // Тест звука
   testSoundBtn.addEventListener("click", () => {
-    if (!Sound.enabled) {
-      showToast("Сначала включите звуки");
-      return;
-    }
+    if (!Sound.enabled) { showToast("Сначала включите звуки"); return; }
     Sound.play("success");
     showToast("Проверка звука");
   });
 
-  // Темы
   themeOptions.forEach(btn => {
     btn.addEventListener("click", () => {
       Sound.setTheme(btn.dataset.theme);
       updateThemeActive();
       const names = { medical: "Медицинская", soft: "Мягкая", classic: "Классическая" };
       showToast("Тема: " + names[btn.dataset.theme]);
+      updateSndInfo();
     });
-  });
-
-  /* ---------------- ДАННЫЕ ---------------- */
-  const resetPsidBtn    = document.getElementById("resetPsidBtn");
-  const resetAllCalcBtn = document.getElementById("resetAllCalcBtn");
-
-  // Сброс баллов PSID
-  resetPsidBtn.addEventListener("click", () => {
-    try { localStorage.removeItem("psid_calc_defaults_v1"); } catch (e) {}
-    showToast("Баллы PSID сброшены");
-  });
-
-  // Сброс всех баллов калькуляторов
-  resetAllCalcBtn.addEventListener("click", () => {
-    if (!confirm("Сбросить все баллы калькуляторов? Это действие нельзя отменить.")) return;
-    const keys = [
-      "psid_calc_state_v1", "psid_calc_defaults_v1",
-      "pm_calc_state_v1", "di_calc_state_v1", "had_calc_state_v1",
-    ];
-    keys.forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
-    showToast("Данные калькуляторов очищены");
   });
 
   /* ---------------- ИНФО ---------------- */
@@ -499,43 +616,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   updateBgInfo();
-
-  // Копировать отчёт
-  const copyReportBtn = document.getElementById("copyReportBtn");
-  copyReportBtn.addEventListener("click", () => {
-    const cfg = Background.getCurrent();
-    const lines = [
-      "=== EMS · Отчёт о состоянии ===",
-      "Версия: 2.0",
-      "Дата: " + new Date().toLocaleString("ru-RU"),
-      "",
-      "Фон: " + (cfg.type || "gradient"),
-      "Звуки: " + (Sound.enabled ? "включены" : "выключены"),
-      "Громкость: " + Math.round(Sound.volume * 100) + "%",
-      "Звуковая тема: " + Sound.theme,
-      "",
-      "Данные в localStorage:",
-      "  psid_state: " + (localStorage.getItem("psid_calc_state_v1") ? "есть" : "нет"),
-      "  psid_defaults: " + (localStorage.getItem("psid_calc_defaults_v1") ? "есть" : "нет"),
-      "  pm_state: " + (localStorage.getItem("pm_calc_state_v1") ? "есть" : "нет"),
-      "  di_state: " + (localStorage.getItem("di_calc_state_v1") ? "есть" : "нет"),
-      "  had_state: " + (localStorage.getItem("had_calc_state_v1") ? "есть" : "нет"),
-    ].join("\n");
-    navigator.clipboard.writeText(lines)
-      .then(() => { Sound.play("success"); showToast("Отчёт скопирован"); })
-      .catch(() => showToast("Не удалось скопировать"));
-  });
-
-  /* ---------------- ОПАСНАЯ ЗОНА ---------------- */
-  const fullResetBtn = document.getElementById("fullResetBtn");
-  fullResetBtn.addEventListener("click", () => {
-    if (!confirm("Полный сброс сайта. Все данные будут удалены. Продолжить?")) return;
-    if (!confirm("Точно? Это действие необратимо.")) return;
-    try { localStorage.clear(); } catch (e) {}
-    Sound.setEnabled(false);
-    Sound.play("error");
-    setTimeout(() => location.reload(), 500);
-  });
 
 });
 </script>
