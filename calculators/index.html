@@ -72,12 +72,12 @@
   .tab-icon { font-size: 24px; flex-shrink: 0; width: 30px; text-align: center; }
   .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* --------- Панель профиля --------- */
-  .profile-bar {
+  /* --------- Панель сверху --------- */
+  .top-bar {
     background: var(--bg-alt);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 18px 22px;
+    padding: 16px 22px;
     margin-bottom: 24px;
     box-shadow: var(--shadow);
     backdrop-filter: blur(var(--blur));
@@ -86,61 +86,72 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 14px;
+    justify-content: space-between;
   }
-  .profile-field {
-    display: flex; flex-direction: column; gap: 5px;
-    flex: 1; min-width: 200px;
+
+  .current-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 200px;
   }
-  .profile-field label {
-    font-size: 12px; color: var(--text-dim);
-    text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
-  }
-  .profile-field select,
-  .profile-field input {
-    background: rgba(13, 17, 23, 0.7); color: var(--text);
-    border: 1px solid var(--border); border-radius: 10px;
-    padding: 10px 14px; font-size: 16px; font-family: inherit;
-    cursor: pointer; transition: border-color 0.15s;
-  }
-  .profile-field select:focus,
-  .profile-field input:focus {
-    outline: none; border-color: var(--accent);
-  }
-  .profile-actions { display: flex; gap: 8px; align-items: flex-end; }
-  .dept-switch {
-    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-    padding: 4px 0; width: 100%;
-    border-top: 1px solid var(--border);
-    padding-top: 14px; margin-top: 4px;
-  }
-  .dept-switch-label {
-    font-size: 12px; color: var(--text-dim);
-    text-transform: uppercase; letter-spacing: 1px;
-    font-weight: 600; margin-right: 8px;
-  }
-  .dept-btn {
-    background: rgba(13, 17, 23, 0.6); color: var(--text);
-    border: 1px solid var(--border); border-radius: 10px;
-    padding: 10px 20px; font-size: 15px; font-weight: 600;
-    font-family: inherit; cursor: pointer; transition: all 0.15s;
-    display: inline-flex; align-items: center; gap: 8px;
-  }
-  .dept-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .dept-btn.active {
-    background: rgba(88, 166, 255, 0.12);
-    border-color: var(--accent); color: var(--accent);
-  }
-  .btn-icon {
-    width: 42px; height: 42px; padding: 0;
+  .current-profile-icon {
+    width: 46px; height: 46px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; background: var(--bg-alt); color: var(--text);
-    border: 1px solid var(--border); border-radius: 10px;
-    cursor: pointer; font-family: inherit; transition: all 0.15s;
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.25);
+    border-radius: 12px;
+    font-size: 24px;
+    flex-shrink: 0;
   }
-  .btn-icon:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-icon.danger:hover {
-    border-color: var(--danger); color: var(--danger);
-    background: rgba(248, 81, 73, 0.06);
+  .current-profile-info { min-width: 0; }
+  .current-profile-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .current-profile-dept {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .top-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .big-btn {
+    background: rgba(13, 17, 23, 0.6);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .big-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .big-btn.primary {
+    background: var(--accent);
+    color: #0d1117;
+    border-color: var(--accent);
+  }
+  .big-btn.primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: #0d1117;
   }
 
   /* --------- Модалка --------- */
@@ -160,7 +171,7 @@
     padding: 28px;
     max-width: 720px;
     width: 100%;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     animation: modalIn 0.25s ease;
@@ -172,8 +183,9 @@
   }
   .modal-title {
     font-size: 22px; font-weight: 700; color: var(--accent);
-    margin-bottom: 18px; display: flex;
+    margin-bottom: 20px; display: flex;
     justify-content: space-between; align-items: center;
+    gap: 12px;
   }
   .modal-close {
     background: transparent; border: none; color: var(--text-dim);
@@ -181,16 +193,138 @@
     padding: 0; width: 32px; height: 32px;
     display: flex; align-items: center; justify-content: center;
     border-radius: 8px; transition: all 0.15s;
+    flex-shrink: 0;
   }
   .modal-close:hover { color: var(--danger); background: rgba(248, 81, 73, 0.1); }
 
   .modal-message {
     font-size: 16px; color: var(--text); line-height: 1.6;
     margin-bottom: 22px;
+    white-space: pre-wrap;
   }
   .modal-buttons {
     display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
   }
+
+  /* --------- Список профилей в модалке --------- */
+  .profile-list {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .profile-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(13, 17, 23, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.18s, background 0.18s;
+  }
+  .profile-card:hover { border-color: var(--accent); }
+  .profile-card.active {
+    border-color: var(--accent);
+    background: rgba(26, 39, 68, 0.55);
+  }
+
+  .profile-card-icon {
+    width: 46px; height: 46px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(88, 166, 255, 0.10);
+    border: 1px solid rgba(88, 166, 255, 0.22);
+    border-radius: 12px;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .profile-card-body { flex: 1; min-width: 0; cursor: pointer; }
+  .profile-card-name {
+    font-size: 16.5px; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .profile-card.active .profile-card-name { color: var(--accent); }
+  .profile-card-meta {
+    font-size: 13px; color: var(--text-dim);
+    margin-top: 2px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .profile-card-total {
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  .profile-card-actions {
+    display: flex; gap: 6px; flex-shrink: 0;
+  }
+  .mini-btn {
+    width: 34px; height: 34px; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    background: transparent; color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 8px;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .mini-btn.danger:hover {
+    border-color: var(--danger); color: var(--danger);
+    background: rgba(248, 81, 73, 0.06);
+  }
+
+  /* --------- Форма нового профиля --------- */
+  .new-profile-form {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+    background: rgba(13, 17, 23, 0.5);
+    border: 1px dashed var(--accent);
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .new-profile-form.active { display: flex; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label {
+    font-size: 12px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+  }
+  .form-field input,
+  .form-field select {
+    background: rgba(13, 17, 23, 0.7);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .form-field input:focus,
+  .form-field select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* --------- Inline редактирование имени --------- */
+  .profile-rename-input {
+    background: rgba(13, 17, 23, 0.8);
+    color: var(--text);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: 600;
+    width: 100%;
+  }
+  .profile-rename-input:focus { outline: none; }
 
   /* --------- Сводка --------- */
   .summary-table { width: 100%; border-collapse: collapse; font-size: 15px; }
@@ -233,7 +367,7 @@
     gap: 26px; align-items: start;
   }
 
-  /* --------- Всплывающий тост при вводе --------- */
+  /* --------- Всплывающий тост --------- */
   .profile-toast {
     position: fixed;
     bottom: 28px;
@@ -277,14 +411,14 @@
     .tab { --width: 190px; --visible: 50px; height: 54px; font-size: 16px; padding: 0 14px; border-radius: 12px; border-right: 1px solid var(--border); right: 0; }
     .tab:hover { right: 0; }
 
-    .profile-bar { padding: 14px 16px; gap: 10px; }
-    .profile-field { min-width: 100%; }
-    .profile-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
-    .dept-btn { flex: 1; justify-content: center; padding: 9px 12px; font-size: 14px; }
-    .dept-switch-label { width: 100%; margin: 0 0 6px 0; }
+    .top-bar { padding: 12px 14px; gap: 10px; }
+    .top-actions { width: 100%; justify-content: stretch; }
+    .big-btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 14px; }
+
     .modal { padding: 20px; }
     .summary-table { font-size: 14px; }
     .summary-table th, .summary-table td { padding: 10px 8px; }
+    .form-row { grid-template-columns: 1fr; }
 
     .profile-toast { padding: 12px 18px; font-size: 15px; bottom: 90px; }
   }
@@ -336,30 +470,26 @@
     <p>PSID · PM · DI · HAD — единый калькулятор с профилями</p>
   </header>
 
-  <div class="profile-bar">
+  <!-- ==================== ПАНЕЛЬ СВЕРХУ ==================== -->
+  <div class="top-bar">
 
-    <div class="profile-field">
-      <label for="profile-select">👤 Профиль</label>
-      <select id="profile-select"></select>
+    <div class="current-profile">
+      <div class="current-profile-icon" id="cur-icon">👤</div>
+      <div class="current-profile-info">
+        <div class="current-profile-name" id="cur-name">—</div>
+        <div class="current-profile-dept" id="cur-dept">—</div>
+      </div>
     </div>
 
-    <div class="profile-actions">
-      <button class="btn-icon" id="btn-add-profile" title="Добавить профиль" type="button">＋</button>
-      <button class="btn-icon" id="btn-rename-profile" title="Переименовать" type="button">✎</button>
-      <button class="btn-icon danger" id="btn-delete-profile" title="Удалить профиль" type="button">🗑</button>
-      <button class="btn-icon" id="btn-summary" title="Сводка по всем профилям" type="button">📊</button>
-    </div>
-
-    <div class="dept-switch">
-      <span class="dept-switch-label">🏥 Отдел:</span>
-      <button class="dept-btn" data-dept="psid" type="button">🏥 PSID</button>
-      <button class="dept-btn" data-dept="pm" type="button">📋 PM</button>
-      <button class="dept-btn" data-dept="di" type="button">📊 DI</button>
-      <button class="dept-btn" data-dept="had" type="button">💉 HAD</button>
+    <div class="top-actions">
+      <button class="big-btn primary" id="btn-profiles" type="button">👥 Профили</button>
+      <button class="big-btn" id="btn-summary" type="button">📊 Сводка</button>
+      <button class="big-btn" id="btn-export" type="button">💾 Экспорт</button>
     </div>
 
   </div>
 
+  <!-- ==================== КАЛЬКУЛЯТОР ==================== -->
   <div class="content-layout" id="calc-area">
 
     <aside class="progress-rail" data-rail="main">
@@ -388,6 +518,44 @@
 
 </div>
 
+<!-- ==================== МОДАЛКА ПРОФИЛЕЙ ==================== -->
+<div class="modal-overlay" id="modal-profiles">
+  <div class="modal">
+    <div class="modal-title">
+      👥 Профили
+      <button class="modal-close" data-close="modal-profiles" type="button">✕</button>
+    </div>
+
+    <div class="new-profile-form" id="new-profile-form">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Имя профиля</label>
+          <input type="text" id="new-name" placeholder="Например: Иван Петров" maxlength="40">
+        </div>
+        <div class="form-field">
+          <label>Отдел</label>
+          <select id="new-dept">
+            <option value="psid">🏥 PSID</option>
+            <option value="pm">📋 PM</option>
+            <option value="di">📊 DI</option>
+            <option value="had">💉 HAD</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button class="big-btn" id="new-cancel" type="button">Отмена</button>
+        <button class="big-btn primary" id="new-create" type="button">Создать</button>
+      </div>
+    </div>
+
+    <div class="profile-list" id="profile-list"></div>
+
+    <div class="modal-buttons">
+      <button class="big-btn primary" id="add-profile-btn" type="button">＋ Новый профиль</button>
+    </div>
+  </div>
+</div>
+
 <!-- ==================== МОДАЛКА СВОДКИ ==================== -->
 <div class="modal-overlay" id="modal-summary">
   <div class="modal">
@@ -408,8 +576,8 @@
     </div>
     <div class="modal-message" id="confirm-message">Вы уверены?</div>
     <div class="modal-buttons">
-      <button class="primary" id="confirm-yes" type="button">Да</button>
-      <button id="confirm-no" type="button">Отмена</button>
+      <button class="big-btn" id="confirm-no" type="button">Отмена</button>
+      <button class="big-btn primary" id="confirm-yes" type="button">Да</button>
     </div>
   </div>
 </div>
@@ -643,19 +811,25 @@ function getActiveProfile() {
 }
 
 /* ============================================================
-   МОДАЛКА ПОДТВЕРЖДЕНИЯ (замена confirm)
+   МОДАЛКИ
    ============================================================ */
-let confirmCallback = null;
+function openModal(id) {
+  document.getElementById(id).classList.add("active");
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove("active");
+}
 
+/* --------- Подтверждение --------- */
+let confirmCallback = null;
 function askConfirm(message, onYes, yesLabel) {
   document.getElementById("confirm-message").textContent = message;
   document.getElementById("confirm-yes").textContent = yesLabel || "Да";
   confirmCallback = onYes;
-  document.getElementById("modal-confirm").classList.add("active");
+  openModal("modal-confirm");
 }
-
 function closeConfirm() {
-  document.getElementById("modal-confirm").classList.remove("active");
+  closeModal("modal-confirm");
   confirmCallback = null;
 }
 
@@ -663,7 +837,6 @@ function closeConfirm() {
    ТОСТ ПРИ ВВОДЕ
    ============================================================ */
 let profileToastTimer = null;
-
 function showProfileToast() {
   const profile = getActiveProfile();
   if (!profile) return;
@@ -716,23 +889,205 @@ function calcInstrActions(profile) {
 }
 
 /* ============================================================
-   ОТРИСОВКА ПАНЕЛИ ПРОФИЛЯ
+   ПАНЕЛЬ СВЕРХУ
    ============================================================ */
-function renderProfileBar() {
-  const sel = document.getElementById("profile-select");
-  sel.innerHTML = "";
-  state.profiles.forEach(p => {
-    const opt = document.createElement("option");
-    opt.value = p.id;
-    opt.textContent = p.name + " (" + DEPTS[p.dept].title + ")";
-    if (p.id === state.activeProfileId) opt.selected = true;
-    sel.appendChild(opt);
-  });
+function renderTopBar() {
+  const p = getActiveProfile();
+  if (!p) {
+    document.getElementById("cur-name").textContent = "—";
+    document.getElementById("cur-dept").textContent = "—";
+    document.getElementById("cur-icon").textContent = "👤";
+    return;
+  }
+  const dept = DEPTS[p.dept];
+  document.getElementById("cur-icon").textContent = dept.icon;
+  document.getElementById("cur-name").textContent = p.name;
+  document.getElementById("cur-dept").textContent = dept.title + " · " + calcTotal(p) + " баллов";
+}
 
-  const active = getActiveProfile();
-  document.querySelectorAll(".dept-btn").forEach(btn => {
-    btn.classList.toggle("active", active && btn.dataset.dept === active.dept);
+/* ============================================================
+   СПИСОК ПРОФИЛЕЙ В МОДАЛКЕ
+   ============================================================ */
+function renderProfileList() {
+  const list = document.getElementById("profile-list");
+  list.innerHTML = "";
+
+  if (!state.profiles.length) {
+    list.innerHTML = "<p style='color: var(--text-dim); text-align: center; padding: 20px 0;'>Нет профилей. Добавьте первый.</p>";
+    return;
+  }
+
+  state.profiles.forEach(p => {
+    const dept = DEPTS[p.dept];
+    const isActive = p.id === state.activeProfileId;
+    const total = calcTotal(p);
+
+    const card = document.createElement("div");
+    card.className = "profile-card" + (isActive ? " active" : "");
+    card.dataset.id = p.id;
+
+    let metaExtra = "";
+    if (p.dept === "di") {
+      const actions = calcInstrActions(p);
+      const instrNorm = dept.instrNorm || 20;
+      metaExtra = `<span>🎯 ${actions} / ${instrNorm} действий</span>`;
+    } else {
+      const norm = NORMS[p.dept] || 0;
+      metaExtra = `<span>🎯 норма ${norm}</span>`;
+    }
+
+    card.innerHTML = `
+      <div class="profile-card-icon">${dept.icon}</div>
+      <div class="profile-card-body" data-action="select">
+        <div class="profile-card-name">${escapeHtml(p.name)}</div>
+        <div class="profile-card-meta">
+          <span>${dept.title}</span>
+          <span class="profile-card-total">${total} баллов</span>
+          ${metaExtra}
+        </div>
+      </div>
+      <div class="profile-card-actions">
+        <button class="mini-btn" data-action="rename" title="Переименовать" type="button">✎</button>
+        <button class="mini-btn danger" data-action="delete" title="Удалить" type="button">🗑</button>
+      </div>
+    `;
+    list.appendChild(card);
   });
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/* --------- Обработчики списка профилей --------- */
+function bindProfileList() {
+  const list = document.getElementById("profile-list");
+  list.addEventListener("click", (e) => {
+    const card = e.target.closest(".profile-card");
+    if (!card) return;
+    const id = card.dataset.id;
+    const action = e.target.dataset.action;
+
+    if (action === "select") {
+      switchProfile(id);
+    } else if (action === "rename") {
+      startRename(id);
+    } else if (action === "delete") {
+      askDeleteProfile(id);
+    }
+  });
+}
+
+function switchProfile(id) {
+  state.activeProfileId = id;
+  saveState();
+  closeModal("modal-profiles");
+  renderTopBar();
+  renderCalculator();
+  recalc();
+  showToast("Профиль переключён");
+}
+
+/* --------- Переименование inline --------- */
+function startRename(id) {
+  const card = document.querySelector(`.profile-card[data-id="${id}"]`);
+  if (!card) return;
+  const body = card.querySelector(".profile-card-body");
+  const profile = state.profiles.find(p => p.id === id);
+  if (!profile) return;
+
+  const oldHtml = body.innerHTML;
+  body.innerHTML = `<input class="profile-rename-input" type="text" value="${escapeHtml(profile.name)}" maxlength="40">`;
+  const input = body.querySelector("input");
+  input.focus();
+  input.select();
+
+  const finish = (save) => {
+    if (save) {
+      const newName = input.value.trim();
+      if (newName && newName !== profile.name) {
+        profile.name = newName;
+        saveState();
+        renderTopBar();
+        showToast("Имя обновлено");
+      }
+    }
+    renderProfileList();
+  };
+
+  input.addEventListener("blur", () => finish(true));
+  input.addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter") { ev.preventDefault(); input.blur(); }
+    if (ev.key === "Escape") { ev.preventDefault(); finish(false); }
+  });
+}
+
+/* --------- Удаление профиля --------- */
+function askDeleteProfile(id) {
+  const profile = state.profiles.find(p => p.id === id);
+  if (!profile) return;
+  if (state.profiles.length <= 1) {
+    showToast("Нельзя удалить последний профиль");
+    return;
+  }
+
+  askConfirm(
+    'Удалить профиль «' + profile.name + '» вместе со всеми данными?',
+    () => {
+      state.profiles = state.profiles.filter(x => x.id !== id);
+      if (state.activeProfileId === id) {
+        state.activeProfileId = state.profiles[0].id;
+      }
+      saveState();
+      renderTopBar();
+      renderProfileList();
+      renderCalculator();
+      recalc();
+      showToast("Профиль удалён");
+    },
+    "Удалить"
+  );
+}
+
+/* --------- Форма нового профиля --------- */
+function openNewProfileForm() {
+  const form = document.getElementById("new-profile-form");
+  document.getElementById("new-name").value = "";
+  document.getElementById("new-dept").value = "psid";
+  form.classList.add("active");
+  setTimeout(() => document.getElementById("new-name").focus(), 50);
+}
+function closeNewProfileForm() {
+  document.getElementById("new-profile-form").classList.remove("active");
+}
+function createNewProfile() {
+  const name = document.getElementById("new-name").value.trim();
+  const dept = document.getElementById("new-dept").value;
+
+  if (!name) {
+    showToast("Введите имя профиля");
+    document.getElementById("new-name").focus();
+    return;
+  }
+  if (!DEPTS[dept]) {
+    showToast("Неверный отдел");
+    return;
+  }
+
+  const p = newProfile(name, dept);
+  state.profiles.push(p);
+  state.activeProfileId = p.id;
+  saveState();
+  closeNewProfileForm();
+  closeModal("modal-profiles");
+  renderTopBar();
+  renderCalculator();
+  recalc();
+  showToast("Профиль создан");
 }
 
 /* ============================================================
@@ -772,7 +1127,7 @@ function renderCalculator() {
 
     section.items.forEach(item => {
       const d = profile.data[item.key] || {};
-      const count = d.count != null ? d.count : "";
+      const count = d.count != null && d.count > 0 ? d.count : "";
       const point = d.point != null ? d.point : item.pts;
 
       const row = document.createElement("div");
@@ -843,6 +1198,7 @@ function onInput(e) {
   saveState();
   recalc();
   showProfileToast();
+  renderTopBar();
 }
 
 function recalc() {
@@ -909,12 +1265,10 @@ function recalc() {
   }
 
   updateRail("calc-area", total);
-  const railTitle = document.getElementById("rail-title");
-  if (railTitle) railTitle.textContent = dept.title;
 }
 
 /* ============================================================
-   КНОПКИ
+   КНОПКИ КАЛЬКУЛЯТОРА
    ============================================================ */
 function copyReport() {
   const el = document.getElementById("report");
@@ -936,67 +1290,10 @@ function resetActive() {
       saveState();
       renderCalculator();
       recalc();
+      renderTopBar();
       showToast("Данные сброшены");
     },
     "Сбросить"
-  );
-}
-
-/* ============================================================
-   ПРОФИЛИ
-   ============================================================ */
-function addProfile() {
-  const name = prompt("Имя нового профиля:", "");
-  if (!name || !name.trim()) return;
-
-  let dept = prompt("Отдел (psid / pm / di / had):", "psid");
-  if (!dept) return;
-  dept = dept.trim().toLowerCase();
-  if (!DEPTS[dept]) {
-    showToast("Неверный отдел");
-    return;
-  }
-
-  const p = newProfile(name.trim(), dept);
-  state.profiles.push(p);
-  state.activeProfileId = p.id;
-  saveState();
-  renderProfileBar();
-  renderCalculator();
-  recalc();
-  showToast("Профиль добавлен");
-}
-
-function renameProfile() {
-  const p = getActiveProfile();
-  if (!p) return;
-  const name = prompt("Новое имя профиля:", p.name);
-  if (!name || !name.trim()) return;
-  p.name = name.trim();
-  saveState();
-  renderProfileBar();
-  showToast("Профиль переименован");
-}
-
-function deleteProfile() {
-  const p = getActiveProfile();
-  if (!p) return;
-  if (state.profiles.length <= 1) {
-    showToast("Нельзя удалить последний профиль");
-    return;
-  }
-  askConfirm(
-    'Удалить профиль «' + p.name + '» вместе со всеми данными?',
-    () => {
-      state.profiles = state.profiles.filter(x => x.id !== p.id);
-      state.activeProfileId = state.profiles[0].id;
-      saveState();
-      renderProfileBar();
-      renderCalculator();
-      recalc();
-      showToast("Профиль удалён");
-    },
-    "Удалить"
   );
 }
 
@@ -1015,6 +1312,7 @@ function showSummary() {
     const norm = NORMS[p.dept] || 0;
     let statusClass = "status-bad";
     let statusText = "Мало";
+
     if (p.dept === "di") {
       const actions = calcInstrActions(p);
       const instrNorm = dept.instrNorm || 20;
@@ -1022,7 +1320,7 @@ function showSummary() {
       else if (actions > 0) { statusClass = "status-low"; statusText = "⚠️ " + actions + " / " + instrNorm + " действ."; }
       else { statusClass = "status-bad"; statusText = "❌ Нет действий"; }
       html += `<tr>
-        <td>${p.name}</td>
+        <td>${escapeHtml(p.name)}</td>
         <td>${dept.icon} ${dept.title}</td>
         <td class="num">${total}</td>
         <td class="num">${instrNorm} действ.</td>
@@ -1033,7 +1331,7 @@ function showSummary() {
       else if (total > 0) { statusClass = "status-low"; statusText = "⚠️ " + Math.round(total / norm * 100) + "%"; }
       else { statusClass = "status-bad"; statusText = "❌ Нет данных"; }
       html += `<tr>
-        <td>${p.name}</td>
+        <td>${escapeHtml(p.name)}</td>
         <td>${dept.icon} ${dept.title}</td>
         <td class="num">${total}</td>
         <td class="num">${norm}</td>
@@ -1044,7 +1342,24 @@ function showSummary() {
 
   html += '</tbody></table>';
   content.innerHTML = html;
-  document.getElementById("modal-summary").classList.add("active");
+  openModal("modal-summary");
+}
+
+/* ============================================================
+   ЭКСПОРТ
+   ============================================================ */
+function exportData() {
+  const dataStr = JSON.stringify(state, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "ems_profiles_" + new Date().toISOString().slice(0,10) + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("Экспорт готов");
 }
 
 /* ============================================================
@@ -1062,39 +1377,51 @@ function init() {
     state.activeProfileId = state.profiles[0].id;
   }
 
-  renderProfileBar();
+  renderTopBar();
+  renderProfileList();
   renderCalculator();
   recalc();
 
-  document.getElementById("profile-select").addEventListener("change", (e) => {
-    state.activeProfileId = e.target.value;
-    saveState();
-    renderProfileBar();
-    renderCalculator();
-    recalc();
+  /* --------- Кнопки сверху --------- */
+  document.getElementById("btn-profiles").addEventListener("click", () => {
+    closeNewProfileForm();
+    renderProfileList();
+    openModal("modal-profiles");
+  });
+  document.getElementById("btn-summary").addEventListener("click", showSummary);
+  document.getElementById("btn-export").addEventListener("click", exportData);
+
+  /* --------- Форма нового профиля --------- */
+  document.getElementById("add-profile-btn").addEventListener("click", openNewProfileForm);
+  document.getElementById("new-cancel").addEventListener("click", closeNewProfileForm);
+  document.getElementById("new-create").addEventListener("click", createNewProfile);
+  document.getElementById("new-name").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); createNewProfile(); }
   });
 
-  document.getElementById("btn-add-profile").addEventListener("click", addProfile);
-  document.getElementById("btn-rename-profile").addEventListener("click", renameProfile);
-  document.getElementById("btn-delete-profile").addEventListener("click", deleteProfile);
-  document.getElementById("btn-summary").addEventListener("click", showSummary);
+  /* --------- Список профилей --------- */
+  bindProfileList();
 
-  // закрытие модалок
+  /* --------- Закрытие модалок --------- */
   document.querySelectorAll("[data-close]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.close;
-      document.getElementById(id).classList.remove("active");
+      closeModal(id);
       if (id === "modal-confirm") confirmCallback = null;
+      if (id === "modal-profiles") closeNewProfileForm();
     });
   });
-  document.getElementById("modal-summary").addEventListener("click", (e) => {
-    if (e.target.id === "modal-summary") e.currentTarget.classList.remove("active");
-  });
-  document.getElementById("modal-confirm").addEventListener("click", (e) => {
-    if (e.target.id === "modal-confirm") closeConfirm();
+  document.querySelectorAll(".modal-overlay").forEach(overlay => {
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove("active");
+        if (overlay.id === "modal-confirm") confirmCallback = null;
+        if (overlay.id === "modal-profiles") closeNewProfileForm();
+      }
+    });
   });
 
-  // кнопки подтверждения
+  /* --------- Кнопки подтверждения --------- */
   document.getElementById("confirm-yes").addEventListener("click", () => {
     const cb = confirmCallback;
     closeConfirm();
@@ -1102,43 +1429,21 @@ function init() {
   });
   document.getElementById("confirm-no").addEventListener("click", closeConfirm);
 
-  // переключение отдела
-  document.querySelectorAll(".dept-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const p = getActiveProfile();
-      if (!p) return;
-      const newDept = btn.dataset.dept;
-      if (!DEPTS[newDept]) return;
-      if (p.dept === newDept) return;
-
-      askConfirm(
-        'Сменить отдел профиля «' + p.name + '» на ' + DEPTS[newDept].title + '?\n\nДанные текущего отдела сохранятся, но не будут отображаться, пока не вернёшься в этот отдел.',
-        () => {
-          p.dept = newDept;
-          saveState();
-          renderProfileBar();
-          renderCalculator();
-          recalc();
-        },
-        "Сменить"
-      );
-    });
-  });
-
+  /* --------- Горячие клавиши --------- */
   document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === "s") {
       e.preventDefault();
       copyReport();
     }
     if (e.key === "Escape") {
-      document.getElementById("modal-summary").classList.remove("active");
-      closeConfirm();
+      document.querySelectorAll(".modal-overlay.active").forEach(m => m.classList.remove("active"));
+      confirmCallback = null;
+      closeNewProfileForm();
     }
   });
 }
 
 window.onCalcResize = function() { recalc(); };
-
 document.addEventListener("DOMContentLoaded", init);
 </script>
 </body>
